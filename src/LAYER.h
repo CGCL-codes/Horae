@@ -134,7 +134,7 @@ void Layer::insert(string src, string dst, weight_type weight) {
 	unsigned int hash_src = (*hfunc[0])((unsigned char*)(src.c_str()), src.length());
 	unsigned int hash_dst = (*hfunc[0])((unsigned char*)(dst.c_str()), dst.length());
 	//unsigned int mask = pow(2, fingerprintLength) - 1;
-	unsigned int mask = (1 >> fingerprintLength) - 1;
+	unsigned int mask = (1 << fingerprintLength) - 1;
 	unsigned int head = 16384; //pow(2, 14);
 	unsigned short fp_src = hash_src & mask;
 	if (fp_src == 0) fp_src += 1;
