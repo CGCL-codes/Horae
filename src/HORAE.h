@@ -49,7 +49,7 @@ Layer* Horae::getLayer(int i) {
 		exit(-1);
 	}
 	if(this->multi_layers[i] == NULL) {
-		cout << "你丫个锤子" << endl;
+		cout << "Error" << endl;
 		getchar();
 		exit(-1);
 	}
