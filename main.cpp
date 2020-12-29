@@ -1,4 +1,4 @@
-﻿//测试边查、点查等结果
+//测试边查、点查等结果
 #include "QueryFunction.h"
 #include <iomanip>
 
@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
 	string back_addr = "_Horae-1-addr-res";
 #endif
 	int dataset = 3;
-	int test_situation = 0;						//0-baseline，1-pgss
+	int test_situation = 1;						//0-baseline，1-pgss
 	int query_times = 1;						//查询的次数
 	string filename, input_dir, output_dir;		//测试数据集文件路径  测试数据输入路径 测试结果输出路径
 	string dataset_name, txt_name = "";
@@ -68,19 +68,18 @@ int main(int argc, char* argv[]) {
 		if (strcmp(argv[i], "-fplength") == 0) {
 			fingerprintLen = atoi(argv[++i]);
 		}
-		if (strcmp(argv[i], "-edgefrequence") == 0) {
+		if (strcmp(argv[i], "-edgeweight") == 0) {
 			efflag = 1;
 		}
 		if (strcmp(argv[i], "-edgeexistence") == 0) {
 			eeflag = 1;
 		}
-		if (strcmp(argv[i], "-nodefrequence") == 0) {
+		if (strcmp(argv[i], "-nodeinweight") == 0) {
 			nfflag = 1;
-		}
-		if (strcmp(argv[i], "-in") == 0) {
 			node_query_flag = 1;
 		}
-		if (strcmp(argv[i], "-out") == 0) {
+		if (strcmp(argv[i], "-nodeoutweight") == 0) {
+			node_query_flag = 1;
 			node_query_flag = 2;
 		}
 		if (strcmp(argv[i], "-write") == 0) {
