@@ -116,7 +116,7 @@ Layer::Layer(const Layer *layer)
 // memory improvement
 Layer::Layer(const Layer *layer, int level)
 : granularity(2 * layer->getGranularity()), fingerprintLength(layer->fingerprintLength), row_addrs(layer->row_addrs), column_addrs(layer->column_addrs) {
-	cout << "Layer::Layer(*layer, level)" << endl;
+	cout << "Layer::Layer(*layer, level: " << level << ")" << endl;
 
 	if(level == 1) {
 		width = 0.7 * layer->width;

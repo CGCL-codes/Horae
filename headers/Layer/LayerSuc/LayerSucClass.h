@@ -32,7 +32,7 @@ LayerSucClass::LayerSucClass(const LayerSucClass *layer): LayerSuc(layer) {
 }
 // memory improvement
 LayerSucClass::LayerSucClass(const LayerSucClass *layer, int level): LayerSuc(layer, level) {
-	cout << "LayerSucClass::LayerSucClass(*layer, level)" << endl;
+	cout << "LayerSucClass::LayerSucClass(*layer, level: " << level << ")" << endl;
 }
 
 LayerSucClass::~LayerSucClass() {

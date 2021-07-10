@@ -33,7 +33,7 @@ LayerSucPreMapClass::LayerSucPreMapClass(const LayerSucPreMapClass *layer): Laye
 
 // memory improvement
 LayerSucPreMapClass::LayerSucPreMapClass(const LayerSucPreMapClass *layer, int level): LayerSucPreMap(layer, level) {
-	cout << "LayerSucPreMapClass::LayerSucPreMapClass(*layer, level)" << endl;
+	cout << "LayerSucPreMapClass::LayerSucPreMapClass(*layer, level: " << level << ")" << endl;
 }
 
 LayerSucPreMapClass::~LayerSucPreMapClass() {

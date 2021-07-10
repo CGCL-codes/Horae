@@ -72,7 +72,7 @@ void Horae::bucketCounting() {
 /**************** test functions ****************/
 Layer* Horae::getLayer(int i) {
 	if(i >= this->multi_layers.size()) {
-		cout << "The index of the multi-layers is out of range!" << endl;
+		cout << "The index " << i << " of the multi-layers is out of range!" << endl;
 		exit(-1);
 	}
 	if(this->multi_layers[i] == NULL) {
@@ -342,14 +342,14 @@ void Horae::newInsert(uint32_t s, uint32_t d, weight_type w, time_type t) {
 		}
 	}
 }
-void Horae::newLevelInsert(int level, uint32_t s, uint32_t d, weight_type w, time_type t){
+void Horae::newLevelInsert(int level, uint32_t s, uint32_t d, weight_type w, time_type t) {
 	Layer *layer = this->getLayer(level);
 	uint32_t tg = layer->getGranularity();
 	uint32_t tt = ceil((double)(t - start_time) / (double)timeslice_len);
 	int winNum = ceil((double)tt / (double)tg);
-	if(level!=0 && winNum%2==1){
+	if (level != 0 && winNum % 2 == 1)
 		return;
-	}else{
+	else {
 		string sv = to_string(s) + "+" + to_string(winNum);
 		string dv = to_string(d) + "+" + to_string(winNum);
 		layer->insert(sv, dv, w);

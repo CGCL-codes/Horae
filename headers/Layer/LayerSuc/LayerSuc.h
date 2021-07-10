@@ -60,7 +60,7 @@ LayerSuc::LayerSuc(const LayerSuc *layer): Layer(layer) {
 
 // memory improvement
 LayerSuc::LayerSuc(const LayerSuc *layer, int level): Layer(layer, level) {
-	cout << "LayerSuc::LayerSuc(*layer, level)" << endl;
+	cout << "LayerSuc::LayerSuc(*layer, level: " << level << ")" << endl;
 }
 
 LayerSuc::~LayerSuc() {

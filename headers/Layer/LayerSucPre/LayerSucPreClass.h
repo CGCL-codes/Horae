@@ -36,7 +36,7 @@ LayerSucPreClass::~LayerSucPreClass() {
 
 // memory improvement
 LayerSucPreClass::LayerSucPreClass(const LayerSucPreClass *layer, int level): LayerSucPre(layer, level) {
-	cout << "LayerSucPreClass::LayerSucPreClass(*layer, level)" << endl;
+	cout << "LayerSucPreClass::LayerSucPreClass(*layer, level: " << level << ")" << endl;
 }
 
 // src is the ID of the source node, dst is the ID of the destination node, weight is the weight of the edge.

@@ -365,7 +365,7 @@ int insert_pgss_parallel(Horae* pg, int64_t fpLength, int level, string filename
 	#ifdef DEBUG
 			cout << "(" << s << ", " << d << ", " << w << ", " << t << ") -- " << " level = " << level << endl;
 	#endif
-			pg->levelInsert(level + 1, s, d, w, t);
+			pg->newLevelInsert(level + 1, s, d, w, t);
 			child = new thread(insert_pgss_parallel, pg, length, level + 1, filename, line);
 		}
 #else
@@ -398,7 +398,11 @@ int insert_pgss_parallel(Horae* pg, int64_t fpLength, int level, string filename
 			child = new thread(insert_pgss_parallel, pg, length, level + 1, filename, line);
 		}
 #endif
+#ifdef MEM
+		pg->newLevelInsert(level, s, d, w, t);
+#else
 		pg->levelInsert(level, s, d, w, t);
+#endif
 		datanum++;
 #if defined(DEBUG) || defined(BINSTIME)
 		if (datanum % 10000000 == 0) {
@@ -488,7 +492,7 @@ int pgssParallelInsert(HORAE_VAR var, string filename) {
 	#ifdef DEBUG
 			cout << "(" << s << ", " << d << ", " << w << ", " << t << ") -- " << " level = " << level << endl;
 	#endif
-			pgss_parallel->levelInsert(level + 1, s, d, w, t);
+			pgss_parallel->newLevelInsert(level + 1, s, d, w, t);
             child = new thread(insert_pgss_parallel, pgss_parallel, length, level + 1, filename, line);
 		}
 #else
@@ -523,7 +527,11 @@ int pgssParallelInsert(HORAE_VAR var, string filename) {
             child = new thread(insert_pgss_parallel, pgss_parallel, length, level + 1, filename, line);	
 		}
 #endif
+#ifdef MEM
+		pgss_parallel->newLevelInsert(level, s, d, w, t);
+#else
 		pgss_parallel->levelInsert(level, s, d, w, t);
+#endif
 		datanum++;
 #if defined(DEBUG) || defined(BINSTIME)
 		if (datanum % 10000000 == 0) {
@@ -1792,7 +1800,7 @@ int nodeFrequencePgssTest_seq(Horae* horae, string input_dir, string output_dir,
 			#else
 				res = horae->nodeQuery(dataArray[n].source, (int)dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
 			#endif
-			
+
 				gettimeofday( &tp2, NULL);
 				double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
     			sumTime_perquery += delta_t;

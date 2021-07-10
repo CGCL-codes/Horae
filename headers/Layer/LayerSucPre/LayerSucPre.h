@@ -47,7 +47,7 @@ LayerSucPre::LayerSucPre(const LayerSucPre *layer): LayerSuc(layer) {
 
 // memory improvement
 LayerSucPre::LayerSucPre(const LayerSucPre *layer, int level): LayerSuc(layer, level) {
-	cout << "LayerSucPre::LayerSucPre(*layer, level)" << endl;
+	cout << "LayerSucPre::LayerSucPre(*layer, level: " << level << ")" << endl;
 }
 
 LayerSucPre::~LayerSucPre() {
