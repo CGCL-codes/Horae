@@ -136,8 +136,11 @@ int main(int argc, char* argv[]) {
 	else {
 		back_addr += (cl + "-res");
 	}
-	
-	
+
+#if defined(MEM)
+	back_addr += "-MEM";
+#endif
+		
 	switch (dataset) {//数据集_查询类型_baseline/pgss_长度_res.txt
 		case 1:
 			filename = "..//..//Dataset//out";

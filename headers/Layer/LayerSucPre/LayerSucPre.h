@@ -9,6 +9,9 @@ protected:
 public:
 	LayerSucPre(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, uint32_t row_addrs = 4, uint32_t column_addrs = 4);
 	LayerSucPre(const LayerSucPre *layer);
+	// memory improvement
+	LayerSucPre(const LayerSucPre *layer, int level);
+
 	virtual ~LayerSucPre();
 	void bucketCounting();
 
@@ -41,6 +44,12 @@ LayerSucPre::LayerSucPre(const LayerSucPre *layer): LayerSuc(layer) {
 	this->precursorAdjacencyList.resize(layer->precursorAdjacencyList.size());
 	this->precursorAdjacencyList.assign(layer->precursorAdjacencyList.begin(), layer->precursorAdjacencyList.end());
 }
+
+// memory improvement
+LayerSucPre::LayerSucPre(const LayerSucPre *layer, int level): LayerSuc(layer, level) {
+	cout << "LayerSucPre::LayerSucPre(*layer, level)" << endl;
+}
+
 LayerSucPre::~LayerSucPre() {
 	cout << "LayerSucPre::~LayerSucPre()" << endl;
 	vector<node>().swap(precursorAdjacencyList);

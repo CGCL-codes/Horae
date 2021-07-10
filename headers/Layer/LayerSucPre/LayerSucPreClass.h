@@ -10,6 +10,10 @@ private:
 public:
 	LayerSucPreClass(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, bool cache_align, bool kick, uint32_t row_addrs = 4, uint32_t column_addrs = 4);
 	LayerSucPreClass(const LayerSucPreClass *layer);
+	
+	// memory improvement
+	LayerSucPreClass(const LayerSucPreClass *layer, int level);
+
 	~LayerSucPreClass();
 	void insert(string src, string dst, weight_type weight);
 	weight_type edgeQuery(string src, string dst);
@@ -28,6 +32,11 @@ LayerSucPreClass::LayerSucPreClass(const LayerSucPreClass *layer): LayerSucPre(l
 }
 LayerSucPreClass::~LayerSucPreClass() {
 	cout << "LayerSucPreClass::~LayerSucPreClass()" << endl;
+}
+
+// memory improvement
+LayerSucPreClass::LayerSucPreClass(const LayerSucPreClass *layer, int level): LayerSucPre(layer, level) {
+	cout << "LayerSucPreClass::LayerSucPreClass(*layer, level)" << endl;
 }
 
 // src is the ID of the source node, dst is the ID of the destination node, weight is the weight of the edge.

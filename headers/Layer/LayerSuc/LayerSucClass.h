@@ -10,6 +10,10 @@ private:
 public:
 	LayerSucClass(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, bool cache_align, bool kick, uint32_t row_addrs = 4, uint32_t column_addrs = 4);
 	LayerSucClass(const LayerSucClass *layer);
+
+	// memory improvement
+	LayerSucClass(const LayerSucClass *layer, int level);
+
 	~LayerSucClass();
 	void insert(string src, string dst, weight_type weight);
 	weight_type edgeQuery(string src, string dst);
@@ -26,6 +30,11 @@ LayerSuc(granularity, width, depth, fingerprintLength, row_addrs, column_addrs),
 LayerSucClass::LayerSucClass(const LayerSucClass *layer): LayerSuc(layer) {
 	cout << "LayerSucClass::LayerSucClass(*layer)" << endl;
 }
+// memory improvement
+LayerSucClass::LayerSucClass(const LayerSucClass *layer, int level): LayerSuc(layer, level) {
+	cout << "LayerSucClass::LayerSucClass(*layer, level)" << endl;
+}
+
 LayerSucClass::~LayerSucClass() {
 	cout << "LayerSucClass::~LayerSucClass()" << endl;
 }

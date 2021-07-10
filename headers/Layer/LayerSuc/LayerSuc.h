@@ -9,6 +9,9 @@ protected:
 public:
 	LayerSuc(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, uint32_t row_addrs = 4, uint32_t column_addrs = 4);
 	LayerSuc(const LayerSuc *layer);
+	// memory improvement
+	LayerSuc(const LayerSuc *layer, int level);
+
 	virtual ~LayerSuc();
 	void bucketCounting();
 
@@ -54,6 +57,12 @@ LayerSuc::LayerSuc(const LayerSuc *layer): Layer(layer) {
 		this->successorAdjacencyList[i].assign(layer->successorAdjacencyList[i].begin(), layer->successorAdjacencyList[i].end());
 	}
 }
+
+// memory improvement
+LayerSuc::LayerSuc(const LayerSuc *layer, int level): Layer(layer, level) {
+	cout << "LayerSuc::LayerSuc(*layer, level)" << endl;
+}
+
 LayerSuc::~LayerSuc() {
 	cout << "LayerSuc::~LayerSuc()" << endl;
 	vector<vector<node>>().swap(successorAdjacencyList);

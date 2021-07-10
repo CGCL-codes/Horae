@@ -56,8 +56,8 @@ private:
 class Layer {
 protected:
 	const uint32_t granularity;			// the granularity of the level
-	const uint32_t width;				// the width of the matrix
-	const uint32_t depth;				// the depth of the matrix
+	uint32_t width;				// the width of the matrix
+	uint32_t depth;				// the depth of the matrix
 	const uint32_t fingerprintLength;	// the fingerprint length
 	const uint32_t row_addrs;			// the row addrs
 	const uint32_t column_addrs;		// the column_addrs
@@ -67,6 +67,9 @@ protected:
 public:
 	Layer(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, uint32_t row_addrs = 4, uint32_t column_addrs = 4);
 	Layer(const Layer *layer);
+	// memory improvement
+	Layer(const Layer *layer, int level);
+
 	virtual ~Layer();
 	uint32_t getGranularity() const;
 	virtual void bucketCounting();
@@ -109,6 +112,26 @@ Layer::Layer(const Layer *layer)
 		}
 	}
 }
+
+// memory improvement
+Layer::Layer(const Layer *layer, int level)
+: granularity(2 * layer->getGranularity()), fingerprintLength(layer->fingerprintLength), row_addrs(layer->row_addrs), column_addrs(layer->column_addrs) {
+	cout << "Layer::Layer(*layer, level)" << endl;
+
+	if(level == 1) {
+		width = 0.7 * layer->width;
+		depth = 0.7 * layer->depth;
+	}
+	else {
+		width = layer->width;
+		depth = layer->depth;
+	}
+	
+	uint32_t msize = width * depth;
+	posix_memalign((void**)&value, 64, sizeof(basket) * msize);		// 64-byte alignment of the requested space
+	memset(this->value, 0, sizeof(basket) * msize);
+}
+
 Layer::~Layer() {
     cout << "Layer::~Layer()" << endl;
 	delete[] this->value;

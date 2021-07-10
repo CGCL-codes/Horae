@@ -11,6 +11,9 @@ protected:
 public:
 	LayerSucPreMap(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, uint32_t row_addrs = 4, uint32_t column_addrs = 4);
 	LayerSucPreMap(const LayerSucPreMap *layer);
+	// memory improvement
+	LayerSucPreMap(const LayerSucPreMap *layer, int level);
+
 	~LayerSucPreMap();
 	void bucketCounting();
 
@@ -39,6 +42,12 @@ LayerSucPreMap::LayerSucPreMap(const LayerSucPreMap *layer): LayerSucPre(layer) 
 	this->n1 = layer->n1;
 	this->n2 = layer->n2;
 }
+
+// memory improvement
+LayerSucPreMap::LayerSucPreMap(const LayerSucPreMap *layer, int level): LayerSucPre(layer, level) {
+	cout << "LayerSucPreMap::LayerSucPreMap(*layer, level)" << endl;
+}
+
 LayerSucPreMap::~LayerSucPreMap() {
 	cout << "LayerSucPreMap::~LayerSucPreMap()" << endl;
 }

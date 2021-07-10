@@ -10,6 +10,10 @@ private:
 public:
 	LayerSucPreMapClass(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, bool cache_align, bool kick, uint32_t row_addrs = 4, uint32_t column_addrs = 4);
 	LayerSucPreMapClass(const LayerSucPreMapClass *layer);
+		
+	// memory improvement
+	LayerSucPreMapClass(const LayerSucPreMapClass *layer, int level);
+
 	~LayerSucPreMapClass();
 	void insert(string src, string dst, weight_type weight);
 	weight_type edgeQuery(string src, string dst);
@@ -26,6 +30,12 @@ LayerSucPreMap(granularity, width, depth, fingerprintLength , row_addrs, column_
 LayerSucPreMapClass::LayerSucPreMapClass(const LayerSucPreMapClass *layer): LayerSucPreMap(layer) {
 	cout << "LayerSucPreMapClass::LayerSucPreMapClass(*layer)" << endl;
 }
+
+// memory improvement
+LayerSucPreMapClass::LayerSucPreMapClass(const LayerSucPreMapClass *layer, int level): LayerSucPreMap(layer, level) {
+	cout << "LayerSucPreMapClass::LayerSucPreMapClass(*layer, level)" << endl;
+}
+
 LayerSucPreMapClass::~LayerSucPreMapClass() {
 	cout << "LayerSucPreMapClass::~LayerSucPreMapClass()" << endl;
 }

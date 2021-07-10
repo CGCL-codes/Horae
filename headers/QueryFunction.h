@@ -263,7 +263,11 @@ int pgssSequentialInsert(HORAE_VAR var, string filename) {
 #endif
 	while (!ifs.eof()) {
 		ifs >> s >> d >> w >> t;
+#ifdef MEM
+		pgss_sequential->newInsert(s, d, w, t);
+#else
 		pgss_sequential->insert(s, d, w, t);
+#endif
 		datanum++;
 #if defined(DEBUG) || defined(BINSTIME)
 		if (datanum % 10000000 == 0) {
@@ -334,34 +338,66 @@ int insert_pgss_parallel(Horae* pg, int64_t fpLength, int level, string filename
 		}
 #endif
 		int tt = ceil((double)(t - pg->getStartTime()) / (double)pg->getTimesliceLength());
-		if ((flag == 1) && (tt > pg->getLayer(level)->getGranularity())) {
+#ifdef MEM
+		if ((flag == 1) && (tt > 2 * pg->getLayer(level)->getGranularity())) {
 			flag = 0;
 			int line = datanum + 1;
-#if defined(DEBUG) || defined(TINSTIME)
+	#if defined(DEBUG) || defined(TINSTIME)
 			timeval matrix_s1, matrix_e1;
 			gettimeofday( &matrix_s1, NULL);
-#endif
+	#endif
+			// Layer* gs = new Layer(*(pg->getLayer(level)), level+1);
 			Layer* gs = NULL;
-#ifdef SUCPRE
-			gs = new LayerSucPreClass((LayerSucPreClass *)pg->getLayer(level));
-#elif SUCPREMAP
-			gs = new LayerSucPreMapClass((LayerSucPreMapClass *)pg->getLayer(level));
-#else
-			gs = new LayerSucClass((LayerSucClass *)pg->getLayer(level));
-#endif
-#if defined(DEBUG) || defined(TINSTIME)
+	#ifdef SUCPRE
+			gs = new LayerSucPreClass((LayerSucPreClass *)pg->getLayer(level), level + 1);
+	#elif SUCPREMAP
+			gs = new LayerSucPreMapClass((LayerSucPreMapClass *)pg->getLayer(level), level + 1);
+	#else
+			gs = new LayerSucClass((LayerSucClass *)pg->getLayer(level), level + 1);
+	#endif
+	#if defined(DEBUG) || defined(TINSTIME)
 			gettimeofday( &matrix_e1, NULL);
 			double matrix_time1 = (matrix_e1.tv_sec - matrix_s1.tv_sec) +  (matrix_e1.tv_usec - matrix_s1.tv_usec) / 1000000.0;
 			cout << "Level " << (level + 1) << ", Line = " << line << ", Matrix Time = " << matrix_time1 << " s" << endl;
-#endif
+	#endif
 			pg->addLayer(gs);
 			int64_t length = ifs.tellg();
-#ifdef DEBUG
+	#ifdef DEBUG
 			cout << "(" << s << ", " << d << ", " << w << ", " << t << ") -- " << " level = " << level << endl;
-#endif
+	#endif
 			pg->levelInsert(level + 1, s, d, w, t);
 			child = new thread(insert_pgss_parallel, pg, length, level + 1, filename, line);
 		}
+#else
+		if ((flag == 1) && (tt > pg->getLayer(level)->getGranularity())) {
+			flag = 0;
+			int line = datanum + 1;
+	#if defined(DEBUG) || defined(TINSTIME)
+			timeval matrix_s1, matrix_e1;
+			gettimeofday( &matrix_s1, NULL);
+	#endif
+			Layer* gs = NULL;
+	#ifdef SUCPRE
+			gs = new LayerSucPreClass((LayerSucPreClass *)pg->getLayer(level));
+	#elif SUCPREMAP
+			gs = new LayerSucPreMapClass((LayerSucPreMapClass *)pg->getLayer(level));
+	#else
+			gs = new LayerSucClass((LayerSucClass *)pg->getLayer(level));
+	#endif
+	#if defined(DEBUG) || defined(TINSTIME)
+			gettimeofday( &matrix_e1, NULL);
+			double matrix_time1 = (matrix_e1.tv_sec - matrix_s1.tv_sec) +  (matrix_e1.tv_usec - matrix_s1.tv_usec) / 1000000.0;
+			cout << "Level " << (level + 1) << ", Line = " << line << ", Matrix Time = " << matrix_time1 << " s" << endl;
+	#endif
+			pg->addLayer(gs);
+			int64_t length = ifs.tellg();
+	#ifdef DEBUG
+			cout << "(" << s << ", " << d << ", " << w << ", " << t << ") -- " << " level = " << level << endl;
+	#endif
+			pg->levelInsert(level + 1, s, d, w, t);
+			child = new thread(insert_pgss_parallel, pg, length, level + 1, filename, line);
+		}
+#endif
 		pg->levelInsert(level, s, d, w, t);
 		datanum++;
 #if defined(DEBUG) || defined(BINSTIME)
@@ -425,38 +461,68 @@ int pgssParallelInsert(HORAE_VAR var, string filename) {
 		ifs >> s >> d >> w >> t;
 		
 		int tt = ceil((double)(t - var.startTime) / (double)var.granularityLength);
-		
-		if ((flag == 1) && (tt > (pgss_parallel->getLayer(level)->getGranularity()))) {
+#ifdef MEM
+		if ((flag == 1) && (tt > 2*(pgss_parallel->getLayer(level)->getGranularity()))) {
 			flag = 0;
 			int line = datanum + 1;
-#if defined(DEBUG) || defined(TINSTIME)
+	#if defined(DEBUG) || defined(TINSTIME)
 			timeval matrix_s1, matrix_e1;
 			gettimeofday( &matrix_s1, NULL);
-#endif
-
+	#endif
+			// Layer* gs = new Layer(*(pgss_parallel->getLayer(level)), level+1); 
 			Layer* gs = NULL;
-#ifdef SUCPRE
-			gs = new LayerSucPreClass((LayerSucPreClass *)pgss_parallel->getLayer(level));
-#elif SUCPREMAP
-			gs = new LayerSucPreMapClass((LayerSucPreMapClass *)pgss_parallel->getLayer(level));
-#else
-			gs = new LayerSucClass((LayerSucClass *)pgss_parallel->getLayer(level));
-#endif
-
-#if defined(DEBUG) || defined(TINSTIME)
+	#ifdef SUCPRE
+			gs = new LayerSucPreClass((LayerSucPreClass *)pgss_parallel->getLayer(level), level + 1);
+	#elif SUCPREMAP
+			gs = new LayerSucPreMapClass((LayerSucPreMapClass *)pgss_parallel->getLayer(level), level + 1);
+	#else
+			gs = new LayerSucClass((LayerSucClass *)pgss_parallel->getLayer(level), level + 1);
+	#endif
+	#if defined(DEBUG) || defined(TINSTIME)
 			gettimeofday( &matrix_e1, NULL);
 			double matrix_time1 = (matrix_e1.tv_sec - matrix_s1.tv_sec) +  (matrix_e1.tv_usec - matrix_s1.tv_usec) / 1000000.0;
 			cout << "Level " << (level + 1) << ", Line = " << line << ", Matrix Time = " << matrix_time1 << " s" << endl;
-#endif
+	#endif
 			pgss_parallel->addLayer(gs);
 			int64_t length = ifs.tellg();
-#ifdef DEBUG
+	#ifdef DEBUG
 			cout << "(" << s << ", " << d << ", " << w << ", " << t << ") -- " << " level = " << level << endl;
-#endif
+	#endif
 			pgss_parallel->levelInsert(level + 1, s, d, w, t);
             child = new thread(insert_pgss_parallel, pgss_parallel, length, level + 1, filename, line);
-			
 		}
+#else
+		if ((flag == 1) && (tt > (pgss_parallel->getLayer(level)->getGranularity()))) {
+			flag = 0;
+			int line = datanum + 1;
+	#if defined(DEBUG) || defined(TINSTIME)
+			timeval matrix_s1, matrix_e1;
+			gettimeofday( &matrix_s1, NULL);
+	#endif
+
+			Layer* gs = NULL;
+	#ifdef SUCPRE
+			gs = new LayerSucPreClass((LayerSucPreClass *)pgss_parallel->getLayer(level));
+	#elif SUCPREMAP
+			gs = new LayerSucPreMapClass((LayerSucPreMapClass *)pgss_parallel->getLayer(level));
+	#else
+			gs = new LayerSucClass((LayerSucClass *)pgss_parallel->getLayer(level));
+	#endif
+
+	#if defined(DEBUG) || defined(TINSTIME)
+			gettimeofday( &matrix_e1, NULL);
+			double matrix_time1 = (matrix_e1.tv_sec - matrix_s1.tv_sec) +  (matrix_e1.tv_usec - matrix_s1.tv_usec) / 1000000.0;
+			cout << "Level " << (level + 1) << ", Line = " << line << ", Matrix Time = " << matrix_time1 << " s" << endl;
+	#endif
+			pgss_parallel->addLayer(gs);
+			int64_t length = ifs.tellg();
+	#ifdef DEBUG
+			cout << "(" << s << ", " << d << ", " << w << ", " << t << ") -- " << " level = " << level << endl;
+	#endif
+			pgss_parallel->levelInsert(level + 1, s, d, w, t);
+            child = new thread(insert_pgss_parallel, pgss_parallel, length, level + 1, filename, line);	
+		}
+#endif
 		pgss_parallel->levelInsert(level, s, d, w, t);
 		datanum++;
 #if defined(DEBUG) || defined(BINSTIME)
@@ -905,7 +971,13 @@ int edgeFrequencePgssTest_single(Horae* horae, string input_dir, string output_d
 		for (int n = 0; n < datanum; n++) {
 			int64_t res;
 			gettimeofday( &tp1, NULL);
+			
+		#ifdef MEM
+			res = horae->newEdgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+		#else
 			res = horae->edgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+		#endif
+			
 			gettimeofday( &tp2, NULL);
 			double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
 			sumTime_perquery += delta_t;
@@ -1007,7 +1079,13 @@ int edgeExistencePgssTest_single(Horae* horae, string input_dir, string output_d
 		for (int n = 0; n < datanum; n++) {
 			int64_t res;
 			gettimeofday( &tp1, NULL);
+
+		#ifdef MEM
+			res = horae->newEdgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+		#else
 			res = horae->edgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+		#endif
+			
 			gettimeofday( &tp2, NULL);
 			double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
     		sumTime_perquery += delta_t;
@@ -1128,7 +1206,13 @@ int nodeFrequencePgssTest_single(Horae* horae, string input_dir, string output_d
 				continue;
 			int64_t res;
 			gettimeofday( &tp1, NULL);
+
+		#ifdef MEM
+			res = horae->newNodeQuery(dataArray[n].source, (int)dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+		#else
 			res = horae->nodeQuery(dataArray[n].source, (int)dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+		#endif
+			
 			gettimeofday( &tp2, NULL);
 			double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
     		sumTime_perquery += delta_t;
@@ -1488,7 +1572,13 @@ int edgeFrequencePgssTest_seq(Horae* horae, string input_dir, string output_dir,
 			for (int n = 0; n < datanum; n++) {
 				int64_t res;
 				gettimeofday( &tp1, NULL);
+
+			#ifdef MEM
+				res = horae->newEdgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+			#else
 				res = horae->edgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+			#endif
+
 				gettimeofday( &tp2, NULL);
 				double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
     			sumTime_perquery += delta_t;
@@ -1579,7 +1669,13 @@ int edgeExistencePgssTest_seq(Horae* horae, string input_dir, string output_dir,
 			for (int n = 0; n < datanum; n++) {
 				int64_t res;
 				gettimeofday( &tp1, NULL);
+
+			#ifdef MEM
+				res = horae->newEdgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+			#else
 				res = horae->edgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+			#endif
+			
 				gettimeofday( &tp2, NULL);
 				double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
     			sumTime_perquery += delta_t;
@@ -1690,7 +1786,13 @@ int nodeFrequencePgssTest_seq(Horae* horae, string input_dir, string output_dir,
 					continue;
 				int64_t res;
 				gettimeofday( &tp1, NULL);
+
+			#ifdef MEM
+				res = horae->newNodeQuery(dataArray[n].source, (int)dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+			#else
 				res = horae->nodeQuery(dataArray[n].source, (int)dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+			#endif
+			
 				gettimeofday( &tp2, NULL);
 				double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
     			sumTime_perquery += delta_t;
