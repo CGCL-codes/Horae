@@ -462,11 +462,9 @@ uint32_t Horae::newEdgeQuery(uint32_t s, uint32_t d, time_type start, time_type 
 	}
 	int gl = (1 << (level - 1));
 	//window *win = new window[2 * level];
-	vector<window> win;				// changed
-
-
-	int n = newSecondPowerDecompose(start, end, win, level-1);
-	for (int i = 0; i < n; i++) {
+	vector<window> win;
+	newSecondPowerDecompose(start, end, win, level-1);
+	for (int i = 0; i < win.size(); i++) {
 			string v1 = to_string(s) + "+" + to_string(win[i].number);
 			string v2 = to_string(d) + "+" + to_string(win[i].number);
 			result += multi_layers[win[i].level - 1]->edgeQuery(v1, v2);
@@ -484,9 +482,9 @@ uint32_t Horae::newNodeQuery(uint32_t v, int type, time_type start, time_type en
 		level++;
 	}
 	int gl = (1 << (level - 1));
-	vector<window> win;		// changed
-	int n = newSecondPowerDecompose(start, end, win, level-1);
-	for (int i = 0; i < n; i++) {
+	vector<window> win;		
+	newSecondPowerDecompose(start, end, win, level-1);
+	for (int i = 0; i < win.size(); i++) {
 			string v1 = to_string(v) + "+" + to_string(win[i].number);
 			result += multi_layers[win[i].level - 1]->nodeQuery(v1, type);
 	}
