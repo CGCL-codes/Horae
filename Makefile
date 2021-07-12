@@ -1,5 +1,4 @@
-all : horae \
-	horae-mem
+all : horae horae-mem
 
 .PHONY : all
 CXX = g++
