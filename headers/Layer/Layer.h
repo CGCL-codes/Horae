@@ -80,10 +80,12 @@ public:
 	
 protected:
 	bool insertMatrix(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, uint16_t fp_dst, weight_type weight);
+	bool kickElement(uint32_t& addr_src, uint16_t& fp_src, uint32_t& addr_dst, uint16_t& fp_dst, weight_type& weight);
 	weight_type edgeQueryMatrix(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, uint16_t fp_dst);
 	weight_type nodeQueryMatrix(uint32_t addr_v, uint16_t fp_v, int type);
 
 	bool insertMatrixCacheline(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, uint16_t fp_dst, weight_type weight);
+	bool kickElementCacheline(uint32_t& addr_src, uint16_t& fp_src, uint32_t& addr_dst, uint16_t& fp_dst, weight_type& weight);
 	weight_type edgeQueryMatrixCacheline(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, uint16_t fp_dst);
 	weight_type nodeQueryMatrixCacheline(uint32_t addr_v, uint16_t fp_v, int type);
 };
@@ -220,6 +222,121 @@ bool Layer::insertMatrix(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, 
 	delete[] seed2;
 	return false;
 }
+bool Layer::kickElement(uint32_t& addr_src, uint16_t& fp_src, uint32_t& addr_dst, uint16_t& fp_dst, weight_type& weight) {
+	int kickNum = 0;
+	
+	uint32_t mask = (1 << fingerprintLength) - 1;
+	uint32_t head = 16384; //pow(2, 14);
+
+	uint32_t* curtmp1 = new uint32_t[row_addrs];			// row address seeds
+	uint32_t* curtmp2 = new uint32_t[column_addrs];			// column address seeds
+
+	int kickflag = 1;
+	while (true){
+		// 找到当前边(e1)的第kickflag个地址，然后判断两个slot中序号较小的那个剔出
+		// kickout the elements of the first pos(the power of two choices)
+		uint32_t pos_x = (addr_src + fp_src) % depth; 
+		uint32_t pos_y;
+		if (kickflag == 1) {
+			pos_y = (addr_dst + fp_dst) % width;
+		}
+		else if (kickflag == 2) {
+			uint32_t tmp2 = (fp_dst * multiplier + increment) % modulus;
+			pos_y = (fp_dst + tmp2) % width;
+
+		}
+		uint32_t pos = pos_x * width + pos_y;
+		uint32_t insertnum[SLOTNUM];
+		for (int i = 0; i < SLOTNUM; i++){
+			insertnum[i] = (value[pos].src[i] >> 14) * 4 + (value[pos].dst[i] >> 14);
+		}
+		int kickindex = getMinIndex(insertnum, SLOTNUM);					// 找到要踢的那个slot
+		uint32_t kick_i = (value[pos].src[kickindex] >> 14);				// 将要踢出的边(e2)信息存储到kick_变量中
+		uint32_t kick_j = (value[pos].dst[kickindex] >> 14);
+		uint16_t kick_fpx = (value[pos].src[kickindex] & mask);
+		uint16_t kick_fpy = (value[pos].dst[kickindex] & mask);
+		weight_type kick_weight = value[pos].weight[kickindex];
+		// insert the element
+		value[pos].src[kickindex] = fp_src;
+		if(kickflag == 1) {
+			value[pos].dst[kickindex] = fp_dst;
+		}
+		else if (kickflag == 2) {
+			value[pos].dst[kickindex] = fp_dst + head;
+		}
+		value[pos].weight[kickindex] = weight;
+
+		// 此时为边e2
+		fp_src = kick_fpx;
+		fp_dst = kick_fpy;
+		weight = kick_weight;
+		
+		// 根据e2存储在矩阵中的当前位置以及下标信息还原边e2的addr1、addr2
+		uint32_t shifterx = fp_src;
+		for (int v = 0; v < kick_i; v++) {
+			shifterx = (shifterx * multiplier + increment) % modulus;
+		}
+		uint32_t tmp_h1 = pos_x;
+		while (tmp_h1 < shifterx)
+			tmp_h1 += depth;
+		tmp_h1 -= shifterx;
+		addr_src = tmp_h1;
+
+		uint32_t shiftery = fp_dst;
+		for (int v = 0; v < kick_j; v++)
+			shiftery = (shiftery * multiplier + increment) % modulus;
+		uint32_t tmp_h2 = pos_y;
+		while (tmp_h2 < shiftery)
+			tmp_h2 += width;
+		tmp_h2 -= shiftery;
+		addr_dst = tmp_h2;
+
+		////////
+		curtmp1[0] = fp_src;
+		curtmp2[0] = fp_dst;
+		for (int i = 1; i < row_addrs; i++)	
+			curtmp1[i] =  (curtmp1[i - 1] * multiplier + increment) % modulus;
+		for (int i = 1; i < column_addrs; i++)	
+			curtmp2[i] =  (curtmp2[i - 1] * multiplier + increment) % modulus;
+		
+		uint32_t addr_no = (kick_i * 4) + (kick_j);
+
+		for (int i = 0; i < row_addrs; i++) {
+			uint32_t depth_addr = (addr_src + curtmp1[i]) % depth;
+			for (int j = 0; j < column_addrs; j++) {
+				if((i * 4 + j) <= addr_no)
+					continue;
+				int width_addr = (addr_dst + curtmp2[j]) % width;
+				int pos = depth_addr * width + width_addr;
+				
+				for (int m = 0; m < SLOTNUM; m++) {
+					if (value[pos].src[m] == 0 && value[pos].weight[m] == 0) {
+						value[pos].src[m] = fp_src + head * i;
+						value[pos].dst[m] = fp_dst + head * j;
+						value[pos].weight[m] = weight;
+						delete[] curtmp1;
+						delete[] curtmp2;
+						return true;
+					}
+				}
+				
+			}
+		}
+		if(addr_no == 0) {
+			kickflag = 2;
+		}
+		else {
+			kickflag = 1;
+		} //avoid kick-loop
+		kickNum++;
+		if(kickNum > 10){
+			break;
+		}
+	}
+	delete[] curtmp1;
+	delete[] curtmp2;
+	return false;
+}
 weight_type Layer::edgeQueryMatrix(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, uint16_t fp_dst) {
 	uint32_t mask = (1 << fingerprintLength) - 1;
 	// Alternative address -- row * column
@@ -294,6 +411,7 @@ weight_type Layer::nodeQueryMatrix(uint32_t addr_v, uint16_t fp_v, int type) {
 	return weight;
 }
 
+
 bool Layer::insertMatrixCacheline(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, uint16_t fp_dst, weight_type weight) {
 	uint32_t mask = (1 << fingerprintLength) - 1;
 	uint32_t head = 16384; //pow(2, 14);
@@ -320,7 +438,7 @@ bool Layer::insertMatrixCacheline(uint32_t addr_src, uint16_t fp_src, uint32_t a
 					pos = row_addr * width + column_addr;
 				}
 				else {
-					column_addr_alt = (column_addr ^ (fp_dst % column_addrs)) % width;
+					column_addr_alt = (column_addr ^ (fp_dst % CACHESLOT)) % width;
 					pos = row_addr * width + column_addr_alt;
 				}
 				for (int m = 0; m < SLOTNUM; m++) {
@@ -344,6 +462,122 @@ bool Layer::insertMatrixCacheline(uint32_t addr_src, uint16_t fp_src, uint32_t a
 	}
 	delete[] seed1;
 	delete[] seed2;
+	return false;
+}
+bool Layer::kickElementCacheline(uint32_t& addr_src, uint16_t& fp_src, uint32_t& addr_dst, uint16_t& fp_dst, weight_type& weight) {
+	int kickNum = 0;
+
+	uint32_t mask = (1 << fingerprintLength) - 1;
+	uint32_t head = 16384; //pow(2, 14);
+	
+	uint32_t* curtmp1 = new uint32_t[row_addrs];			// row address seeds
+	uint32_t* curtmp2 = new uint32_t[column_addrs / 2];			// column address seeds
+
+	int kickflag = 1;
+	while (true){
+		// 找到当前边(e1)的第kickflag个地址，然后判断两个slot中序号较小的那个剔出
+		// kickout the elements of first pos(the power of two choices)
+		uint32_t pos_x = (addr_src + fp_src) % depth; 
+		uint32_t pos_y = (addr_dst + fp_dst) % width;
+		if(kickflag == 2) {
+			pos_y =  pos_y ^ (fp_dst % CACHESLOT) % width;
+		}
+		uint32_t pos = pos_x * width + pos_y;
+		uint32_t insertnum[SLOTNUM];
+		for (int i = 0; i < SLOTNUM; i++){
+			insertnum[i] = (value[pos].src[i] >> 14) * 4 + (value[pos].dst[i] >> 14);
+		}
+		int kickindex = getMinIndex(insertnum, SLOTNUM);					// 找到要踢的那个slot
+		uint32_t kick_i = (value[pos].src[kickindex] >> 14);				// 将要踢出的边(e2)信息存储到kick_变量中
+		uint32_t kick_j = (value[pos].dst[kickindex] >> 14);
+		uint16_t kick_fpx = (value[pos].src[kickindex] & mask);
+		uint16_t kick_fpy = (value[pos].dst[kickindex] & mask);
+		weight_type kick_weight = value[pos].weight[kickindex];
+		// insert the element
+		value[pos].src[kickindex] = fp_src;
+		if (kickflag == 1) {
+			value[pos].dst[kickindex] = fp_dst;
+		}
+		else if (kickflag == 2) {
+			value[pos].dst[kickindex] = fp_dst + head;
+		}
+		value[pos].weight[kickindex] = weight;
+		
+		// 此时为边e2
+		fp_src = kick_fpx;
+		fp_dst = kick_fpy;
+		weight = kick_weight;
+		
+		//根据e2存储在矩阵中的当前位置以及下标信息还原边e2的addr1、addr2
+		uint32_t shifterx = fp_src;
+		for (int v = 0; v < kick_i; v++) {
+			shifterx = (shifterx * multiplier + increment) % modulus;
+		}
+		uint32_t tmp_h1 = pos_x;
+		while (tmp_h1 < shifterx)
+			tmp_h1 += depth;
+		tmp_h1 -= shifterx;
+		addr_src = tmp_h1;
+
+		uint32_t shiftery = fp_dst;
+		for (int v = 0; v < (kick_j / 2); v++)
+			shiftery = (shiftery * multiplier + increment) % modulus;
+		uint32_t tmp_h2 = (kick_j % 2 == 0) ? pos_y : (pos_y ^ (fp_dst % CACHESLOT) % width);
+		while (tmp_h2 < shiftery)
+			tmp_h2 += width;
+		tmp_h2 -= shiftery;
+		addr_dst = tmp_h2;
+
+		curtmp1[0] = fp_src;
+		curtmp2[0] = fp_dst;
+		for (int i = 1; i < row_addrs; i++)	
+			curtmp1[i] =  (curtmp1[i - 1] * multiplier + increment) % modulus;
+		for (int i = 1; i < column_addrs / 2; i++)	
+			curtmp2[i] =  (curtmp2[i - 1] * multiplier + increment) % modulus;
+		
+		uint32_t addr_no = (kick_i * 4) + (kick_j);
+
+		for (int i = 0; i < row_addrs; i++) {
+			uint32_t row_addr = (addr_src + curtmp1[i]) % depth;
+			for (int j = 0; j < column_addrs / 2; j++) {
+				uint32_t column_addr = (addr_dst + curtmp2[j]) % width;
+				for (int k = 0; k < 2; k++) {
+					if((i * 4 + j * 2 + k) <= addr_no)
+						continue;
+					uint32_t pos;
+					if (k == 0) {
+						pos = row_addr * width + column_addr;
+					}
+					else {
+						uint32_t column_addr_alt = (column_addr ^ (fp_dst % CACHESLOT)) % width;
+						pos = row_addr * width + column_addr_alt;
+					}
+					for (int m = 0; m < SLOTNUM; m++) {
+						if (value[pos].src[m] == 0 && value[pos].weight[m] == 0) {
+							value[pos].src[m] = fp_src + head * i;
+							value[pos].dst[m] = fp_dst + head * (j * 2 + k);
+							value[pos].weight[m] = weight;
+							delete[] curtmp1;
+							delete[] curtmp2;
+							return true;
+						}
+					}
+				}
+			}
+		}
+		if(addr_no == 0){
+			kickflag = 2;
+		}
+		else{
+			kickflag = 1;
+		}	//avoid kick-loop
+		kickNum++;
+		if(kickNum > 10) {
+			break;
+		}
+	}
+	delete[] curtmp1;
+	delete[] curtmp2;
 	return false;
 }
 weight_type Layer::edgeQueryMatrixCacheline(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, uint16_t fp_dst) {
@@ -370,7 +604,7 @@ weight_type Layer::edgeQueryMatrixCacheline(uint32_t addr_src, uint16_t fp_src, 
 					pos = row_addr * width + column_addr;
 				}
 				else {
-					uint32_t column_addr_alt = (column_addr ^ (fp_dst % column_addrs)) % width;
+					uint32_t column_addr_alt = (column_addr ^ (fp_dst % CACHESLOT)) % width;
 					pos = row_addr * width + column_addr_alt;
 				}
 				if(pos >= width * depth || pos < 0) {
@@ -427,7 +661,7 @@ weight_type Layer::nodeQueryMatrixCacheline(uint32_t addr_v, uint16_t fp_v, int 
 				py[i] = (addr_v + seeds[i / 2]) % width;
 			}
 			else {
-				py[i] = py[i - 1] ^ (fp_v % column_addrs) % width;
+				py[i] = py[i - 1] ^ (fp_v % CACHESLOT) % width;
 			}
 		}
 

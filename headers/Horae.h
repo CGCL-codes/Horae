@@ -465,9 +465,9 @@ uint32_t Horae::newEdgeQuery(uint32_t s, uint32_t d, time_type start, time_type 
 	vector<window> win;
 	newSecondPowerDecompose(start, end, win, level-1);
 	for (int i = 0; i < win.size(); i++) {
-			string v1 = to_string(s) + "+" + to_string(win[i].number);
-			string v2 = to_string(d) + "+" + to_string(win[i].number);
-			result += multi_layers[win[i].level - 1]->edgeQuery(v1, v2);
+		string v1 = to_string(s) + "+" + to_string(win[i].number);
+		string v2 = to_string(d) + "+" + to_string(win[i].number);
+		result += multi_layers[win[i].level - 1]->edgeQuery(v1, v2);
 	}
 	//delete[] win;
 	return result;

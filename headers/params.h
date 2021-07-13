@@ -13,7 +13,7 @@
 typedef uint32_t weight_type;
 typedef int64_t time_type;
 
-
+#define CACHESLOT 4    // one 64 Bytes cacheline contains 4 slotrooms
 
 
 #endif //_PARAMS_H
