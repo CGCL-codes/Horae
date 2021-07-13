@@ -466,7 +466,7 @@ int pgssParallelInsert(HORAE_VAR var, string filename) {
 		
 		int tt = ceil((double)(t - var.startTime) / (double)var.granularityLength);
 #ifdef MEM
-		if ((flag == 1) && (tt > 2*(pgss_parallel->getLayer(level)->getGranularity()))) {
+		if ((flag == 1) && (tt > 2 * (pgss_parallel->getLayer(level)->getGranularity()))) {
 			flag = 0;
 			int line = datanum + 1;
 	#if defined(DEBUG) || defined(TINSTIME)

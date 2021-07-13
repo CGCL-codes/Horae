@@ -326,16 +326,10 @@ void Horae::newInsert(uint32_t s, uint32_t d, weight_type w, time_type t) {
 #endif	
 		this->multi_layers.push_back(layer);
 	}
-	for (uint32_t i = 0; i < 1; i++) {
-		string sv = to_string(s) + "+" + to_string((uint32_t)ceil((double)tt / (double)multi_layers[i]->getGranularity()));
-		string dv = to_string(d) + "+" + to_string((uint32_t)ceil((double)tt / (double)multi_layers[i]->getGranularity()));
-		this->multi_layers[i]->insert(sv, dv, w);
-	}
-	for (uint32_t i = 1; i < multi_layers.size(); i++) {
+	
+	for (uint32_t i = 0; i < multi_layers.size(); i++) {
 		uint32_t winNum = ceil((double)tt / (double)multi_layers[i]->getGranularity());
-		if(winNum % 2 ==1){
-			continue;
-		}else{
+		if (i == 0 || (i != 0 && winNum % 2 == 0)) {
 			string sv = to_string(s) + "+" + to_string(winNum);
 			string dv = to_string(d) + "+" + to_string(winNum);
 			this->multi_layers[i]->insert(sv, dv, w);

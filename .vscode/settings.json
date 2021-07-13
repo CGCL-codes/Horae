@@ -25,6 +25,7 @@
         "unordered_map": "cpp",
         "algorithm": "cpp",
         "string": "cpp",
-        "xiosbase": "cpp"
+        "xiosbase": "cpp",
+        "cmath": "cpp"
     }
 }
