@@ -284,7 +284,7 @@ int main(int argc, char* argv[]) {
 		 << ", fingerprintLen = " << horae_var.fingerprintLen << endl;
 #endif
 	string test_situation_dir = dataset_name + "_gl_" + to_string(horae_var.granularityLength) + "_" + to_string(horae_var.width) + "_" + 
-		to_string(horae_var.depth) + "_" + to_string(SLOTNUM) + "_" + to_string(horae_var.fingerprintLen) + back_addr +"//";
+		to_string(horae_var.depth) + "_" + to_string(SLOTNUM) + "_" + to_string(horae_var.fingerprintLen) + back_addr +"-DEBUG//";
 	output_dir += test_situation_dir;
 
 	char dir_path[FILENAME_MAX];
@@ -413,6 +413,11 @@ int main(int argc, char* argv[]) {
 		default:
 			break;
 	}
+
+	// uint32_t rlt = pgss_parallel->newEdgeQuery(4088104007, 1315596906, 1, 1024);
+	// cout << rlt << endl;
+
+
 #if defined(DEBUG) || defined(HINT)
 	gettimeofday( &main_end, NULL);
 	double main_time = (main_end.tv_sec - main_start.tv_sec) + (main_end.tv_usec - main_start.tv_usec) / 1000000.0;

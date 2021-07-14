@@ -45,7 +45,6 @@ void LayerSucClass::insert(string src, string dst, weight_type weight) {
 	uint32_t hash_dst = (*hfunc[0])((unsigned char*)(dst.c_str()), dst.length());
 	//uint32_t mask = pow(2, fingerprintLength) - 1;
 	uint32_t mask = (1 << fingerprintLength) - 1;
-	uint32_t head = 16384; //pow(2, 14);
 	uint16_t fp_src = hash_src & mask;
 	if (fp_src == 0) fp_src += 1;
 	uint32_t addr_src = (hash_src >> fingerprintLength) % depth;

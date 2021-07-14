@@ -26,6 +26,7 @@
         "algorithm": "cpp",
         "string": "cpp",
         "xiosbase": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "fstream": "cpp"
     }
 }
