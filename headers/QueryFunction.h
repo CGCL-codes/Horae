@@ -466,10 +466,6 @@ int pgssParallelInsert(HORAE_VAR var, string filename) {
 		
 		int tt = ceil((double)(t - var.startTime) / (double)var.granularityLength);
 
-		if (s == 4088104007 && d == 1315596906) {
-			cout << s << " " << " " << d << " " << w << " " << t << " " << tt << endl;
-		}
-		
 #ifdef MEM
 		if ((flag == 1) && (tt > 2 * (pgss_parallel->getLayer(level)->getGranularity()))) {
 			flag = 0;
@@ -984,19 +980,13 @@ int edgeFrequencePgssTest_single(Horae* horae, string input_dir, string output_d
 		for (int n = 0; n < datanum; n++) {
 			int64_t res;
 			gettimeofday( &tp1, NULL);
-			// if (num == 1024) {
-			// 	cout << dataArray[n].source << dataArray[n].destination << dataArray[n].start_time << dataArray[n].end_time << endl;
-			// 	getchar();
-			// }
+			
 		#ifdef MEM
 			res = horae->newEdgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
 		#else
 			res = horae->edgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
 		#endif
-			// if (num == 1024) {
-			// 	cout << "res = " << res << endl;
-			// 	getchar();
-			// }
+
 			gettimeofday( &tp2, NULL);
 			double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
 			sumTime_perquery += delta_t;

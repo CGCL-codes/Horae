@@ -342,10 +342,6 @@ void Horae::newLevelInsert(int level, uint32_t s, uint32_t d, weight_type w, tim
 	uint32_t tt = ceil((double)(t - start_time) / (double)timeslice_len);
 
 	int winNum = ceil((double)tt / (double)tg);
-
-	if (s == 4088104007 && d == 1315596906) {
-		cout << "newLevelInsert(" << level << ", " << s << ", " << d << ", " << w << ", " << t << ") -- tt = " << tt << ", winNum = " << winNum << endl;
-	}
 	if (level != 0 && winNum % 2 == 1)
 		return;
 	else {
@@ -465,11 +461,7 @@ uint32_t Horae::newEdgeQuery(uint32_t s, uint32_t d, time_type start, time_type 
 	for (int i = 0; i < win.size(); i++) {
 		string v1 = to_string(s) + "+" + to_string(win[i].number);
 		string v2 = to_string(d) + "+" + to_string(win[i].number);
-		// result += multi_layers[win[i].level - 1]->edgeQuery(v1, v2);
-		weight_type r = multi_layers[win[i].level - 1]->edgeQuery(v1, v2);
-		result += r;
-		
-		// cout << "win: level = " << win[i].level << ", number = " << win[i].number << ", r = " << r << endl;
+		result += multi_layers[win[i].level - 1]->edgeQuery(v1, v2);
 	}
 	//delete[] win;
 	return result;
