@@ -36,7 +36,9 @@ void LayerSucPre::bucketCounting() {
 }
 
 LayerSucPre::LayerSucPre(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, uint32_t row_addrs, uint32_t column_addrs): LayerSuc(granularity, width, depth, fingerprintLength, row_addrs, column_addrs) {
-	cout << "LayerSucPre::LayerSucPre(granularity, width, depth, fingerprintLength)" << endl;
+	cout << "LayerSucPre::LayerSucPre(granularity: " << granularity 
+		<< ", width: " << width <<", depth: " << depth << ", fplen: " << fingerprintLength
+		<< ", row_addrs: " << row_addrs << ", column_addrs: " << column_addrs << ")" << endl;
 }
 LayerSucPre::LayerSucPre(const LayerSucPre *layer): LayerSuc(layer) {
 	cout << "LayerSucPre::LayerSucPre(*layer)" << endl;

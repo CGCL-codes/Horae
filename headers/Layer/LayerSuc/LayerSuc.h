@@ -47,7 +47,9 @@ void LayerSuc::bucketCounting() {
 }
 
 LayerSuc::LayerSuc(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, uint32_t row_addrs, uint32_t column_addrs): Layer(granularity, width, depth, fingerprintLength, row_addrs, column_addrs) {
-	cout << "LayerSuc::LayerSuc(granularity, width, depth, fplen, row_addrs, column_addrs)" << endl;
+	cout << "LayerSuc::LayerSuc(granularity: " << granularity 
+		<< ", width: " << width <<", depth: " << depth << ", fplen: " << fingerprintLength
+		<< ", row_addrs: " << row_addrs << ", column_addrs: " << column_addrs << ")" << endl;
 }
 LayerSuc::LayerSuc(const LayerSuc *layer): Layer(layer) {
 	cout << "LayerSuc::LayerSuc(*layer)" << endl;

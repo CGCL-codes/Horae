@@ -33,7 +33,9 @@ void LayerSucPreMap::bucketCounting() {
 }
 
 LayerSucPreMap::LayerSucPreMap(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, uint32_t row_addrs, uint32_t column_addrs): LayerSucPre(granularity, width, depth, fingerprintLength, row_addrs, column_addrs) {
-	cout << "LayerSucPreMap::LayerSucPreMap(granularity, width, depth, fingerprintLength)" << endl;
+	cout << "LayerSucPreMap::LayerSucPreMap(granularity: " << granularity 
+		<< ", width: " << width <<", depth: " << depth << ", fplen: " << fingerprintLength
+		<< ", row_addrs: " << row_addrs << ", column_addrs: " << column_addrs << ")" << endl;
 	this->n1 = 0;
 	this->n2 = 0;
 }
