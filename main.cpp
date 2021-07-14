@@ -284,8 +284,11 @@ int main(int argc, char* argv[]) {
 		 << ", fingerprintLen = " << horae_var.fingerprintLen << endl;
 #endif
 	string test_situation_dir = dataset_name + "_gl_" + to_string(horae_var.granularityLength) + "_" + to_string(horae_var.width) + "_" + 
-		to_string(horae_var.depth) + "_" + to_string(SLOTNUM) + "_" + to_string(horae_var.fingerprintLen) + back_addr + //";
+		to_string(horae_var.depth) + "_" + to_string(SLOTNUM) + "_" + to_string(horae_var.fingerprintLen) + back_addr + "//";
+	
 	output_dir += test_situation_dir;
+	// cout << "test_situation_dir = " << test_situation_dir << endl;
+	// cout << "output_dir = " << output_dir << endl;
 
 	char dir_path[FILENAME_MAX];
 	strcpy(dir_path, output_dir.c_str());

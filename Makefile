@@ -11,7 +11,7 @@ horae-mem : horae-mem.o
 
 
 horae.o : main.cpp headers/Horae.h headers/QueryFunction.h headers/HashFunction.h headers/LayerHeaders.h headers/params.h
-	$(CXX) -o horae.o -c main.cpp -D HINT -D MEM
+	$(CXX) -o horae.o -c main.cpp -D HINT
 horae-mem.o : main.cpp headers/Horae.h headers/QueryFunction.h headers/HashFunction.h headers/LayerHeaders.h headers/params.h
 	$(CXX) -o horae-mem.o -c main.cpp -D HINT -D MEM
 	
