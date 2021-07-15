@@ -225,12 +225,27 @@ int main(int argc, char* argv[]) {
 			dataset_name = "lkml";
 			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
 			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
-					width = 6500;
-					depth = 6550;
+				width = 6500;
+				depth = 6550;
 			}
 			else if (test_situation == 1) {  //pgss
-					width = 1750;
-					depth = 1800;
+				width = 1750;
+				depth = 1800;
+			}
+			break;
+		case 7:
+			filename = "..//..//Dataset//wiki-talk";
+			input_dir = "..//..//TestFiles//wiki-talk//input//";
+			output_dir = "..//..//TestFiles//wiki-talk//output//";
+			dataset_name = "wiki-talk";
+			num = { 32, 64, 128, 256, 512, 1024, 2048, 3072, 4096, 5120 };
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+				width = 3536;
+				depth = 3536;
+			}
+			else if (test_situation == 1) {  //pgss
+				width = 3536;
+				depth = 3536;
 			}
 			break;
 		default:
