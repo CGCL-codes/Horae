@@ -189,6 +189,8 @@ int baselineInsert(HORAE_VAR var, string filename) {
 	int datanum = 0;
 	while (!ifs.eof()) {
 		ifs >> s >> d >> w >> t;
+		if(ifs.fail())
+			break;
 		uint32_t tt = ceil((double)(t - var.startTime) / (double)var.granularityLength);
 		string sv = to_string(s) + "+" + to_string((uint32_t)ceil((double)tt / (double)baseline_gss->getGranularity()));
 		string dv = to_string(d) + "+" + to_string((uint32_t)ceil((double)tt / (double)baseline_gss->getGranularity()));
@@ -263,6 +265,8 @@ int pgssSequentialInsert(HORAE_VAR var, string filename) {
 #endif
 	while (!ifs.eof()) {
 		ifs >> s >> d >> w >> t;
+		if(ifs.fail())
+			break;
 		pgss_sequential->insert(s, d, w, t);
 		datanum++;
 #if defined(DEBUG) || defined(BINSTIME)
@@ -327,6 +331,8 @@ int insert_pgss_parallel(Horae* pg, int64_t fpLength, int level, string filename
 #endif
 	while (!ifs.eof()) {
 		ifs >> s >> d >> w >> t;
+		if(ifs.fail())
+			break;
 #ifdef DEBUG
 		if(tag == 1) {
 			cout << "(" << s << ", " << d << ", " << w << ", " << t << ") ---- " << " level = " << level << endl;
@@ -442,7 +448,8 @@ int pgssParallelInsert(HORAE_VAR var, string filename) {
 #endif
 	while (!ifs.eof()) {
 		ifs >> s >> d >> w >> t;
-		
+		if(ifs.fail())
+			break;
 		int tt = ceil((double)(t - var.startTime) / (double)var.granularityLength);
 
 #ifdef MEM
@@ -559,6 +566,8 @@ int readRandomFileToDataArray(string file, QueryPairData dataArray[]) {
 	int64_t startPoint, endPoint, timeStart, timeEnd;
 	while (!randomFile.eof()) {
 		randomFile >> startPoint >> endPoint >> timeStart >> timeEnd;
+		if(randomFile.fail())
+			break;
 		dataArray[datanum].source = startPoint;
 		dataArray[datanum].destination = endPoint;
 		dataArray[datanum].start_time = timeStart;

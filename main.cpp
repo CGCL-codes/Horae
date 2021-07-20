@@ -248,6 +248,21 @@ int main(int argc, char* argv[]) {
 				depth = 3536;
 			}
 			break;
+		case 8:
+			filename = "..//..//Dataset//dblp";
+			input_dir = "..//..//TestFiles//dblp//input//";
+			output_dir = "..//..//TestFiles//dblp//output//";
+			dataset_name = "dblp";
+			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+				width = 3840;
+				depth = 3840;
+			}
+			else if (test_situation == 1) {  //pgss
+				width = 3840;
+				depth = 3840;
+			}
+			break;
 		default:
 			break;
 	}
@@ -452,7 +467,7 @@ time_type getDatasetStartTime(string datasetPath) {
 	time_type startTime;
 	ifs >> s >> d >> w >> startTime;
 	ifs.close();
-	if(startTime > 1) 
+	if(startTime > 0) 
 		return startTime - 1;
 	else
 		return -1;
