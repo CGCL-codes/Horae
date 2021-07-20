@@ -77,13 +77,16 @@ public:
 	virtual void insert(string src, string dst, weight_type weight) = 0;
 	virtual weight_type edgeQuery(string src, string dst) = 0;
 	virtual weight_type nodeQuery(string vertex, int type) = 0;		//src_type = 0 dst_type = 1
+	virtual bool reachabilityQuery(string s, string d) {
+        return false;
+    }
 	
 protected:
 	bool insertMatrix(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, uint16_t fp_dst, weight_type weight);
 	bool kickElement(uint32_t& addr_src, uint16_t& fp_src, uint32_t& addr_dst, uint16_t& fp_dst, weight_type& weight);
 	weight_type edgeQueryMatrix(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, uint16_t fp_dst);
 	weight_type nodeQueryMatrix(uint32_t addr_v, uint16_t fp_v, int type);
-
+	
 	bool insertMatrixCacheline(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, uint16_t fp_dst, weight_type weight);
 	bool kickElementCacheline(uint32_t& addr_src, uint16_t& fp_src, uint32_t& addr_dst, uint16_t& fp_dst, weight_type& weight);
 	weight_type edgeQueryMatrixCacheline(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, uint16_t fp_dst);

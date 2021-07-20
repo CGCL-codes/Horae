@@ -7,6 +7,11 @@ class LayerSucClass: public LayerSuc {
 private:
 	bool cache_align = false;
 	bool kick = false;
+	struct mapnode
+    {
+        uint32_t addr;
+        uint16_t fp;
+    };
 public:
 	LayerSucClass(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, bool cache_align, bool kick, uint32_t row_addrs = 4, uint32_t column_addrs = 4);
 	LayerSucClass(const LayerSucClass *layer);
@@ -18,6 +23,7 @@ public:
 	void insert(string src, string dst, weight_type weight);
 	weight_type edgeQuery(string src, string dst);
 	weight_type nodeQuery(string vertex, int type);		//src_type = 0 dst_type = 1
+	bool reachabilityQuery(string s, string d);
 };
 
 LayerSucClass::LayerSucClass(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, bool cache_align, bool kick, uint32_t row_addrs, uint32_t column_addrs): 
@@ -157,6 +163,274 @@ weight_type LayerSucClass::nodeQuery(string vertex, int type) { // vertex is the
 		weight += nodeQuerySucBuffer(k1, type);
 	}
 	return weight;
+}
+
+// s is the ID of the source node, d is the ID of the destination node
+bool LayerSucClass::reachabilityQuery(string s, string d) {
+	uint32_t hash_s = (*hfunc[0])((unsigned char*)(s.c_str()), s.length());
+    uint32_t hash_d = (*hfunc[0])((unsigned char*)(d.c_str()), d.length());
+    uint32_t mask = (1 << fingerprintLength) - 1;
+    
+    uint32_t addr_s = (hash_s >> fingerprintLength) % depth;
+    uint32_t addr_d = (hash_d >> fingerprintLength) % width;
+
+    uint16_t fp_s = hash_s & mask;
+    uint16_t fp_d = hash_d & mask;
+    if(fp_s == 0) fp_s = 1;
+    if(fp_d == 0) fp_d = 1;
+
+    uint32_t key_s = (addr_s << fingerprintLength) + fp_s;
+    uint32_t key_d = (addr_d << fingerprintLength) + fp_d;
+    
+	int pos;
+	map<uint32_t, bool> checked;
+	queue<mapnode> q;
+	mapnode e;
+	e.addr = addr_s;
+	e.fp = fp_s;
+	q.push(e);
+	checked[key_s] = true;
+	map<unsigned int, bool>::iterator IT;
+
+    uint32_t temp_addr;
+    uint16_t temp_fp;
+	
+	if (cache_align) 
+	{
+		while (!q.empty())
+		{
+			e = q.front();
+			temp_addr = e.addr;
+			temp_fp = e.fp;
+
+			int* tmp1 = new int[row_addrs];
+			int* tmp2 = new int[column_addrs / 2];
+			tmp1[0] = temp_fp;
+			tmp2[0] = fp_d;
+			
+			for (int i = 1; i < row_addrs; i++)
+			{
+				tmp1[i] = (tmp1[i - 1] * multiplier + increment) % modulus;
+			}
+			for (int i = 1; i < column_addrs / 2; i++) 
+			{
+				tmp2[i] = (tmp2[i - 1] * multiplier + increment) % modulus;
+			}
+			for (int i1 = 0; i1 < row_addrs; i1++)
+			{
+				int p1 = (temp_addr + tmp1[i1]) % depth;
+				for (int i2 = 0; i2 < column_addrs / 2; i2++)
+				{
+					int p2 = (addr_d + tmp2[i2]) % width;
+					for (int k = 0; k < 2; k++) {
+						uint32_t pos;
+						if (k == 0) {
+							pos = p1 * width + p2;
+						}
+						else {
+							uint32_t column_addr_alt = (p2 ^ (fp_d % CACHESLOT)) % width;
+							pos = p1 * width + column_addr_alt;
+						}
+						for (int j = 0; j < SLOTNUM; j++) {
+							if (((value[pos].src[j] >> 14) == i1) && ((value[pos].dst[j] >> 14) == (i2*2+k)) && ((value[pos].src[j] & mask) == temp_fp) && ((value[pos].dst[j] & mask) == fp_d)) {
+								delete []tmp1;
+								delete []tmp2;
+								return true;
+							}
+						}
+					}
+				}
+			}
+			//	 find in buffer
+			uint32_t temp_key = (temp_addr << fingerprintLength) + temp_fp;
+			vector<vector<node> >::iterator it = find_if(successorAdjacencyList.begin(), successorAdjacencyList.end(), findv(temp_key));
+			if (it != successorAdjacencyList.end())
+			{
+				for (vector<node>::iterator iter = it->begin(); iter != it->end(); iter++) 
+				{
+					if (iter->key != temp_key)
+					{
+						unsigned int val = iter->key;
+						unsigned int temp_h = (val) >> fingerprintLength;
+						unsigned int tmp = pow(2, fingerprintLength);
+						unsigned short temp_g = (val % tmp);
+						if ((temp_h == addr_d) && (temp_g == fp_d))
+						{
+							delete []tmp1;
+							delete []tmp2;
+							return true;
+						}
+			
+						IT = checked.find(val);
+						if (IT == checked.end())
+						{
+							mapnode temp_e;
+							temp_e.addr = temp_h;
+							temp_e.fp = temp_g;
+							q.push(temp_e);
+							checked[val] = true;;
+						}
+					}
+				}
+			}
+			
+			// find in matrix
+			for (int i1 = 0; i1 < row_addrs; i1++)
+			{
+				int p1 = (temp_addr + tmp1[i1]) % depth;
+				for (int i2 = 0; i2 < width; i2++)
+				{
+					int pos = p1 * width + i2;
+					for (int i3 = 0; i3 < SLOTNUM; i3++)
+					{
+						if ((value[pos].src[i3] & mask) == temp_fp && ((value[pos].src[i3] >> 14) == i1))
+						{
+							uint32_t tmp_g = value[pos].dst[i3];
+							int tmp_s = (value[pos].dst[i3] >> 14) & 0xff;
+				
+							uint32_t shifter = tmp_g;
+							for (int v = 0; v < tmp_s; v++)
+								shifter = (shifter * multiplier + increment) % modulus;
+							uint32_t tmp_h = i2;
+							while (tmp_h < shifter)
+								tmp_h += width;				/////////
+							tmp_h -= shifter;
+
+							uint32_t val = (tmp_h << fingerprintLength) + tmp_g;
+						
+							IT = checked.find(val);
+							if (IT == checked.end())
+							{
+								mapnode tmp_e;
+								tmp_e.addr = tmp_h;
+								tmp_e.fp = tmp_g;
+								q.push(tmp_e);
+								checked[val] = true;
+							}
+						}
+					}
+				}
+			}
+			delete[] tmp1;
+			delete[] tmp2;
+			q.pop();
+		}
+	}
+	else 
+	{
+		while (!q.empty())
+		{
+			e = q.front();
+			temp_addr = e.addr;
+			temp_fp = e.fp;
+
+			int* tmp1 = new int[row_addrs];
+			int* tmp2 = new int[column_addrs];
+			tmp1[0] = temp_fp;
+			tmp2[0] = fp_d;
+			
+			for (int i = 1; i < row_addrs; i++)
+			{
+				tmp1[i] = (tmp1[i - 1] * multiplier + increment) % modulus;
+			}
+			for (int i = 1; i < column_addrs; i++) 
+			{
+				tmp2[i] = (tmp2[i - 1] * multiplier + increment) % modulus;
+			}
+			for (int i1 = 0; i1 < row_addrs; i1++)
+			{
+				int p1 = (temp_addr + tmp1[i1]) % depth;
+				for (int i2 = 0; i2 < column_addrs; i2++)
+				{
+					int p2 = (addr_d + tmp2[i2]) % width;
+					int pos = p1 * width + p2;
+					for (int i3 = 0; i3 < SLOTNUM; i3++)
+					{
+						if (((value[pos].src[i3] >> 14) == i1) && ((value[pos].dst[i3] >> 14) == i2) && ((value[pos].src[i3] & mask) == temp_fp) && ((value[pos].dst[i3] & mask) == fp_d))
+						{
+							delete []tmp1;
+							delete []tmp2;
+							return true;
+						}
+					}
+				}
+			}
+			//	 find in buffer
+			uint32_t temp_key = (temp_addr << fingerprintLength) + temp_fp;
+			vector<vector<node> >::iterator it = find_if(successorAdjacencyList.begin(), successorAdjacencyList.end(), findv(temp_key));
+			if (it != successorAdjacencyList.end())
+			{
+				for (vector<node>::iterator iter = it->begin(); iter != it->end(); iter++) 
+				{
+					if (iter->key != temp_key)
+					{
+						unsigned int val = iter->key;
+						unsigned int temp_h = (val) >> fingerprintLength;
+						unsigned int tmp = pow(2, fingerprintLength);
+						unsigned short temp_g = (val % tmp);
+						if ((temp_h == addr_d) && (temp_g == fp_d))
+						{
+							delete []tmp1;
+							delete []tmp2;
+							return true;
+						}
+			
+						IT = checked.find(val);
+						if (IT == checked.end())
+						{
+							mapnode temp_e;
+							temp_e.addr = temp_h;
+							temp_e.fp = temp_g;
+							q.push(temp_e);
+							checked[val] = true;;
+						}
+					}
+				}
+			}
+			
+			// find in matrix
+			for (int i1 = 0; i1 < row_addrs; i1++)
+			{
+				int p1 = (temp_addr + tmp1[i1]) % depth;
+				for (int i2 = 0; i2 < width; i2++)
+				{
+					int pos = p1 * width + i2;
+					for (int i3 = 0; i3 < SLOTNUM; i3++)
+					{
+						if ((value[pos].src[i3] & mask) == temp_fp && ((value[pos].src[i3] >> 14) == i1))
+						{
+							uint32_t tmp_g = (value[pos].dst[i3] & mask);
+							int tmp_s = value[pos].dst[i3] >> 14;
+				
+							uint32_t shifter = tmp_g;
+							for (int v = 0; v < tmp_s; v++)
+								shifter = (shifter * multiplier + increment) % modulus;
+							uint32_t tmp_h = i2;
+							while (tmp_h < shifter)
+								tmp_h += width;				/////////
+							tmp_h -= shifter;
+
+							uint32_t val = (tmp_h << fingerprintLength) + tmp_g;
+						
+							IT = checked.find(val);
+							if (IT == checked.end())
+							{
+								mapnode tmp_e;
+								tmp_e.addr = tmp_h;
+								tmp_e.fp = tmp_g;
+								q.push(tmp_e);
+								checked[val] = true;
+							}
+						}
+					}
+				}
+			}
+			delete[] tmp1;
+			delete[] tmp2;
+			q.pop();
+		}
+	}
+	return false;
 }
 
 #endif		// _LayerSucClass_H

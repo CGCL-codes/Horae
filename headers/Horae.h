@@ -37,6 +37,7 @@ public:
 	
 	uint32_t edgeQuery(uint32_t s, uint32_t d, time_type start, time_type end);
 	uint32_t nodeQuery(uint32_t v, int type, time_type start, time_type end);
+	bool reachabilityQuery(uint32_t s, uint32_t d, time_type start, time_type end);
 
 	void setStartTime(time_type startTime);
 	time_type getStartTime();
@@ -439,6 +440,28 @@ uint32_t Horae::nodeQuery(uint32_t v, int type, time_type start, time_type end) 
 	}
 	// delete[] win;
 	return result;
+}
+
+bool Horae::reachabilityQuery(uint32_t s, uint32_t d, time_type start, time_type end) {
+	int length = end - start + 1;
+	int level = 0;
+	while (length) {
+		length = length >> 1;
+		level++;
+	}
+	int gl = (1 << (level - 1));
+	// window *win = new window[2 * level];
+	// int n = secondPowerDecompose(start, end, win, level-1);
+	vector<window> win;
+	secondPowerDecompose(start, end, win, level - 1);
+	for (int i = 0; i < win.size(); i++) {
+		string v1 = to_string(s) + "+" + to_string(win[i].number);
+		string v2 = to_string(d) + "+" + to_string(win[i].number);
+		if (multi_layers[win[i].level - 1]->reachabilityQuery(v1, v2))
+			return true;
+	}
+	// delete[] win;
+	return false;
 }
 
 #endif		// _Horae_H
