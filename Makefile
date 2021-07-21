@@ -4,6 +4,7 @@ all : horae horae-mem
 CXX = g++
 CFLAGS = -lpthread -static-libstdc++ -std=c++11
 
+
 horae : horae.o
 	$(CXX) -o horae horae.o $(CFLAGS)
 horae-mem : horae-mem.o

@@ -464,4 +464,5 @@ bool Horae::reachabilityQuery(uint32_t s, uint32_t d, time_type start, time_type
 	return false;
 }
 
+
 #endif		// _Horae_H

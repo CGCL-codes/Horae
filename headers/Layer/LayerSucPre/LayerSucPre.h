@@ -74,4 +74,5 @@ void LayerSucPre::insertPreBuffer(uint32_t k1, uint32_t k2, weight_type weight) 
 	}
 }
 
+
 #endif      // _LayerSucPre_H

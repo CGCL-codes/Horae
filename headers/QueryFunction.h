@@ -1,4 +1,3 @@
-//插入、边查、点查等函数
 #ifndef QUERYFUNCTION_H
 #define QUERYFUNCTION_H
 
@@ -51,12 +50,12 @@ static Horae* pgss_parallel;
 int isFolderExist(char* folder);
 int createDirectory(char* sPathName);
 int readRandomFileToDataArray(string file, QueryPairData dataArray[]);
-//串行/并行插入函数
+// para/seq insert functions
 int baselineInsert(HORAE_VAR var, string filename);
 int pgssSequentialInsert(HORAE_VAR var, string filename);
 int insert_pgss_parallel(Horae* pg, int64_t fpLength, int level, string filename, int line);
 int pgssParallelInsert(HORAE_VAR var, string filename);
-//并行查询
+// para query functions
 int64_t edgeFrequenceBaseline(Layer& layer, int64_t s, int64_t d, int64_t start, int64_t end);
 int edgeFrequenceBaselineTest_para(string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
 int edgeFrequenceBaselineTest_single(string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write);
@@ -72,14 +71,14 @@ int edgeExistencePgssTest_para(Horae* horae, string input_dir, string output_dir
 int edgeExistencePgssTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write, int flag);
 int nodeFrequencePgssTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
 int nodeFrequencePgssTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write, int flag, int line);
-//串行查询
+// seq query functions
 int edgeFrequenceBaselineTest_seq(string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
 int edgeExistenceBaselineTest_seq(string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag);
 int nodeFrequenceBaselineTest_seq(string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
 int edgeFrequencePgssTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
 int edgeExistencePgssTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag);
 int nodeFrequencePgssTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
-//main函数调用的查询函数
+// query functions that the main function called
 void edgeFrequenceBaselineTest(bool para_query, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
 void edgeExistenceBaselineTest(bool para_query, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag);
 void nodeFrequenceBaselineTest(bool para_query, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
@@ -117,17 +116,17 @@ int createDirectory(char* sPathName) {
 	return 0;
 }
 
-uint64_t count_lines(string file) {  //统计文本行数
+uint64_t count_lines(string file) {  // count file lines
     ifstream readFile;
     uint64_t n = 0;
     char line[512];
     string temp;
-    readFile.open(file, ios::in);//ios::in 表示以只读的方式读取文件
-    if(readFile.fail()) { //文件打开失败:返回0
+    readFile.open(file, ios::in);	// ios::in means that open file with readonly 
+    if(readFile.fail()) { 			// open file error, return 0
         cout << "error in opening file" << endl;
         return 0;
     }
-    else { //文件存在
+    else { 							// the file exists
         while(getline(readFile,temp))
             n++;
     }
@@ -574,7 +573,7 @@ int readRandomFileToDataArray(string file, QueryPairData dataArray[]) {
 		dataArray[datanum].end_time = timeEnd;
 		datanum++;
 		if(datanum > query_data_pairs) {
-			cout << "输入数据 > 数组范围" << endl;
+			cout << "the input data is more than the range of the array" << endl;
 			break;
 		}
 	}
@@ -839,7 +838,7 @@ int nodeFrequenceBaselineTest_single(string input_dir, string output_dir, string
 				return -1;
 			}
 		}
-		else {	//在原文件后面追加写入
+		else {	//	append
 			resultFile.open(output_dir + dataset_name + output_file_prefix + "baseline_" + to_string(num) + output_file_suffix, ios::app);
 			cout << "append " << (output_dir + dataset_name + output_file_prefix + "baseline_" + to_string(num) + output_file_suffix) << endl;
 			if (!resultFile.is_open()) {
@@ -1150,7 +1149,7 @@ int nodeFrequencePgssTest_single(Horae* horae, string input_dir, string output_d
 				return -1;
 			}
 		}
-		else {	//在原文件后面追加写入
+		else {	// append
 			resultFile.open(output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num) + output_file_suffix, ios::app);
 			cout << "append " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num) + output_file_suffix) << endl;
 			if (!resultFile.is_open()) {
@@ -1438,7 +1437,7 @@ int nodeFrequenceBaselineTest_seq(string input_dir, string output_dir, string da
 					return -1;
 				}
 			}
-			else {	//在原文件后面追加写入
+			else {	// append
 				resultFile.open(output_dir + dataset_name + output_file_prefix + "baseline_" + to_string(num[i]) + output_file_suffix, ios::app);
 				cout << "append " << (output_dir + dataset_name + output_file_prefix + "baseline_" + to_string(num[i]) + output_file_suffix) << endl;
 				if (!resultFile.is_open()) {
@@ -1712,7 +1711,7 @@ int nodeFrequencePgssTest_seq(Horae* horae, string input_dir, string output_dir,
 					return -1;
 				}
 			}
-			else {	//在原文件后面追加写入
+			else {	// append
 				resultFile.open(output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num[i]) + output_file_suffix, ios::app);
 				cout << "append " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num[i]) + output_file_suffix) << endl;
 				if (!resultFile.is_open()) {

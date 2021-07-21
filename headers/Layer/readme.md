@@ -1,14 +1,14 @@
 ``` inherit
-Layer           <only got basket>
+Layer           <Matrix>
 |
 |
-LayerSuc        (no map no prelist)
+LayerSuc        (Add successor linked list)
 |       |
 |       |--> LayerSucClass
-LayerSucPre     (no map but prelist)
+LayerSucPre     (Add precursor linked list)
 |       |
 |       |--> LayerSucPreClass
-LayerSucPreMap  (both map and prelist)
+LayerSucPreMap  (Add map)
 |
 |--> LayerSucPreMapClass
 ```

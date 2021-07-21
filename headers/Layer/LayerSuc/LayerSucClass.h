@@ -1,4 +1,3 @@
-// no map & no prelist
 #ifndef _LayerSucClass_H
 #define _LayerSucClass_H
 #include "LayerSuc.h"

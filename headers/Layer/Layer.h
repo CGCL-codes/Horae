@@ -56,8 +56,8 @@ private:
 class Layer {
 protected:
 	const uint32_t granularity;			// the granularity of the level
-	uint32_t width;				// the width of the matrix
-	uint32_t depth;				// the depth of the matrix
+	uint32_t width;						// the width of the matrix
+	uint32_t depth;						// the depth of the matrix
 	const uint32_t fingerprintLength;	// the fingerprint length
 	const uint32_t row_addrs;			// the row addrs
 	const uint32_t column_addrs;		// the column_addrs

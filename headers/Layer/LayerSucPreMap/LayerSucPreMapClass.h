@@ -1,4 +1,3 @@
-// both map and prelist
 #ifndef _LayerSucPreMapClass_H
 #define _LayerSucPreMapClass_H
 #include "LayerSucPreMap.h"

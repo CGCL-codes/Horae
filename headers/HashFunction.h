@@ -19,6 +19,7 @@ typedef unsigned int uint32_t;
                        +(uint32_t)(((const uint8_t *)(d))[0]) )
 #endif 
 
+
 using namespace std;
 
 unsigned int

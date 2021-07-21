@@ -163,5 +163,4 @@ weight_type LayerSuc::nodeQuerySucBuffer(uint32_t k, int type) {
 	return weight;
 }
 
-
 #endif      // _LayerSuc_H

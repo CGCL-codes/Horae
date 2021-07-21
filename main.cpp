@@ -1,13 +1,10 @@
-//测试边查、点查等结果
 #include "headers/QueryFunction.h"
 #include <iomanip>
 
 time_type getDatasetStartTime(string datasetPath);
 
 int main(int argc, char* argv[]) {
-	//强制使用小数,防止使用科学计数法
     cout << fixed;
-    //控制显示的精度，控制小数点后面的位数
 #if defined(DEBUG) || defined(HINT)  
 	cout << setprecision(7);
 	timeval main_start, main_end;
@@ -35,17 +32,17 @@ int main(int argc, char* argv[]) {
 
 	int dataset = 3;
 	int test_situation = 0;						//0-baseline，1-pgss
-	int query_times = 1;						//查询的次数
-	string filename, input_dir, output_dir;		//测试数据集文件路径  测试数据输入路径 测试结果输出路径
+	int query_times = 1;						// query times
+	string filename, input_dir, output_dir;		// dataset filepath, test file folder path , output file folder path
 	string dataset_name, txt_name = "";
 	vector<int> num;
 	int efflag = 0, eeflag = 0, nfflag = 0; 	//  edge frequence query,  edge existence query,  node frequence query
-	bool parallel_insert = false;				//是否并行插入
-	bool writeflag = false;						//是否将测试结果写入到文件
-	int node_query_flag = 0;					//1-node_in_query, 2-node_out_query
-	int edge_existence_flag = 1;				//1-edge_existence_query, 2-bool_query
+	bool parallel_insert = false;				// para isnert flag
+	bool writeflag = false;						// write result to file flag
+	int node_query_flag = 0;					// 1-node_in_query, 2-node_out_query
+	int edge_existence_flag = 1;				// 1-edge_existence_query, 2-bool_query
 	int line = 0;
-	bool para_query = true;  						//0-串行结果查询，1-并行结果查询
+	bool para_query = true;  					// 0-seq result query, 1-para result query
 
 	uint32_t row_addrs = 4, column_addrs = 4;
 	bool kick = false, cache_align = false;
@@ -141,14 +138,14 @@ int main(int argc, char* argv[]) {
 	back_addr += "-MEM";
 #endif
 		
-	switch (dataset) {//数据集_查询类型_baseline/pgss_长度_res.txt
+	switch (dataset) {
 		case 1:
 			filename = "..//..//Dataset//out";
 			input_dir = "..//..//TestFiles//out//input//";
 			output_dir = "..//..//TestFiles//out//output//";
 			dataset_name = "out";
 			num = { 8, 16, 32, 64, 128, 256, 384 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+			if (test_situation == 0 || test_situation == 2) { // baseline or single dynamic pgss
 				width = 2850;
 				depth = 3158;
 			}
@@ -267,7 +264,7 @@ int main(int argc, char* argv[]) {
 			break;
 	}
 
-	// 命令行参数
+	// command parameters
 	for (int i = 0; i < argc; i++) {
 		if (strcmp(argv[i], "-vector") == 0) {
 			num.clear();

@@ -137,5 +137,4 @@ weight_type LayerSucPreMap::nodeQuerySucPreMapBuffer(uint32_t k, int type) {
 	return weight;
 }
 
-
 #endif      // _LayerSucPreMap_H
