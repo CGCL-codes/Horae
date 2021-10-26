@@ -443,6 +443,7 @@ uint32_t Horae::nodeQuery(uint32_t v, int type, time_type start, time_type end) 
 }
 
 bool Horae::reachabilityQuery(uint32_t s, uint32_t d, time_type start, time_type end) {
+	cout << "reachabilityQuery(" << s << ", " << d << ", " << start << ", " << end << ")" << endl;
 	int length = end - start + 1;
 	int level = 0;
 	while (length) {
@@ -457,6 +458,7 @@ bool Horae::reachabilityQuery(uint32_t s, uint32_t d, time_type start, time_type
 	for (int i = 0; i < win.size(); i++) {
 		string v1 = to_string(s) + "+" + to_string(win[i].number);
 		string v2 = to_string(d) + "+" + to_string(win[i].number);
+		cout << "multi_layers[" << (win[i].level - 1) << "]->reachabilityQuery(" << v1 << ", " << v2 << ")" << endl;
 		if (multi_layers[win[i].level - 1]->reachabilityQuery(v1, v2))
 			return true;
 	}

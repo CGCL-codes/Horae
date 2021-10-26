@@ -572,10 +572,10 @@ int readRandomFileToDataArray(string file, QueryPairData dataArray[]) {
 		dataArray[datanum].start_time = timeStart;
 		dataArray[datanum].end_time = timeEnd;
 		datanum++;
-		if(datanum > query_data_pairs) {
-			cout << "the input data is more than the range of the array" << endl;
-			break;
-		}
+		// if(datanum > query_data_pairs) {
+		// 	cout << "the input data is more than the range of the array" << endl;
+		// 	break;
+		// }
 	}
 	randomFile.close();
 	return datanum;
@@ -1807,5 +1807,156 @@ void nodeFrequencePgssTest(bool para_query, Horae* horae, string input_dir, stri
 	else 
 		nodeFrequencePgssTest_seq(horae, input_dir, output_dir, dataset_name, num, query_times, write, flag, line);
 }
+
+int edgeFrequenceFileTest(Horae* horae, string test_file, string output_dir, int query_times, bool write) {
+	string output_file = "output_res.txt";
+	string time_file = "output_time.txt";
+	uint64_t lines = count_lines(test_file);
+	QueryPairData* dataArray = new QueryPairData[lines + 10];
+	
+	//edge query process
+	int datanum = readRandomFileToDataArray(test_file, dataArray);
+	cout << "datanum = " << datanum << endl;
+#if defined(DEBUG) || defined(HINT)
+	cout << "****************** test_file = " << test_file << " ******************" << endl;
+#endif
+	ofstream resultFile, timeFile;
+	if (write) {
+		char dir_path[FILENAME_MAX];
+		strcpy(dir_path, output_dir.c_str());
+		if (createDirectory(dir_path) != 0) {
+			cout << "createDirectory error" << endl;
+			return -1;
+		}
+		resultFile.open(output_dir + "//" + output_file);
+		if (!resultFile.is_open()) {
+			cout << "Error in open file, Path = " << (output_dir + "//" + output_file) << endl;
+			return -1;
+		}
+		timeFile.open(output_dir + "//" + time_file);
+		if (!timeFile.is_open()) {
+			cout << "Error in open file, Path = " << (output_dir + "//" + time_file) << endl;
+			return -1;
+		}
+	}
+	double sumTime = 0, sumTime_perquery = 0;
+	timeval tp1, tp2;
+	for (int m = 0; m < query_times; m++) {
+		sumTime_perquery = 0;
+		for (int n = 0; n < datanum; n++) {
+			int64_t res;
+			gettimeofday( &tp1, NULL);
+			res = horae->edgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+			gettimeofday( &tp2, NULL);
+			double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
+			sumTime_perquery += delta_t;
+			if (write && (m == 0)) {
+				if(n == (datanum - 1)) {
+					resultFile << res;
+					timeFile  << delta_t;
+					break;
+				}
+				else {
+					resultFile << res << endl;
+					timeFile  << delta_t << endl;
+				}
+			}
+		}
+		sumTime += (sumTime_perquery / (double)datanum);
+	}
+	if (write) {
+		resultFile.flush();
+		timeFile.flush();
+		resultFile.close();
+		timeFile.close();
+	}
+#if defined(DEBUG) || defined(HINT)
+	cout << "Query Times = " << query_times << endl;
+	cout << "Query Avg Time = " << (double)(sumTime / (double)query_times) / 1000 << "ms" << endl;
+	cout << endl << endl;
+#endif
+	delete[] dataArray;
+	return 0;
+}
+
+int nodeFrequenceFileTest(Horae* horae, string test_file, string output_dir, int query_times, bool write, int flag) {
+	string tag = "node-";
+	if (flag == 1) {
+		tag += "in-";
+	}
+	if (flag == 2) {
+		tag += "out-";
+	}
+	string output_file = tag + "output_res.txt";
+	string time_file = tag + "output_time.txt";
+	uint64_t lines = count_lines(test_file);
+	QueryPairData* dataArray = new QueryPairData[lines + 10];
+	
+	// node query process
+	int datanum = readRandomFileToDataArray(test_file, dataArray);
+	cout << "datanum = " << datanum << endl;
+#if defined(DEBUG) || defined(HINT)
+	cout << "****************** test_file = " << test_file << " ******************" << endl;
+#endif
+	ofstream resultFile, timeFile;
+	if (write) {
+		char dir_path[FILENAME_MAX];
+		strcpy(dir_path, output_dir.c_str());
+		if (createDirectory(dir_path) != 0) {
+			cout << "createDirectory error" << endl;
+			return -1;
+		}
+		resultFile.open(output_dir + "//" + output_file);
+		if (!resultFile.is_open()) {
+			cout << "Error in open file, Path = " << (output_dir + "//" + output_file) << endl;
+			return -1;
+		}
+		timeFile.open(output_dir + "//" + time_file);
+		if (!timeFile.is_open()) {
+			cout << "Error in open file, Path = " << (output_dir + "//" + time_file) << endl;
+			return -1;
+		}
+	}
+	double sumTime = 0, sumTime_perquery = 0;
+	timeval tp1, tp2;
+	for (int m = 0; m < query_times; m++) {
+		sumTime_perquery = 0;
+		for (int n = 0; n < datanum; n++) {
+			int64_t res;
+			gettimeofday( &tp1, NULL);
+			res = horae->nodeQuery(dataArray[n].source, (int)dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
+			gettimeofday( &tp2, NULL);
+			double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
+			sumTime_perquery += delta_t;
+			if (write && (m == 0)) {
+				if(n == (datanum - 1)) {
+					resultFile << res;
+					timeFile  << delta_t;
+					break;
+				}
+				else {
+					resultFile << res << endl;
+					timeFile  << delta_t << endl;
+				}
+			}
+		}
+		sumTime += (sumTime_perquery / (double)datanum);
+	}
+	if (write) {
+		resultFile.flush();
+		timeFile.flush();
+		resultFile.close();
+		timeFile.close();
+	}
+#if defined(DEBUG) || defined(HINT)
+	cout << "Query Times = " << query_times << endl;
+	cout << "Query Avg Time = " << (double)(sumTime / (double)query_times) / 1000 << "ms" << endl;
+	cout << endl << endl;
+#endif
+	delete[] dataArray;
+	return 0;
+}
+
+
 
 #endif // #ifndef QUERYFUNCTION_H

@@ -1,3 +1,18 @@
+/*  Copyright (C) 2020, STCS & CGCL(http://grid.hust.edu.cn/) and Huazhong University of Science and Technology(http://www.hust.edu.cn).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * */
+
 #include "headers/QueryFunction.h"
 #include <iomanip>
 
@@ -46,6 +61,10 @@ int main(int argc, char* argv[]) {
 
 	uint32_t row_addrs = 4, column_addrs = 4;
 	bool kick = false, cache_align = false;
+	bool edge_file_test = false;
+	bool node_file_test = false;
+	string edge_test_file = "";
+	string node_test_file = "";
 	
 	//命令行参数
 	for (int i = 0; i < argc; i++) {
@@ -119,6 +138,14 @@ int main(int argc, char* argv[]) {
 		}
 		if (strcmp(argv[i], "-cache_align") == 0) {
 			cache_align = true;
+		}
+		if (strcmp(argv[i], "-edge_test_file") == 0) {
+			edge_file_test = true;
+			edge_test_file = argv[++i];
+		}
+		if (strcmp(argv[i], "-node_test_file") == 0) {
+			node_file_test = true;
+			node_test_file = argv[++i];
 		}
 	}
 	if (cache_align) {
@@ -258,6 +285,38 @@ int main(int argc, char* argv[]) {
 			else if (test_situation == 1) {  //pgss
 				width = 3840;
 				depth = 3840;
+			}
+			break;
+		case 9:
+			filename = "..//..//Dataset//stk-balanced";
+			input_dir = "..//..//TestFiles//stk-balanced//input//";
+			output_dir = "..//..//TestFiles//stk-balanced//output//";
+			dataset_name = "stk-balanced";
+			//num = { 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560, 3072, 3584 };
+			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+				width = 20396;/////////
+				depth = 20397;/////////
+			}
+			else if (test_situation == 1) {  //pgss
+				width = 5655;///////////
+				depth = 5659;///////////
+			}
+			break;
+		case 10:
+			filename = "..//..//Dataset//stk-time";
+			input_dir = "..//..//TestFiles//stackoverflow//input//";
+			output_dir = "..//..//TestFiles//stackoverflow//output//";
+			dataset_name = "stackoverflow";
+			//num = { 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560, 3072, 3584 };
+			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+				width = 20396;/////////
+				depth = 20397;/////////
+			}
+			else if (test_situation == 1) {  //pgss
+				width = 5655;///////////
+				depth = 5659;///////////
 			}
 			break;
 		default:
@@ -437,6 +496,34 @@ int main(int argc, char* argv[]) {
 				}
 #if defined(DEBUG) || defined(HINT)
 				cout << "************** pgss node frequence end ***************" << endl << endl;
+#endif
+			}
+			if (edge_file_test) {
+#if defined(DEBUG) || defined(HINT)
+				cout << "**************** pgss frequence start ****************" << endl;
+#endif
+				if (parallel_insert) {
+					edgeFrequenceFileTest(pgss_parallel, edge_test_file, output_dir, query_times, writeflag);
+				}
+				else {
+					edgeFrequenceFileTest(pgss_sequential, edge_test_file, output_dir, query_times, writeflag);
+				}
+#if defined(DEBUG) || defined(HINT)
+				cout << "***************** pgss frequence end *****************" << endl << endl;
+#endif
+			}
+			if (node_file_test) {
+#if defined(DEBUG) || defined(HINT)
+				cout << "**************** pgss node frequence start ****************" << endl;
+#endif
+				if (parallel_insert) {
+					nodeFrequenceFileTest(pgss_parallel, node_test_file, output_dir, query_times, writeflag, node_query_flag);
+				}
+				else {
+					nodeFrequenceFileTest(pgss_sequential, node_test_file, output_dir, query_times, writeflag, node_query_flag);
+				}
+#if defined(DEBUG) || defined(HINT)
+				cout << "***************** pgss node frequence end *****************" << endl << endl;
 #endif
 			}
 			break;
