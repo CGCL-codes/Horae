@@ -1,4 +1,4 @@
 gl = 50000
-时间片：13120
-node in--1000条数据，node out一共10000条数据，其他都是100000条测试数据
-所有文件末尾均不带多余换行
+time windows = 13120
+node in -- 1000 pieces of data, node out -- 10000 pieces of data, the others are 100000 pieces of test data
+No extra '\n' at the end of all files

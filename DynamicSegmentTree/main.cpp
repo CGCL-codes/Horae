@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
 	int bp = 100;
 	bool query = false;
 	
-	//命令行参数
+	// Command line parameters
 	for (int i = 0; i < argc; i++) {
 		if (strcmp(argv[i], "-line") == 0) {
 			line = atoi(argv[++i]);

@@ -68,7 +68,7 @@ private:
         uint16_t fp;
     };
 public:
-	static int nodes;					// 矩阵实例化的节点数量
+	static int nodes;					// The number of nodes that allocate matrix space
 	time_type interval_start;
 	time_type interval_end;
 	TreeNode* left;
@@ -662,7 +662,7 @@ bool TreeNode::kickElement(uint32_t& addr_src, uint16_t& fp_src, uint32_t& addr_
 
 	int kickflag = 1;
 	while (true){
-		// 找到当前边(e1)的第kickflag个地址，然后判断两个slot中序号较小的那个剔出
+		// Find the kickflag address of the current edge (e1), and then judge the smaller number of the two slots to remove
 		// kickout the elements of the first pos(the power of two choices)
 		uint32_t pos_x = (addr_src + fp_src) % depth; 
 		uint32_t pos_y;
@@ -679,8 +679,8 @@ bool TreeNode::kickElement(uint32_t& addr_src, uint16_t& fp_src, uint32_t& addr_
 		for (int i = 0; i < SLOTNUM; i++){
 			insertnum[i] = (value[pos].src[i] >> 14) * 4 + (value[pos].dst[i] >> 14);
 		}
-		int kickindex = getMinIndex(insertnum, SLOTNUM);					// 找到要踢的那个slot
-		uint32_t kick_i = (value[pos].src[kickindex] >> 14);				// 将要踢出的边(e2)信息存储到kick_变量中
+		int kickindex = getMinIndex(insertnum, SLOTNUM);					// Find the slot that will be kicked out
+		uint32_t kick_i = (value[pos].src[kickindex] >> 14);				// Store the edge (e2) information to the kick_ variable
 		uint32_t kick_j = (value[pos].dst[kickindex] >> 14);
 		uint16_t kick_fpx = (value[pos].src[kickindex] & mask);
 		uint16_t kick_fpy = (value[pos].dst[kickindex] & mask);
@@ -695,12 +695,12 @@ bool TreeNode::kickElement(uint32_t& addr_src, uint16_t& fp_src, uint32_t& addr_
 		}
 		value[pos].weight[kickindex] = weight;
 
-		// 此时为边e2
+		// edge e2
 		fp_src = kick_fpx;
 		fp_dst = kick_fpy;
 		weight = kick_weight;
 		
-		// 根据e2存储在矩阵中的当前位置以及下标信息还原边e2的addr1、addr2
+		// Restore the addr1 and addr2 of edge e2 according to the current position of e2 stored in the matrix and the subscript information
 		uint32_t shifterx = fp_src;
 		for (int v = 0; v < kick_i; v++) {
 			shifterx = (shifterx * multiplier + increment) % modulus;
@@ -903,7 +903,7 @@ bool TreeNode::kickElementCacheline(uint32_t& addr_src, uint16_t& fp_src, uint32
 
 	int kickflag = 1;
 	while (true){
-		// 找到当前边(e1)的第kickflag个地址，然后判断两个slot中序号较小的那个剔出
+		// Find the kickflag address of the current edge (e1), and then judge the smaller number of the two slots to remove
 		// kickout the elements of first pos(the power of two choices)
 		uint32_t pos_x = (addr_src + fp_src) % depth; 
 		uint32_t pos_y = (addr_dst + fp_dst) % width;
@@ -914,9 +914,9 @@ bool TreeNode::kickElementCacheline(uint32_t& addr_src, uint16_t& fp_src, uint32
 		uint32_t insertnum[SLOTNUM];
 		for (int i = 0; i < SLOTNUM; i++){
 			insertnum[i] = (value[pos].src[i] >> 14) * 4 + (value[pos].dst[i] >> 14);
-		}
-		int kickindex = getMinIndex(insertnum, SLOTNUM);					// 找到要踢的那个slot
-		uint32_t kick_i = (value[pos].src[kickindex] >> 14);				// 将要踢出的边(e2)信息存储到kick_变量中
+		}	
+		int kickindex = getMinIndex(insertnum, SLOTNUM);					// Find the slot that will be kicked out
+		uint32_t kick_i = (value[pos].src[kickindex] >> 14);				// Store the edge (e2) information to the kick_ variable
 		uint32_t kick_j = (value[pos].dst[kickindex] >> 14);
 		uint16_t kick_fpx = (value[pos].src[kickindex] & mask);
 		uint16_t kick_fpy = (value[pos].dst[kickindex] & mask);
@@ -931,12 +931,12 @@ bool TreeNode::kickElementCacheline(uint32_t& addr_src, uint16_t& fp_src, uint32
 		}
 		value[pos].weight[kickindex] = weight;
 		
-		// 此时为边e2
+		// edge e2
 		fp_src = kick_fpx;
 		fp_dst = kick_fpy;
 		weight = kick_weight;
 		
-		//根据e2存储在矩阵中的当前位置以及下标信息还原边e2的addr1、addr2
+		// Restore the addr1 and addr2 of edge e2 according to the current position of e2 stored in the matrix and the subscript information
 		uint32_t shifterx = fp_src;
 		for (int v = 0; v < kick_i; v++) {
 			shifterx = (shifterx * multiplier + increment) % modulus;
