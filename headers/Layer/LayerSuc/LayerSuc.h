@@ -31,12 +31,16 @@ void LayerSuc::bucketCounting() {
 	//print buffer size
 	cout << "---------------------------------------" << endl;
     cout << "LayerSuc bucketCounting(): print successorAdjacencyList..." << endl;
+	cout << "successorAdjacencyList.size() = " << successorAdjacencyList.size() << endl;
+	cout << "successorAdjacencyList.capacity() = " << successorAdjacencyList.capacity() << endl;
+
 	int64_t total_sucBuffer = 0;
-	int64_t total_cap = 0;
+	int64_t total_cap = 0, total_size = 0;
 	for(int64_t i = 0; i < this->successorAdjacencyList.size(); i++) {
 		total_cap += this->successorAdjacencyList[i].capacity();
+		total_size += this->successorAdjacencyList[i].size();
 	}
-	cout << "successorAdjacencyList.capacity() = " << successorAdjacencyList.capacity() << endl;
+	cout << "total_size = " << total_size << endl;
 	cout << "total_cap = " << total_cap << endl;
 	for(int64_t i = 0; i < this->successorAdjacencyList.size(); i++) {
 		 total_sucBuffer += this->successorAdjacencyList[i].size();

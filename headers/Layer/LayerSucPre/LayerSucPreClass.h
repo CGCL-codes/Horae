@@ -40,8 +40,8 @@ LayerSucPreClass::LayerSucPreClass(const LayerSucPreClass *layer, int level): La
 
 // src is the ID of the source node, dst is the ID of the destination node, weight is the weight of the edge.
 void LayerSucPreClass::insert(string src, string dst, weight_type weight) {
-	uint32_t hash_src = (*hfunc[0])((unsigned char*)(src.c_str()), src.length());
-	uint32_t hash_dst = (*hfunc[0])((unsigned char*)(dst.c_str()), dst.length());
+	uint32_t hash_src = (*hfunc[HASH])((unsigned char*)(src.c_str()), src.length());
+	uint32_t hash_dst = (*hfunc[HASH])((unsigned char*)(dst.c_str()), dst.length());
 	//uint32_t mask = pow(2, fingerprintLength) - 1;
 	uint32_t mask = (1 << fingerprintLength) - 1;
 	uint32_t head = 16384; //pow(2, 14);
@@ -105,8 +105,8 @@ void LayerSucPreClass::insert(string src, string dst, weight_type weight) {
 }
 // src is the ID of the source node, dst is the ID of the destination node, return the weight of the edge
 weight_type LayerSucPreClass::edgeQuery(string src, string dst) {
-	uint32_t hash_src = (*hfunc[0])((unsigned char*)(src.c_str()), src.length());
-	uint32_t hash_dst = (*hfunc[0])((unsigned char*)(dst.c_str()), dst.length());
+	uint32_t hash_src = (*hfunc[HASH])((unsigned char*)(src.c_str()), src.length());
+	uint32_t hash_dst = (*hfunc[HASH])((unsigned char*)(dst.c_str()), dst.length());
 	uint32_t mask = pow(2, fingerprintLength) - 1;
 	uint16_t fp_src = hash_src & mask;
 	if (fp_src == 0) fp_src += 1;
@@ -134,7 +134,7 @@ weight_type LayerSucPreClass::edgeQuery(string src, string dst) {
 // vertex is the ID of the queried node, function for node query. type 0 is for successor query, type 1 is for precusor query
 weight_type LayerSucPreClass::nodeQuery(string vertex, int type) { // vertex is the ID of the queried node, function for node query.
 	weight_type weight = 0;
-	uint32_t hash_vertex = (*hfunc[0])((unsigned char*)(vertex.c_str()), vertex.length());
+	uint32_t hash_vertex = (*hfunc[HASH])((unsigned char*)(vertex.c_str()), vertex.length());
 	uint32_t mask = pow(2, fingerprintLength) - 1;
 	uint16_t fp = hash_vertex & mask;
 	if (fp == 0) fp += 1;

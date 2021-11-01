@@ -15,4 +15,21 @@ typedef int64_t time_type;
 
 #define CACHESLOT 4    // one 64 Bytes cacheline contains 4 slotrooms
 
+#ifdef H0
+#define HASH 0
+#elif H1
+#define HASH 1
+#elif H2
+#define HASH 2
+#elif H3
+#define HASH 3
+#elif H4
+#define HASH 4
+#elif H5
+#define HASH 5
+#else
+#define HASH 6
+#endif
+
+
 #endif //_PARAMS_H

@@ -30,7 +30,7 @@ void LayerSucPre::bucketCounting() {
 	cout << "---------------------------------------" << endl;
     cout << "LayerSucPre bucketCounting(): print precursorAdjacencyList..." << endl;
 	int64_t total_preBuffer = this->precursorAdjacencyList.size();
-	cout << "total_preBuffer = " << total_preBuffer << endl;
+	cout << "precursorAdjacencyList.size() = " << total_preBuffer << endl;
 	cout << "---------------------------------------" << endl;
 	return;
 }
