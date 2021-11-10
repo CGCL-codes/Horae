@@ -43,8 +43,8 @@ struct QueryPairData {
 
 /******************* static variables *************************/
 static Layer* baseline_gss;
-static Horae* pgss_sequential;
-static Horae* pgss_parallel;
+static Horae* horae_sequential;
+static Horae* horae_parallel;
 /******************* static variables *************************/
 /***************** function declaration ***********************/
 int isFolderExist(char* folder);
@@ -52,9 +52,9 @@ int createDirectory(char* sPathName);
 int readRandomFileToDataArray(string file, QueryPairData dataArray[]);
 // para/seq insert functions
 int baselineInsert(HORAE_VAR var, string filename);
-int pgssSequentialInsert(HORAE_VAR var, string filename);
-int insert_pgss_parallel(Horae* pg, int64_t fpLength, int level, string filename, int line);
-int pgssParallelInsert(HORAE_VAR var, string filename);
+int horaeSequentialInsert(HORAE_VAR var, string filename);
+int insert_horae_parallel(Horae* pg, int64_t fpLength, int level, string filename, int line);
+int horaeParallelInsert(HORAE_VAR var, string filename);
 // para query functions
 int64_t edgeFrequenceBaseline(Layer& layer, int64_t s, int64_t d, int64_t start, int64_t end);
 int edgeFrequenceBaselineTest_para(string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
@@ -65,26 +65,26 @@ int64_t nodeFrequenceBaseline(Layer& layer, int64_t v, int type, int64_t start, 
 int nodeFrequenceBaselineTest_para(string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
 int nodeFrequenceBaselineTest_single(string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write, int flag, int line);
 
-int edgeFrequencePgssTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
-int edgeFrequencePgssTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write);
-int edgeExistencePgssTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag);
-int edgeExistencePgssTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write, int flag);
-int nodeFrequencePgssTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
-int nodeFrequencePgssTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write, int flag, int line);
+int edgeFrequenceHoraeTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
+int edgeFrequenceHoraeTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write);
+int edgeExistenceHoraeTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag);
+int edgeExistenceHoraeTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write, int flag);
+int nodeFrequenceHoraeTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
+int nodeFrequenceHoraeTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write, int flag, int line);
 // seq query functions
 int edgeFrequenceBaselineTest_seq(string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
 int edgeExistenceBaselineTest_seq(string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag);
 int nodeFrequenceBaselineTest_seq(string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
-int edgeFrequencePgssTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
-int edgeExistencePgssTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag);
-int nodeFrequencePgssTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
+int edgeFrequenceHoraeTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
+int edgeExistenceHoraeTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag);
+int nodeFrequenceHoraeTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
 // query functions that the main function called
 void edgeFrequenceBaselineTest(bool para_query, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
 void edgeExistenceBaselineTest(bool para_query, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag);
 void nodeFrequenceBaselineTest(bool para_query, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
-void edgeFrequencePgssTest(bool para_query, Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
-void edgeExistencePgssTest(bool para_query, Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag);
-void nodeFrequencePgssTest(bool para_query, Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
+void edgeFrequenceHoraeTest(bool para_query, Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write);
+void edgeExistenceHoraeTest(bool para_query, Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag);
+void nodeFrequenceHoraeTest(bool para_query, Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line);
 /***************** function declaration ***********************/
 int isFolderExist(char* folder) {
 	int ret = 0;
@@ -234,7 +234,7 @@ int baselineInsert(HORAE_VAR var, string filename) {
 	ifs.close();
 	return 0;
 }
-int pgssSequentialInsert(HORAE_VAR var, string filename) {
+int horaeSequentialInsert(HORAE_VAR var, string filename) {
 	ifstream ifs;
 	ifs.open(filename);
 	if (!ifs.is_open()) {
@@ -244,7 +244,7 @@ int pgssSequentialInsert(HORAE_VAR var, string filename) {
 #if defined(DEBUG) || defined(TINSTIME) || defined(BINSTIME) || defined(HINT)
 	cout << "Inserting..." << endl;
 #endif
-	pgss_sequential = new Horae(var.startTime, var.granularityLength, var.gl, var.width, var.depth, var.fingerprintLen, var.cache_align, var.kick, var.row_addrs, var.col_addrs);	
+	horae_sequential = new Horae(var.startTime, var.granularityLength, var.gl, var.width, var.depth, var.fingerprintLen, var.cache_align, var.kick, var.row_addrs, var.col_addrs);	
 	int64_t s, d;
 	weight_type w;
 	time_type t;
@@ -266,7 +266,7 @@ int pgssSequentialInsert(HORAE_VAR var, string filename) {
 		ifs >> s >> d >> w >> t;
 		if(ifs.fail())
 			break;
-		pgss_sequential->insert(s, d, w, t);
+		horae_sequential->insert(s, d, w, t);
 		datanum++;
 #if defined(DEBUG) || defined(BINSTIME)
 		if (datanum % 10000000 == 0) {
@@ -301,13 +301,13 @@ int pgssSequentialInsert(HORAE_VAR var, string filename) {
 	cout << "Insertion Time = " << ins_time << " s" << endl;
 	cout << "Insertion Finished!" << endl;
 	cout << "Datanum = " << datanum << endl;
-	cout << "Level = " << pgss_sequential->getMultilayerSize() << endl;
+	cout << "Level = " << horae_sequential->getMultilayerSize() << endl;
 #endif
 	ifs.close();
-	pgss_sequential->bucketCounting();
+	horae_sequential->bucketCounting();
 	return 0;
 }
-int insert_pgss_parallel(Horae* pg, int64_t fpLength, int level, string filename, int line) {
+int insert_horae_parallel(Horae* pg, int64_t fpLength, int level, string filename, int line) {
     ifstream ifs;
 	ifs.open(filename);
 	if (!ifs.is_open()) {
@@ -384,7 +384,7 @@ int insert_pgss_parallel(Horae* pg, int64_t fpLength, int level, string filename
 			cout << "(" << s << ", " << d << ", " << w << ", " << t << ") -- " << " level = " << level << endl;
 	#endif
 			pg->levelInsert(level + 1, s, d, w, t);
-			child = new thread(insert_pgss_parallel, pg, length, level + 1, filename, line);
+			child = new thread(insert_horae_parallel, pg, length, level + 1, filename, line);
 		}
 		pg->levelInsert(level, s, d, w, t);
 		datanum++;
@@ -416,7 +416,7 @@ int insert_pgss_parallel(Horae* pg, int64_t fpLength, int level, string filename
 	return 0;
 }
 
-int pgssParallelInsert(HORAE_VAR var, string filename) {
+int horaeParallelInsert(HORAE_VAR var, string filename) {
 	ifstream ifs;
 	ifs.open(filename);
 	if (!ifs.is_open()) {
@@ -426,7 +426,7 @@ int pgssParallelInsert(HORAE_VAR var, string filename) {
 #if defined(DEBUG) || defined(HINT)
 	cout << "Inserting..." << endl;
 #endif
-	pgss_parallel = new Horae(var.startTime, var.granularityLength, var.gl, var.width, var.depth, var.fingerprintLen, var.cache_align, var.kick, var.row_addrs, var.col_addrs);
+	horae_parallel = new Horae(var.startTime, var.granularityLength, var.gl, var.width, var.depth, var.fingerprintLen, var.cache_align, var.kick, var.row_addrs, var.col_addrs);
 	int64_t s, d;
 	weight_type w;
 	time_type t;
@@ -452,24 +452,24 @@ int pgssParallelInsert(HORAE_VAR var, string filename) {
 		int tt = ceil((double)(t - var.startTime) / (double)var.granularityLength);
 
 #ifdef MEM
-		if ((flag == 1) && (tt > 2 * (pgss_parallel->getLayer(level)->getGranularity()))) {
+		if ((flag == 1) && (tt > 2 * (horae_parallel->getLayer(level)->getGranularity()))) {
 			flag = 0;
 			int line = datanum + 1;
 	#if defined(DEBUG) || defined(TINSTIME)
 			timeval matrix_s1, matrix_e1;
 			gettimeofday( &matrix_s1, NULL);
 	#endif
-			// Layer* gs = new Layer(*(pgss_parallel->getLayer(level)), level+1); 
+			// Layer* gs = new Layer(*(horae_parallel->getLayer(level)), level+1); 
 			Layer* gs = NULL;
 	#ifdef SUCPRE
-			gs = new LayerSucPreClass((LayerSucPreClass *)pgss_parallel->getLayer(level), level + 1);
+			gs = new LayerSucPreClass((LayerSucPreClass *)horae_parallel->getLayer(level), level + 1);
 	#elif SUCPREMAP
-			gs = new LayerSucPreMapClass((LayerSucPreMapClass *)pgss_parallel->getLayer(level), level + 1);
+			gs = new LayerSucPreMapClass((LayerSucPreMapClass *)horae_parallel->getLayer(level), level + 1);
 	#else
-			gs = new LayerSucClass((LayerSucClass *)pgss_parallel->getLayer(level), level + 1);
+			gs = new LayerSucClass((LayerSucClass *)horae_parallel->getLayer(level), level + 1);
 	#endif
 #else
-		if ((flag == 1) && (tt > (pgss_parallel->getLayer(level)->getGranularity()))) {
+		if ((flag == 1) && (tt > (horae_parallel->getLayer(level)->getGranularity()))) {
 			flag = 0;
 			int line = datanum + 1;
 	#if defined(DEBUG) || defined(TINSTIME)
@@ -479,11 +479,11 @@ int pgssParallelInsert(HORAE_VAR var, string filename) {
 
 			Layer* gs = NULL;
 	#ifdef SUCPRE
-			gs = new LayerSucPreClass((LayerSucPreClass *)pgss_parallel->getLayer(level));
+			gs = new LayerSucPreClass((LayerSucPreClass *)horae_parallel->getLayer(level));
 	#elif SUCPREMAP
-			gs = new LayerSucPreMapClass((LayerSucPreMapClass *)pgss_parallel->getLayer(level));
+			gs = new LayerSucPreMapClass((LayerSucPreMapClass *)horae_parallel->getLayer(level));
 	#else
-			gs = new LayerSucClass((LayerSucClass *)pgss_parallel->getLayer(level));
+			gs = new LayerSucClass((LayerSucClass *)horae_parallel->getLayer(level));
 	#endif
 #endif
 
@@ -492,15 +492,15 @@ int pgssParallelInsert(HORAE_VAR var, string filename) {
 			double matrix_time1 = (matrix_e1.tv_sec - matrix_s1.tv_sec) +  (matrix_e1.tv_usec - matrix_s1.tv_usec) / 1000000.0;
 			cout << "Level " << (level + 1) << ", Line = " << line << ", Matrix Time = " << matrix_time1 << " s" << endl;
 	#endif
-			pgss_parallel->addLayer(gs);
+			horae_parallel->addLayer(gs);
 			int64_t length = ifs.tellg();
 	#ifdef DEBUG
 			cout << "(" << s << ", " << d << ", " << w << ", " << t << ") -- " << " level = " << level << endl;
 	#endif
-			pgss_parallel->levelInsert(level + 1, s, d, w, t);
-            child = new thread(insert_pgss_parallel, pgss_parallel, length, level + 1, filename, line);	
+			horae_parallel->levelInsert(level + 1, s, d, w, t);
+            child = new thread(insert_horae_parallel, horae_parallel, length, level + 1, filename, line);	
 		}
-		pgss_parallel->levelInsert(level, s, d, w, t);
+		horae_parallel->levelInsert(level, s, d, w, t);
 
 		datanum++;
 #if defined(DEBUG) || defined(BINSTIME)
@@ -541,7 +541,7 @@ int pgssParallelInsert(HORAE_VAR var, string filename) {
 	delete child;
 #if defined(DEBUG) || defined(HINT)
 	cout << "Datanum = " << datanum << endl;
-	cout << "Level = " << pgss_parallel->getMultilayerSize()<< endl;
+	cout << "Level = " << horae_parallel->getMultilayerSize()<< endl;
 #endif
 	ifs.close();
 #if defined(DEBUG) || defined(TINSTIME) || defined(HINT)
@@ -550,7 +550,7 @@ int pgssParallelInsert(HORAE_VAR var, string filename) {
 	double ins_time = (t_end.tv_sec - t_start.tv_sec) +  (t_end.tv_usec - t_start.tv_usec) / 1000000.0;
 	cout << "Insertion Time = " << ins_time << " s" << endl;
 #endif
-	pgss_parallel->bucketCounting();
+	horae_parallel->bucketCounting();
 	return 0;
 }
 
@@ -912,10 +912,10 @@ int nodeFrequenceBaselineTest_para(string input_dir, string output_dir, string d
 }
 
 
-int edgeFrequencePgssTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write) {
+int edgeFrequenceHoraeTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write) {
 	string input_file_prefix = dataset_name + "_random_edge_frequence_";
 	string input_file_suffix = "_sorted.txt";
-	string output_file_prefix = dataset_name + "_edge_frequence_pgss_";
+	string output_file_prefix = dataset_name + "_edge_frequence_horae_";
 	string output_file_suffix = "_res.txt";
 	string time_file_suffix = "_time.txt";
 	//edge query process
@@ -982,11 +982,11 @@ int edgeFrequencePgssTest_single(Horae* horae, string input_dir, string output_d
 #endif
 	return 0;
 }
-int edgeFrequencePgssTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write) {
+int edgeFrequenceHoraeTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write) {
 	vector<thread*> childs;
 	thread* child = NULL;
 	for(int i = 0; i < num.size(); i++) {
-		child = new thread(edgeFrequencePgssTest_single, horae, input_dir, output_dir, dataset_name, num[i], query_times, write);
+		child = new thread(edgeFrequenceHoraeTest_single, horae, input_dir, output_dir, dataset_name, num[i], query_times, write);
 		childs.push_back(child);
 
 	}
@@ -996,7 +996,7 @@ int edgeFrequencePgssTest_para(Horae* horae, string input_dir, string output_dir
 	}
 	return 0;
 }
-int edgeExistencePgssTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write, int flag) {
+int edgeExistenceHoraeTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write, int flag) {
 	string input_file_prefix = "";
 	string input_file_suffix = "";
 	string output_file_prefix = "";
@@ -1007,13 +1007,13 @@ int edgeExistencePgssTest_single(Horae* horae, string input_dir, string output_d
 	case 1:
 		input_file_prefix = "_random_edge_existence_";
 		input_file_suffix = "_sorted.txt";
-		output_file_prefix = "_edge_existence_pgss_";
+		output_file_prefix = "_edge_existence_horae_";
 		output_file_suffix = "_res.txt";
 		break;
 	case 2:
 		input_file_prefix = "_bool_";
 		input_file_suffix = ".txt";
-		output_file_prefix = "_bool_pgss_";
+		output_file_prefix = "_bool_horae_";
 		output_file_suffix = "_res.txt";
 		break;
 	default:
@@ -1085,11 +1085,11 @@ int edgeExistencePgssTest_single(Horae* horae, string input_dir, string output_d
 #endif
 	return 0;
 }
-int edgeExistencePgssTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag) {
+int edgeExistenceHoraeTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag) {
 	vector<thread*> childs;
 	thread* child = NULL;
 	for(int i = 0; i < num.size(); i++) {
-		child = new thread(edgeExistencePgssTest_single, horae, input_dir, output_dir, dataset_name, num[i], query_times, write, flag);
+		child = new thread(edgeExistenceHoraeTest_single, horae, input_dir, output_dir, dataset_name, num[i], query_times, write, flag);
 		childs.push_back(child);
 
 	}
@@ -1099,7 +1099,7 @@ int edgeExistencePgssTest_para(Horae* horae, string input_dir, string output_dir
 	}
 	return 0;
 }
-int nodeFrequencePgssTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write, int flag, int line) {
+int nodeFrequenceHoraeTest_single(Horae* horae, string input_dir, string output_dir, string dataset_name, int num, int query_times, bool write, int flag, int line) {
 	string input_file_prefix = "";
 	string input_file_suffix = "";
 	string output_file_prefix = "";
@@ -1138,28 +1138,28 @@ int nodeFrequencePgssTest_single(Horae* horae, string input_dir, string output_d
 		}
 		
 		if(line == 0) {
-			resultFile.open(output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num) + output_file_suffix);
+			resultFile.open(output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num) + output_file_suffix);
 			if (!resultFile.is_open()) {
-				cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num) + output_file_suffix) << endl;
+				cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num) + output_file_suffix) << endl;
 				return -1;
 			}
-			timeFile.open(output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num) + time_file_suffix);
+			timeFile.open(output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num) + time_file_suffix);
 			if (!timeFile.is_open()) {
-				cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num) + time_file_suffix) << endl;
+				cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num) + time_file_suffix) << endl;
 				return -1;
 			}
 		}
 		else {	// append
-			resultFile.open(output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num) + output_file_suffix, ios::app);
-			cout << "append " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num) + output_file_suffix) << endl;
+			resultFile.open(output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num) + output_file_suffix, ios::app);
+			cout << "append " << (output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num) + output_file_suffix) << endl;
 			if (!resultFile.is_open()) {
-				cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num) + output_file_suffix) << endl;
+				cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num) + output_file_suffix) << endl;
 				return -1;
 			}
-			timeFile.open(output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num) + time_file_suffix, ios::app);
-			cout << "append " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num) + time_file_suffix) << endl;
+			timeFile.open(output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num) + time_file_suffix, ios::app);
+			cout << "append " << (output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num) + time_file_suffix) << endl;
 			if (!timeFile.is_open()) {
-				cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num) + time_file_suffix) << endl;
+				cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num) + time_file_suffix) << endl;
 				return -1;
 			}
 		}
@@ -1206,11 +1206,11 @@ int nodeFrequencePgssTest_single(Horae* horae, string input_dir, string output_d
 #endif
 	return 0;
 }
-int nodeFrequencePgssTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line) {
+int nodeFrequenceHoraeTest_para(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line) {
 	vector<thread*> childs;
 	thread* child = NULL;
 	for(int i = 0; i < num.size(); i++) {
-		child = new thread(nodeFrequencePgssTest_single, horae, input_dir, output_dir, dataset_name, num[i], query_times, write, flag, line);
+		child = new thread(nodeFrequenceHoraeTest_single, horae, input_dir, output_dir, dataset_name, num[i], query_times, write, flag, line);
 		childs.push_back(child);
 
 	}
@@ -1494,10 +1494,10 @@ int nodeFrequenceBaselineTest_seq(string input_dir, string output_dir, string da
 	delete[] dataArray;
 	return 0;
 }
-int edgeFrequencePgssTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write) {
+int edgeFrequenceHoraeTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write) {
 	string input_file_prefix = dataset_name + "_random_edge_frequence_";
 	string input_file_suffix = "_sorted.txt";
-	string output_file_prefix = dataset_name + "_edge_frequence_pgss_";
+	string output_file_prefix = dataset_name + "_edge_frequence_horae_";
 	string output_file_suffix = "_res.txt";
 	string time_file_suffix = "_time.txt";
 	
@@ -1567,7 +1567,7 @@ int edgeFrequencePgssTest_seq(Horae* horae, string input_dir, string output_dir,
 	delete[] dataArray;
 	return 0;
 }
-int edgeExistencePgssTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag) {
+int edgeExistenceHoraeTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag) {
 	string input_file_prefix = "";
 	string input_file_suffix = "";
 	string output_file_prefix = "";
@@ -1578,13 +1578,13 @@ int edgeExistencePgssTest_seq(Horae* horae, string input_dir, string output_dir,
 	case 1:
 		input_file_prefix = "_random_edge_existence_";
 		input_file_suffix = "_sorted.txt";
-		output_file_prefix = "_edge_existence_pgss_";
+		output_file_prefix = "_edge_existence_horae_";
 		output_file_suffix = "_res.txt";
 		break;
 	case 2:
 		input_file_prefix = "_bool_";
 		input_file_suffix = ".txt";
-		output_file_prefix = "_bool_pgss_";
+		output_file_prefix = "_bool_horae_";
 		output_file_suffix = "_res.txt";
 		break;
 	default:
@@ -1660,7 +1660,7 @@ int edgeExistencePgssTest_seq(Horae* horae, string input_dir, string output_dir,
 	delete[] dataArray;
 	return 0;
 }
-int nodeFrequencePgssTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line) {
+int nodeFrequenceHoraeTest_seq(Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line) {
 	string input_file_prefix = "";
 	string input_file_suffix = "";
 	string output_file_prefix = "";
@@ -1700,28 +1700,28 @@ int nodeFrequencePgssTest_seq(Horae* horae, string input_dir, string output_dir,
 			}
 			
 			if(line == 0) {
-				resultFile.open(output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num[i]) + output_file_suffix);
+				resultFile.open(output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num[i]) + output_file_suffix);
 				if (!resultFile.is_open()) {
-					cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num[i]) + output_file_suffix) << endl;
+					cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num[i]) + output_file_suffix) << endl;
 					return -1;
 				}
-				timeFile.open(output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num[i]) + time_file_suffix);
+				timeFile.open(output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num[i]) + time_file_suffix);
 				if (!timeFile.is_open()) {
-					cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num[i]) + time_file_suffix) << endl;
+					cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num[i]) + time_file_suffix) << endl;
 					return -1;
 				}
 			}
 			else {	// append
-				resultFile.open(output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num[i]) + output_file_suffix, ios::app);
-				cout << "append " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num[i]) + output_file_suffix) << endl;
+				resultFile.open(output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num[i]) + output_file_suffix, ios::app);
+				cout << "append " << (output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num[i]) + output_file_suffix) << endl;
 				if (!resultFile.is_open()) {
-					cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num[i]) + output_file_suffix) << endl;
+					cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num[i]) + output_file_suffix) << endl;
 					return -1;
 				}
-				timeFile.open(output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num[i]) + time_file_suffix, ios::app);
-				cout << "append " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num[i]) + time_file_suffix) << endl;
+				timeFile.open(output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num[i]) + time_file_suffix, ios::app);
+				cout << "append " << (output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num[i]) + time_file_suffix) << endl;
 				if (!timeFile.is_open()) {
-					cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "pgss_" + to_string(num[i]) + time_file_suffix) << endl;
+					cout << "Error in open file, Path = " << (output_dir + dataset_name + output_file_prefix + "horae_" + to_string(num[i]) + time_file_suffix) << endl;
 					return -1;
 				}
 			}
@@ -1789,23 +1789,23 @@ void nodeFrequenceBaselineTest(bool para_query, string input_dir, string output_
 	else 
 		nodeFrequenceBaselineTest_seq(input_dir, output_dir, dataset_name, num, query_times, write, flag, line);
 }
-void edgeFrequencePgssTest(bool para_query, Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write) {
+void edgeFrequenceHoraeTest(bool para_query, Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write) {
 	if(para_query)
-		edgeFrequencePgssTest_para(horae, input_dir, output_dir, dataset_name, num, query_times, write);
+		edgeFrequenceHoraeTest_para(horae, input_dir, output_dir, dataset_name, num, query_times, write);
 	else 
-		edgeFrequencePgssTest_seq(horae, input_dir, output_dir, dataset_name, num, query_times, write);
+		edgeFrequenceHoraeTest_seq(horae, input_dir, output_dir, dataset_name, num, query_times, write);
 }
-void edgeExistencePgssTest(bool para_query, Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag) {
+void edgeExistenceHoraeTest(bool para_query, Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag) {
 	if(para_query)
-		edgeExistencePgssTest_para(horae, input_dir, output_dir, dataset_name, num, query_times, write, flag);
+		edgeExistenceHoraeTest_para(horae, input_dir, output_dir, dataset_name, num, query_times, write, flag);
 	else 
-		edgeExistencePgssTest_seq(horae, input_dir, output_dir, dataset_name, num, query_times, write, flag);
+		edgeExistenceHoraeTest_seq(horae, input_dir, output_dir, dataset_name, num, query_times, write, flag);
 }
-void nodeFrequencePgssTest(bool para_query, Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line) {
+void nodeFrequenceHoraeTest(bool para_query, Horae* horae, string input_dir, string output_dir, string dataset_name, vector<int> num, int query_times, bool write, int flag, int line) {
 	if(para_query)
-		nodeFrequencePgssTest_para(horae, input_dir, output_dir, dataset_name, num, query_times, write, flag, line);
+		nodeFrequenceHoraeTest_para(horae, input_dir, output_dir, dataset_name, num, query_times, write, flag, line);
 	else 
-		nodeFrequencePgssTest_seq(horae, input_dir, output_dir, dataset_name, num, query_times, write, flag, line);
+		nodeFrequenceHoraeTest_seq(horae, input_dir, output_dir, dataset_name, num, query_times, write, flag, line);
 }
 
 int edgeFrequenceFileTest(Horae* horae, string test_file, string output_dir, int query_times, bool write) {

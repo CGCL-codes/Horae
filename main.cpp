@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
 #endif
 
 	int dataset = 3;
-	int test_situation = 0;						//0-baseline，1-pgss
+	int test_situation = 0;						// 0-baseline，1-horae
 	int query_times = 1;						// query times
 	string filename, input_dir, output_dir;		// dataset filepath, test file folder path , output file folder path
 	string dataset_name, txt_name = "";
@@ -66,11 +66,8 @@ int main(int argc, char* argv[]) {
 	string edge_test_file = "";
 	string node_test_file = "";
 	
-	//命令行参数
+	// Command-line parameters
 	for (int i = 0; i < argc; i++) {
-		if (strcmp(argv[i], "-line") == 0) {
-			line = atoi(argv[++i]);
-		}
 		if (strcmp(argv[i], "-dataset") == 0) {
 			dataset = atoi(argv[++i]);
 		}
@@ -83,43 +80,39 @@ int main(int argc, char* argv[]) {
 		if (strcmp(argv[i], "-fplength") == 0) {
 			fingerprintLen = atoi(argv[++i]);
 		}
-		if (strcmp(argv[i], "-edgefrequence") == 0) {
+		if (strcmp(argv[i], "-edgeweight") == 0) {
 			efflag = 1;
 		}
 		if (strcmp(argv[i], "-edgeexistence") == 0) {
 			eeflag = 1;
 		}
-		if (strcmp(argv[i], "-nodefrequence") == 0) {
+		if (strcmp(argv[i], "-nodeinweight") == 0) {
 			nfflag = 1;
-		}
-		if (strcmp(argv[i], "-in") == 0) {
 			node_query_flag = 1;
 		}
-		if (strcmp(argv[i], "-out") == 0) {
+		if (strcmp(argv[i], "-nodeoutweight") == 0) {
+			nfflag = 1;
 			node_query_flag = 2;
+		}
+		if (strcmp(argv[i], "-bool") == 0) {
+			edge_existence_flag = 2;
 		}
 		if (strcmp(argv[i], "-write") == 0) {
 			writeflag = true;
-		}
-		if (strcmp(argv[i], "-qtimes") == 0) {
-			query_times = atoi(argv[++i]);
 		}
 		if (strcmp(argv[i], "-baseline") == 0) {
 			test_situation = 0;
 			txt_name = "baseline";
 		}
-		if (strcmp(argv[i], "-pgss") == 0) {
+		if (strcmp(argv[i], "-horae") == 0) {
 			test_situation = 1;
-			txt_name = "pgss";
+			txt_name = "horae";
 		}
-		if (strcmp(argv[i], "-para") == 0) {
+		if (strcmp(argv[i], "-para_ins") == 0) {
 			parallel_insert = true;
 		}
-		if (strcmp(argv[i], "-seq") == 0) {
+		if (strcmp(argv[i], "-seq_ins") == 0) {
 			parallel_insert = false;
-		}
-		if (strcmp(argv[i], "-bool") == 0) {
-			edge_existence_flag = 2;
 		}
 		if (strcmp(argv[i], "-para_query") == 0) {
 			para_query = true;
@@ -138,6 +131,12 @@ int main(int argc, char* argv[]) {
 		}
 		if (strcmp(argv[i], "-cache_align") == 0) {
 			cache_align = true;
+		}
+		if (strcmp(argv[i], "-qtimes") == 0) {
+			query_times = atoi(argv[++i]);
+		}
+		if (strcmp(argv[i], "-line") == 0) {
+			line = atoi(argv[++i]);
 		}
 		if (strcmp(argv[i], "-edge_test_file") == 0) {
 			edge_file_test = true;
@@ -172,11 +171,11 @@ int main(int argc, char* argv[]) {
 			output_dir = "..//..//TestFiles//out//output//";
 			dataset_name = "out";
 			num = { 8, 16, 32, 64, 128, 256, 384 };
-			if (test_situation == 0 || test_situation == 2) { // baseline or single dynamic pgss
+			if (test_situation == 0 || test_situation == 2) { // baseline or single dynamic horae
 				width = 2850;
 				depth = 3158;
 			}
-			else if (test_situation == 1) {  //pgss
+			else if (test_situation == 1) {  //horae
 				width = 900;
 				depth = 1000;
 			}
@@ -187,11 +186,11 @@ int main(int argc, char* argv[]) {
 			output_dir = "..//..//TestFiles//lastfm_song//output//";
 			dataset_name = "lastfm_song";
 			num = { 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560, 3072};
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
 				width = 45000;
 				depth = 1800;
 			}
-			else if (test_situation == 1) {  //pgss
+			else if (test_situation == 1) {  //horae
 				width = 15000;
 				depth = 600;
 			}
@@ -203,11 +202,11 @@ int main(int argc, char* argv[]) {
 			dataset_name = "stackoverflow";
 			//num = { 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560, 3072, 3584 };
 			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
 				width = 20396;/////////
 				depth = 20397;/////////
 			}
-			else if (test_situation == 1) {  //pgss
+			else if (test_situation == 1) {  //horae
 				width = 5655;///////////
 				depth = 5659;///////////
 			}
@@ -218,11 +217,11 @@ int main(int argc, char* argv[]) {
 			output_dir = "..//..//TestFiles//caida//output//";
 			dataset_name = "caida";
 			num = { 1024, 2048, 3072, 4096, 5120, 6144, 7168, 8192, 9216, 10240, 11264, 12288 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
 				width = 54000;
 				depth = 54000;
 			}
-			else if (test_situation == 1) {  //pgss
+			else if (test_situation == 1) {  //horae
 				width = 15000;
 				depth = 15000;
 			}
@@ -233,11 +232,11 @@ int main(int argc, char* argv[]) {
 			output_dir = "..//..//TestFiles//wiki//output//";
 			dataset_name = "wiki";
 			num = { 64, 128, 256, 512, 1024, 1536, 2048, 2560, 3072, 3584, 4096, 4608 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
 				width = 6500;
 				depth = 6550;
 			}
-			else if (test_situation == 1) {  //pgss
+			else if (test_situation == 1) {  //horae
 				width = 1750;
 				depth = 1800;
 			}
@@ -248,11 +247,11 @@ int main(int argc, char* argv[]) {
 			output_dir = "..//..//TestFiles//lkml-10w-86400//output//";
 			dataset_name = "lkml";
 			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
 				width = 6500;
 				depth = 6550;
 			}
-			else if (test_situation == 1) {  //pgss
+			else if (test_situation == 1) {  //horae
 				width = 1750;
 				depth = 1800;
 			}
@@ -263,11 +262,11 @@ int main(int argc, char* argv[]) {
 			output_dir = "..//..//TestFiles//wiki-talk//output//";
 			dataset_name = "wiki-talk";
 			num = { 32, 64, 128, 256, 512, 1024, 2048, 3072, 4096, 5120 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
 				width = 3536;
 				depth = 3536;
 			}
-			else if (test_situation == 1) {  //pgss
+			else if (test_situation == 1) {  //horae
 				width = 3536;
 				depth = 3536;
 			}
@@ -278,11 +277,11 @@ int main(int argc, char* argv[]) {
 			output_dir = "..//..//TestFiles//dblp//output//";
 			dataset_name = "dblp";
 			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
 				width = 3840;
 				depth = 3840;
 			}
-			else if (test_situation == 1) {  //pgss
+			else if (test_situation == 1) {  //horae
 				width = 3840;
 				depth = 3840;
 			}
@@ -294,11 +293,11 @@ int main(int argc, char* argv[]) {
 			dataset_name = "stk-balanced";
 			//num = { 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560, 3072, 3584 };
 			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
 				width = 20396;/////////
 				depth = 20397;/////////
 			}
-			else if (test_situation == 1) {  //pgss
+			else if (test_situation == 1) {  //horae
 				width = 5655;///////////
 				depth = 5659;///////////
 			}
@@ -310,11 +309,11 @@ int main(int argc, char* argv[]) {
 			dataset_name = "stackoverflow";
 			//num = { 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560, 3072, 3584 };
 			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic pgss
+			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
 				width = 20396;/////////
 				depth = 20397;/////////
 			}
-			else if (test_situation == 1) {  //pgss
+			else if (test_situation == 1) {  //horae
 				width = 5655;///////////
 				depth = 5659;///////////
 			}
@@ -434,96 +433,96 @@ int main(int argc, char* argv[]) {
 		case 1:
 			if (parallel_insert) {
 #if defined(DEBUG) || defined(HINT)
-				cout << "****************** pgss parallel insert start *****************" << endl;
+				cout << "****************** horae parallel insert start *****************" << endl;
 				timeval t_start, t_end;
 				gettimeofday( &t_start, NULL);
 #endif
-				pgssParallelInsert(horae_var, filename);
+				horaeParallelInsert(horae_var, filename);
 #if defined(DEBUG) || defined(HINT)
 				gettimeofday( &t_end, NULL);
 				double delta_t = (t_end.tv_sec-t_start.tv_sec) + 
 						(t_end.tv_usec-t_start.tv_usec)/1000000.0;
 				cout << "all time : " << delta_t  << "s" << endl;
-				cout << "****************** pgss parallel insert end *******************" << endl << endl;
+				cout << "****************** horae parallel insert end *******************" << endl << endl;
 #endif
 			}
 			else {
 #if defined(DEBUG) || defined(HINT)
-				cout << "****************** pgss sequential insert start *****************" << endl;
+				cout << "****************** horae sequential insert start *****************" << endl;
 #endif
-				pgssSequentialInsert(horae_var, filename);
+				horaeSequentialInsert(horae_var, filename);
 #if defined(DEBUG) || defined(HINT)
-				cout << "****************** pgss sequential insert end *******************" << endl << endl;
+				cout << "****************** horae sequential insert end *******************" << endl << endl;
 #endif
 			}
 			if (efflag == 1) {
 #if defined(DEBUG) || defined(HINT)
-				cout << "**************** pgss frequence start ****************" << endl;
+				cout << "**************** horae frequence start ****************" << endl;
 #endif
 				if (parallel_insert) {
-					edgeFrequencePgssTest(para_query, pgss_parallel, input_dir, output_dir, dataset_name, num, query_times, writeflag);
+					edgeFrequenceHoraeTest(para_query, horae_parallel, input_dir, output_dir, dataset_name, num, query_times, writeflag);
 				}
 				else {
-					edgeFrequencePgssTest(para_query, pgss_sequential, input_dir, output_dir, dataset_name, num, query_times, writeflag);
+					edgeFrequenceHoraeTest(para_query, horae_sequential, input_dir, output_dir, dataset_name, num, query_times, writeflag);
 				}
 #if defined(DEBUG) || defined(HINT)
-				cout << "***************** pgss frequence end *****************" << endl << endl;
+				cout << "***************** horae frequence end *****************" << endl << endl;
 #endif
 			}
 			if (eeflag == 1) {
 #if defined(DEBUG) || defined(HINT)
-				cout << "**************** pgss existence start ****************" << endl;
+				cout << "**************** horae existence start ****************" << endl;
 #endif
 				if (parallel_insert) {
-					edgeExistencePgssTest(para_query,pgss_parallel, input_dir, output_dir, dataset_name, num, query_times, writeflag, edge_existence_flag);
+					edgeExistenceHoraeTest(para_query, horae_parallel, input_dir, output_dir, dataset_name, num, query_times, writeflag, edge_existence_flag);
 				}
 				else {
-					edgeExistencePgssTest(para_query, pgss_sequential, input_dir, output_dir, dataset_name, num, query_times, writeflag, edge_existence_flag);
+					edgeExistenceHoraeTest(para_query, horae_sequential, input_dir, output_dir, dataset_name, num, query_times, writeflag, edge_existence_flag);
 				}
 #if defined(DEBUG) || defined(HINT)
-				cout << "***************** pgss existence end *****************" << endl << endl;
+				cout << "***************** horae existence end *****************" << endl << endl;
 #endif
 			}
 			if (nfflag == 1) {
 #if defined(DEBUG) || defined(HINT)
-				cout << "************* pgss node frequence start **************" << endl;
+				cout << "************* horae node frequence start **************" << endl;
 #endif
 				if (parallel_insert) {
-					nodeFrequencePgssTest(para_query, pgss_parallel, input_dir, output_dir, dataset_name, num, query_times, writeflag, node_query_flag, line);
+					nodeFrequenceHoraeTest(para_query, horae_parallel, input_dir, output_dir, dataset_name, num, query_times, writeflag, node_query_flag, line);
 				}
 				else {
-					nodeFrequencePgssTest(para_query, pgss_sequential, input_dir, output_dir, dataset_name, num, query_times, writeflag, node_query_flag, line);
+					nodeFrequenceHoraeTest(para_query, horae_sequential, input_dir, output_dir, dataset_name, num, query_times, writeflag, node_query_flag, line);
 				}
 #if defined(DEBUG) || defined(HINT)
-				cout << "************** pgss node frequence end ***************" << endl << endl;
+				cout << "************** horae node frequence end ***************" << endl << endl;
 #endif
 			}
 			if (edge_file_test) {
 #if defined(DEBUG) || defined(HINT)
-				cout << "**************** pgss frequence start ****************" << endl;
+				cout << "**************** horae frequence start ****************" << endl;
 #endif
 				if (parallel_insert) {
-					edgeFrequenceFileTest(pgss_parallel, edge_test_file, output_dir, query_times, writeflag);
+					edgeFrequenceFileTest(horae_parallel, edge_test_file, output_dir, query_times, writeflag);
 				}
 				else {
-					edgeFrequenceFileTest(pgss_sequential, edge_test_file, output_dir, query_times, writeflag);
+					edgeFrequenceFileTest(horae_sequential, edge_test_file, output_dir, query_times, writeflag);
 				}
 #if defined(DEBUG) || defined(HINT)
-				cout << "***************** pgss frequence end *****************" << endl << endl;
+				cout << "***************** horae frequence end *****************" << endl << endl;
 #endif
 			}
 			if (node_file_test) {
 #if defined(DEBUG) || defined(HINT)
-				cout << "**************** pgss node frequence start ****************" << endl;
+				cout << "**************** horae node frequence start ****************" << endl;
 #endif
 				if (parallel_insert) {
-					nodeFrequenceFileTest(pgss_parallel, node_test_file, output_dir, query_times, writeflag, node_query_flag);
+					nodeFrequenceFileTest(horae_parallel, node_test_file, output_dir, query_times, writeflag, node_query_flag);
 				}
 				else {
-					nodeFrequenceFileTest(pgss_sequential, node_test_file, output_dir, query_times, writeflag, node_query_flag);
+					nodeFrequenceFileTest(horae_sequential, node_test_file, output_dir, query_times, writeflag, node_query_flag);
 				}
 #if defined(DEBUG) || defined(HINT)
-				cout << "***************** pgss node frequence end *****************" << endl << endl;
+				cout << "***************** horae node frequence end *****************" << endl << endl;
 #endif
 			}
 			break;

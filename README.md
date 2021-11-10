@@ -1,5 +1,5 @@
 # Horae: A Graph Stream Summarization Structure for Efficient Temporal Range Query
-Horae is a graph stream summarization structure for efficient temporal range query. Horae can deal with temporal queries with arbitrary and elastic range while guaranteeing one-sided and controllable errors. More to the point, Horae provides a worst query time of *O(log |L|)*, where *|L|* is the length of query range. Hoare leverages multi-layer storage and *Binary Range Decomposition* (*BRD*) algorithm to decompose the time range query to logarithmic time interval queries and executes these queries in corresponding layers.
+Horae is a graph stream summarization structure for efficient temporal range query. Horae can deal with temporal queries with arbitrary and elastic range while guaranteeing one-sided and controllable errors. More to the point, Horae provides a worst query time of *O*(*log |L|*), where *|L|* is the length of query range. Hoare leverages multi-layer storage and *Binary Range Decomposition* (*BRD*) algorithm to decompose the time range query to logarithmic time interval queries and executes these queries in corresponding layers.
 
 ## How to use?
 ### Environment
@@ -22,25 +22,32 @@ Some important parameters setting and theirs descriptions are as follows.
 | **-d**                  | the depth of the hash matrix                       |
 | **-gl**                 | granularity length                                 |
 | **-slot**               | slot numbers of one bucket                         |
-| **-fplength**           | fingerprint length                                 | 
+| **-fplength**           | fingerprint length                                 |
 | **-edgeweight**         | run edge weight query                              |
 | **-edgeexistence**      | run edge existence query                           |
 | **-nodeinweight**       | run node-in aggregated weight query                |
-| **-nodeoutfrequence**   | run node-out aggregated weight query               |
+| **-nodeoutweight**      | run node-out aggregated weight query               |
 | **-bool**               | run bool query                                     |
+| **-dataset**            | choose dataset for testing                         |
 | **-filename**           | the file path of dataset                           |
 | **-input_dir**          | the folder path of input files                     |
 | **-output_dir**         | the folder path of output files                    |
+| **-para_ins**           | parallel insertion                                 |
+| **-seq_ins**            | serial insertion                                   |
 | **-para_query**         | execute query tasks in parallel                    |
 | **-seq_query**          | execute query tasks serially                       |
+| **-baseline**           | run baseline code                                  |
+| **-horae**              | run horae code                                     |
 | **-row_addrs**          | number of alternative addresses for matrix rows    |
 | **-col_addrs**          | number of alternative addresses for matrix columns |
 | **-kick**               | add kick out stategy                               |
 | **-cache_align**        | add cache align stategy                            |
+| **-write**              | output test results to file                        |
+
 
 We give a simple example of how to use these parameters:
 ``` code
-e.g. ./horae -filename <path> -w <int> -d <int> -gl <int> -fplength <int> -slot <int> -edgefrequence -input_dir <path> -output_dir <path>
+e.g. ./horae -dataset <int> -filename <path> -w <int> -d <int> -gl <int> -fplength <int> -slot <int> -edgefrequence -input_dir <path> -output_dir <path>
 e.g. ./horae -dataset 9 -filename Dataset/stack2048T-balanced -pgss -para -w 4364 -d 4364 -gl 1 -qtimes 1 -node_test_file TestFiles/balanced-test-2048/input/stack2048T-balanced_node_in_test.txt -in -output_dir TestFiles/balanced-test-2048/output/ -fplength 14 -kick -cache_align -write
 ```
 
