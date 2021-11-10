@@ -1,5 +1,5 @@
 # Horae: A Graph Stream Summarization Structure for Efficient Temporal Range Query
-Horae is a graph stream summarization structure for efficient temporal range query. Horae can deal with temporal queries with arbitrary and elastic range while guaranteeing one-sided and controllable errors. More to the point, Horae provides a worst query time of O(log{|L|}), where |L| is the length of query range. Hoare leverages multi-layer storage and Binary Range Decomposition (BRD) algorithm to decompose the time range query to logarithmic time interval queries and executes these queries in corresponding layers.
+Horae is a graph stream summarization structure for efficient temporal range query. Horae can deal with temporal queries with arbitrary and elastic range while guaranteeing one-sided and controllable errors. More to the point, Horae provides a worst query time of *O(log |L|)*, where *|L|* is the length of query range. Hoare leverages multi-layer storage and *Binary Range Decomposition* (*BRD*) algorithm to decompose the time range query to logarithmic time interval queries and executes these queries in corresponding layers.
 
 ## How to use?
 ### Environment
@@ -7,30 +7,30 @@ We implement Horae in a Red Hat Enterprise Linux Server release 6.2 with an Inte
 
 The g++ version we use is 7.3.0.
 
-Build
+Build & Run
 
 ```txt
 make
-./Horae
+./horae
 ```
 
 ### Configurations
 Some important parameters setting and theirs descriptions are as follows.
-| Command-line parameters | Descriptions                                      |
-|:----------------------- | :------------------------------------------------ |
-| **-w**                  | the width of the hash matrix                      |
-| **-d**                  | the depth of the hash matrix                      |
-| **-gl**                 | granularity length                                |
-| **-slot**               | slot numbers of one bucket                        |
-| **-fplength**           | fingerprint length                                | 
-| **-edgeweight**         | run edge weight query                             |
-| **-edgeexistence**      | run edge existence query                          |
-| **-nodeinweight**       | run node-in aggregated weight query               |
-| **-nodeoutfrequence**   | run node-out aggregated weight query              |
-| **-bool**               | run bool query                                    |
-| **-filename**           | the file path of dataset                          |
-| **-input_dir**          | the folder path of input files                    |
-| **-output_dir**         | the folder path of output files                   |
+| Command-line parameters | Descriptions                                       |
+|:----------------------- | :------------------------------------------------- |
+| **-w**                  | the width of the hash matrix                       |
+| **-d**                  | the depth of the hash matrix                       |
+| **-gl**                 | granularity length                                 |
+| **-slot**               | slot numbers of one bucket                         |
+| **-fplength**           | fingerprint length                                 | 
+| **-edgeweight**         | run edge weight query                              |
+| **-edgeexistence**      | run edge existence query                           |
+| **-nodeinweight**       | run node-in aggregated weight query                |
+| **-nodeoutfrequence**   | run node-out aggregated weight query               |
+| **-bool**               | run bool query                                     |
+| **-filename**           | the file path of dataset                           |
+| **-input_dir**          | the folder path of input files                     |
+| **-output_dir**         | the folder path of output files                    |
 | **-para_query**         | execute query tasks in parallel                    |
 | **-seq_query**          | execute query tasks serially                       |
 | **-row_addrs**          | number of alternative addresses for matrix rows    |
