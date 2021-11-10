@@ -47,8 +47,8 @@ Some important parameters setting and theirs descriptions are as follows.
 
 We give a simple example of how to use these parameters:
 ``` code
-e.g. ./horae -dataset <int> -filename <path> -w <int> -d <int> -gl <int> -fplength <int> -slot <int> -edgefrequence -input_dir <path> -output_dir <path>
-e.g. ./horae -dataset 9 -filename Dataset/stack2048T-balanced -pgss -para -w 4364 -d 4364 -gl 1 -qtimes 1 -node_test_file TestFiles/balanced-test-2048/input/stack2048T-balanced_node_in_test.txt -in -output_dir TestFiles/balanced-test-2048/output/ -fplength 14 -kick -cache_align -write
+e.g. ./horae -dataset <int> -filename <path> -w <int> -d <int> -gl <int> -fplength <int> -horae -para_ins -slot <int> -edgeweight -write -input_dir <path> -output_dir <path>
+e.g. ./horae -dataset 9 -filename Dataset/stackoverflow -horae -para_ins -w 5656 -d 5656 -gl 86400 -qtimes 1 -edgeweight -write -output_dir TestFiles/stk-test/output/ -fplength 14 -kick -cache_align 
 ```
 
 
