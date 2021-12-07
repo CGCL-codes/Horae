@@ -36,16 +36,15 @@ int main(int argc, char* argv[]) {
 	uint32_t granularityLength = 61200, gl = 1, slot = 2, fingerprintLen = 7;
 	string back_addr = "";
 	string cl = "";
-#ifdef BMAP
-	cl = "-both-map-and-prelist";
-#elif NMBP
-	cl = "-no-map-but-prelist";
-#else
-	cl = "-no-map-no-prelist";
-#endif
+// #ifdef BMAP
+// 	cl = "-both-map-and-prelist";
+// #elif NMBP
+// 	cl = "-no-map-but-prelist";
+// #else
+// 	cl = "-no-map-no-prelist";
+// #endif
 
 	int dataset = 3;
-	int test_situation = 0;						// 0-baseline (gss + timeslice)，1-horae
 	int query_times = 1;						// query times
 	string filename, input_dir, output_dir;		// dataset filepath, test file folder path , output file folder path
 	string dataset_name, txt_name = "";
@@ -98,14 +97,6 @@ int main(int argc, char* argv[]) {
 		}
 		if (strcmp(argv[i], "-write") == 0) {
 			writeflag = true;
-		}
-		if (strcmp(argv[i], "-baseline") == 0) {
-			test_situation = 0;
-			txt_name = "baseline";
-		}
-		if (strcmp(argv[i], "-horae") == 0) {
-			test_situation = 1;
-			txt_name = "horae";
 		}
 		if (strcmp(argv[i], "-para_ins") == 0) {
 			parallel_insert = true;
@@ -170,14 +161,8 @@ int main(int argc, char* argv[]) {
 			output_dir = ".//TestFiles//lkml-10w-86400//output//";
 			dataset_name = "lkml";
 			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0) { //baselines
-				width = 2680;
-				depth = 2680;
-			}
-			else if (test_situation == 1) {  //horae
-				width = 740;
-				depth = 740;
-			}
+			width = 740;
+			depth = 740;
 			break;
 		case 2:
 			filename = ".//Dataset//wiki-talk";
@@ -185,14 +170,8 @@ int main(int argc, char* argv[]) {
 			output_dir = ".//TestFiles//wiki-talk//output//";
 			dataset_name = "wiki-talk";
 			num = { 32, 64, 128, 256, 512, 1024, 2048, 3072, 4096, 5120 };
-			if (test_situation == 0) { //baselines
-				width = 13500;
-				depth = 13500;
-			}
-			else if (test_situation == 1) {  //horae
-				width = 3536;
-				depth = 3536;
-			}
+			width = 3536;
+			depth = 3536;
 			break;
 		case 3:
 			filename = ".//Dataset//stackoverflow";
@@ -200,14 +179,8 @@ int main(int argc, char* argv[]) {
 			output_dir = ".//TestFiles//stackoverflow//output//";
 			dataset_name = "stackoverflow";
 			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0) { 		//baselines
-				width = 20396;
-				depth = 20396;
-			}
-			else if (test_situation == 1) {  //horae
-				width = 5656;
-				depth = 5656;
-			}
+			width = 5656;
+			depth = 5656;
 			break;
 		case 4:
 			filename = ".//Dataset//caida";
@@ -215,30 +188,18 @@ int main(int argc, char* argv[]) {
 			output_dir = ".//TestFiles//caida//output//";
 			dataset_name = "caida";
 			num = { 1024, 2048, 3072, 4096, 5120, 6144, 7168, 8192, 9216, 10240, 11264, 12288 };
-			if (test_situation == 0) { //baselines
-				width = 55000;
-				depth = 55000;
-			}
-			else if (test_situation == 1) {  //horae
-				width = 14000;
-				depth = 14000;
-			}
+			width = 14000;
+			depth = 14000;
 			break;
 		
 		case 5:
-			filename = ".//Dataset//wiki-balanced";
-			input_dir = ".//TestFiles//wiki-balanced//input//";
-			output_dir = ".//TestFiles//wiki-balanced//output//";
+			filename = ".//Dataset//wiki-talk-balanced";
+			input_dir = ".//TestFiles//wiki-talk-balanced//input//";
+			output_dir = ".//TestFiles//wiki-talk-balanced//output//";
 			dataset_name = "wiki-balanced";
 			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0) { //baseline or single dynamic horae
-				width = 20396;
-				depth = 20396;
-			}
-			else if (test_situation == 1) {  //horae
-				width = 5656;
-				depth = 5656;
-			}
+			width = 3536;
+			depth = 3536;
 			break;
 		default:
 			break;
@@ -315,141 +276,101 @@ int main(int argc, char* argv[]) {
 	cout << endl;
 	cout << "*******************************************************" << endl << endl;
 #endif
-	switch (test_situation) {
-		case 0:
+
+// insert and queries
+	if (parallel_insert) {
 #if defined(DEBUG) || defined(HINT)
-			cout << "****************** baseline insert start *****************" << endl;
+		cout << "****************** horae parallel insert start *****************" << endl;
+		timeval t_start, t_end;
+		gettimeofday( &t_start, NULL);
 #endif
-			baselineInsert(horae_var, filename);
+		horaeParallelInsert(horae_var, filename);
 #if defined(DEBUG) || defined(HINT)
-			cout << "****************** baseline insert end *******************" << endl << endl;
+		gettimeofday( &t_end, NULL);
+		double delta_t = (t_end.tv_sec-t_start.tv_sec) + 
+				(t_end.tv_usec-t_start.tv_usec)/1000000.0;
+		cout << "all time : " << delta_t  << "s" << endl;
+		cout << "****************** horae parallel insert end *******************" << endl << endl;
 #endif
-			if (efflag == 1) {
+	}
+	else {
 #if defined(DEBUG) || defined(HINT)
-				cout << "**************** baseline frequence start ****************" << endl;
+		cout << "****************** horae sequential insert start *****************" << endl;
 #endif
-				edgeFrequenceBaselineTest(para_query, input_dir, output_dir, dataset_name, num, query_times, writeflag);
+		horaeSequentialInsert(horae_var, filename);
 #if defined(DEBUG) || defined(HINT)
-				cout << "***************** baseline frequence end *****************" << endl << endl;
+		cout << "****************** horae sequential insert end *******************" << endl << endl;
 #endif
-			}
-			if (eeflag == 1) {
+	}
+	if (efflag == 1) {
 #if defined(DEBUG) || defined(HINT)
-				cout << "**************** baseline existence start ****************" << endl;
+		cout << "**************** horae frequence start ****************" << endl;
 #endif
-				edgeExistenceBaselineTest(para_query, input_dir, output_dir, dataset_name, num, query_times, writeflag, edge_existence_flag);
+		if (parallel_insert) {
+			edgeFrequenceHoraeTest(para_query, horae_parallel, input_dir, output_dir, dataset_name, num, query_times, writeflag);
+		}
+		else {
+			edgeFrequenceHoraeTest(para_query, horae_sequential, input_dir, output_dir, dataset_name, num, query_times, writeflag);
+		}
 #if defined(DEBUG) || defined(HINT)
-				cout << "***************** baseline existence end *****************" << endl << endl;
+		cout << "***************** horae frequence end *****************" << endl << endl;
 #endif
-			}
-			if (nfflag == 1) {
+	}
+	if (eeflag == 1) {
 #if defined(DEBUG) || defined(HINT)
-				cout << "************* baseline node frequence start **************" << endl;
+		cout << "**************** horae existence start ****************" << endl;
 #endif
-				nodeFrequenceBaselineTest(para_query, input_dir, output_dir, dataset_name, num, query_times, writeflag, node_query_flag, line);
+		if (parallel_insert) {
+			edgeExistenceHoraeTest(para_query, horae_parallel, input_dir, output_dir, dataset_name, num, query_times, writeflag, edge_existence_flag);
+		}
+		else {
+			edgeExistenceHoraeTest(para_query, horae_sequential, input_dir, output_dir, dataset_name, num, query_times, writeflag, edge_existence_flag);
+		}
 #if defined(DEBUG) || defined(HINT)
-				cout << "************** baseline node frequence end ***************" << endl << endl;
+		cout << "***************** horae existence end *****************" << endl << endl;
 #endif
-			}
-			break;
-		case 1:
-			if (parallel_insert) {
+	}
+	if (nfflag == 1) {
 #if defined(DEBUG) || defined(HINT)
-				cout << "****************** horae parallel insert start *****************" << endl;
-				timeval t_start, t_end;
-				gettimeofday( &t_start, NULL);
+		cout << "************* horae node frequence start **************" << endl;
 #endif
-				horaeParallelInsert(horae_var, filename);
+		if (parallel_insert) {
+			nodeFrequenceHoraeTest(para_query, horae_parallel, input_dir, output_dir, dataset_name, num, query_times, writeflag, node_query_flag, line);
+		}
+		else {
+			nodeFrequenceHoraeTest(para_query, horae_sequential, input_dir, output_dir, dataset_name, num, query_times, writeflag, node_query_flag, line);
+		}
 #if defined(DEBUG) || defined(HINT)
-				gettimeofday( &t_end, NULL);
-				double delta_t = (t_end.tv_sec-t_start.tv_sec) + 
-						(t_end.tv_usec-t_start.tv_usec)/1000000.0;
-				cout << "all time : " << delta_t  << "s" << endl;
-				cout << "****************** horae parallel insert end *******************" << endl << endl;
+		cout << "************** horae node frequence end ***************" << endl << endl;
 #endif
-			}
-			else {
+	}
+	if (edge_file_test) {
 #if defined(DEBUG) || defined(HINT)
-				cout << "****************** horae sequential insert start *****************" << endl;
+		cout << "**************** horae frequence start ****************" << endl;
 #endif
-				horaeSequentialInsert(horae_var, filename);
+		if (parallel_insert) {
+			edgeFrequenceFileTest(horae_parallel, edge_test_file, output_dir, query_times, writeflag);
+		}
+		else {
+			edgeFrequenceFileTest(horae_sequential, edge_test_file, output_dir, query_times, writeflag);
+		}
 #if defined(DEBUG) || defined(HINT)
-				cout << "****************** horae sequential insert end *******************" << endl << endl;
+		cout << "***************** horae frequence end *****************" << endl << endl;
 #endif
-			}
-			if (efflag == 1) {
+	}
+	if (node_file_test) {
 #if defined(DEBUG) || defined(HINT)
-				cout << "**************** horae frequence start ****************" << endl;
+		cout << "**************** horae node frequence start ****************" << endl;
 #endif
-				if (parallel_insert) {
-					edgeFrequenceHoraeTest(para_query, horae_parallel, input_dir, output_dir, dataset_name, num, query_times, writeflag);
-				}
-				else {
-					edgeFrequenceHoraeTest(para_query, horae_sequential, input_dir, output_dir, dataset_name, num, query_times, writeflag);
-				}
+		if (parallel_insert) {
+			nodeFrequenceFileTest(horae_parallel, node_test_file, output_dir, query_times, writeflag, node_query_flag);
+		}
+		else {
+			nodeFrequenceFileTest(horae_sequential, node_test_file, output_dir, query_times, writeflag, node_query_flag);
+		}
 #if defined(DEBUG) || defined(HINT)
-				cout << "***************** horae frequence end *****************" << endl << endl;
+		cout << "***************** horae node frequence end *****************" << endl << endl;
 #endif
-			}
-			if (eeflag == 1) {
-#if defined(DEBUG) || defined(HINT)
-				cout << "**************** horae existence start ****************" << endl;
-#endif
-				if (parallel_insert) {
-					edgeExistenceHoraeTest(para_query, horae_parallel, input_dir, output_dir, dataset_name, num, query_times, writeflag, edge_existence_flag);
-				}
-				else {
-					edgeExistenceHoraeTest(para_query, horae_sequential, input_dir, output_dir, dataset_name, num, query_times, writeflag, edge_existence_flag);
-				}
-#if defined(DEBUG) || defined(HINT)
-				cout << "***************** horae existence end *****************" << endl << endl;
-#endif
-			}
-			if (nfflag == 1) {
-#if defined(DEBUG) || defined(HINT)
-				cout << "************* horae node frequence start **************" << endl;
-#endif
-				if (parallel_insert) {
-					nodeFrequenceHoraeTest(para_query, horae_parallel, input_dir, output_dir, dataset_name, num, query_times, writeflag, node_query_flag, line);
-				}
-				else {
-					nodeFrequenceHoraeTest(para_query, horae_sequential, input_dir, output_dir, dataset_name, num, query_times, writeflag, node_query_flag, line);
-				}
-#if defined(DEBUG) || defined(HINT)
-				cout << "************** horae node frequence end ***************" << endl << endl;
-#endif
-			}
-			if (edge_file_test) {
-#if defined(DEBUG) || defined(HINT)
-				cout << "**************** horae frequence start ****************" << endl;
-#endif
-				if (parallel_insert) {
-					edgeFrequenceFileTest(horae_parallel, edge_test_file, output_dir, query_times, writeflag);
-				}
-				else {
-					edgeFrequenceFileTest(horae_sequential, edge_test_file, output_dir, query_times, writeflag);
-				}
-#if defined(DEBUG) || defined(HINT)
-				cout << "***************** horae frequence end *****************" << endl << endl;
-#endif
-			}
-			if (node_file_test) {
-#if defined(DEBUG) || defined(HINT)
-				cout << "**************** horae node frequence start ****************" << endl;
-#endif
-				if (parallel_insert) {
-					nodeFrequenceFileTest(horae_parallel, node_test_file, output_dir, query_times, writeflag, node_query_flag);
-				}
-				else {
-					nodeFrequenceFileTest(horae_sequential, node_test_file, output_dir, query_times, writeflag, node_query_flag);
-				}
-#if defined(DEBUG) || defined(HINT)
-				cout << "***************** horae node frequence end *****************" << endl << endl;
-#endif
-			}
-			break;
-		default:
-			break;
 	}
 
 #if defined(DEBUG) || defined(HINT)
