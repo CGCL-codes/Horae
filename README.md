@@ -31,6 +31,8 @@ Given an arbitrary query range [*T<sub>b</sub>*, *T<sub>e</sub>*] with the lengt
 
 For an arbitrary time range, it may align perfectly with a window, align with one side of a window, or not align with any window in the (*m* + 1)<sup>*th*</sup> layer. Accordingly, we summarize the following three cases and apply different strategies. The figure above shows examples of the three cases (4 ≤ *L* < 8 and *m* = 2).
 
+For more detailed information, please refer to the paper.
+
 
 ## How to use?
 ### Environment
