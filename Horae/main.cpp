@@ -30,11 +30,10 @@ int main(int argc, char* argv[]) {
 	}
 	cout << endl << endl;
 #endif
-	//HORAE_VAR varibles  //int granularityLength = 43200;  //int granularityLength = 604800;// 2592000 one month
+	// HORAE_VAR varibles
 	time_type startTime;
 	uint32_t width, depth;
 	uint32_t granularityLength = 61200, gl = 1, slot = 2, fingerprintLen = 7;
-	// string back_addr = "_Horae-1-addr_res_FINAL";
 	string back_addr = "";
 	string cl = "";
 #ifdef BMAP
@@ -46,18 +45,18 @@ int main(int argc, char* argv[]) {
 #endif
 
 	int dataset = 3;
-	int test_situation = 0;						// 0-baseline，1-horae
+	int test_situation = 0;						// 0-baseline (gss + timeslice)，1-horae
 	int query_times = 1;						// query times
 	string filename, input_dir, output_dir;		// dataset filepath, test file folder path , output file folder path
 	string dataset_name, txt_name = "";
 	vector<int> num;
-	int efflag = 0, eeflag = 0, nfflag = 0; 	//  edge frequence query,  edge existence query,  node frequence query
-	bool parallel_insert = false;				// para isnert flag
-	bool writeflag = false;						// write result to file flag
+	int efflag = 0, eeflag = 0, nfflag = 0; 	// edge frequence query, edge existence query, node frequence query
+	bool parallel_insert = false;				// the flag of parallel inserting
+	bool writeflag = false;						// the flag of writing results to files
 	int node_query_flag = 0;					// 1-node_in_query, 2-node_out_query
 	int edge_existence_flag = 1;				// 1-edge_existence_query, 2-bool_query
 	int line = 0;
-	bool para_query = true;  					// 0-seq result query, 1-para result query
+	bool para_query = true;  					// 0-sequential query, 1-parallel query
 
 	uint32_t row_addrs = 4, column_addrs = 4;
 	bool kick = false, cache_align = false;
@@ -166,163 +165,86 @@ int main(int argc, char* argv[]) {
 		
 	switch (dataset) {
 		case 1:
-			filename = "..//..//Dataset//out";
-			input_dir = "..//..//TestFiles//out//input//";
-			output_dir = "..//..//TestFiles//out//output//";
-			dataset_name = "out";
-			num = { 8, 16, 32, 64, 128, 256, 384 };
-			if (test_situation == 0 || test_situation == 2) { // baseline or single dynamic horae
-				width = 2850;
-				depth = 3158;
+			filename = ".//Dataset//lkml";
+			input_dir = ".//TestFiles//lkml-10w-86400//input//";
+			output_dir = ".//TestFiles//lkml-10w-86400//output//";
+			dataset_name = "lkml";
+			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
+			if (test_situation == 0) { //baselines
+				width = 2680;
+				depth = 2680;
 			}
 			else if (test_situation == 1) {  //horae
-				width = 900;
-				depth = 1000;
+				width = 740;
+				depth = 740;
 			}
 			break;
 		case 2:
-			filename = "..//..//Dataset//lastfm_song";
-			input_dir = "..//..//TestFiles//lastfm_song//input//";
-			output_dir = "..//..//TestFiles//lastfm_song//output//";
-			dataset_name = "lastfm_song";
-			num = { 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560, 3072};
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
-				width = 45000;
-				depth = 1800;
+			filename = ".//Dataset//wiki-talk";
+			input_dir = ".//TestFiles//wiki-talk//input//";
+			output_dir = ".//TestFiles//wiki-talk//output//";
+			dataset_name = "wiki-talk";
+			num = { 32, 64, 128, 256, 512, 1024, 2048, 3072, 4096, 5120 };
+			if (test_situation == 0) { //baselines
+				width = 13500;
+				depth = 13500;
 			}
 			else if (test_situation == 1) {  //horae
-				width = 15000;
-				depth = 600;
+				width = 3536;
+				depth = 3536;
 			}
 			break;
 		case 3:
-			filename = "..//..//Dataset//stackoverflow";
-			input_dir = "..//..//TestFiles//stackoverflow//input//";
-			output_dir = "..//..//TestFiles//stackoverflow//output//";
+			filename = ".//Dataset//stackoverflow";
+			input_dir = ".//TestFiles//stackoverflow//input//";
+			output_dir = ".//TestFiles//stackoverflow//output//";
 			dataset_name = "stackoverflow";
-			//num = { 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560, 3072, 3584 };
 			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
-				width = 20396;/////////
-				depth = 20397;/////////
+			if (test_situation == 0) { 		//baselines
+				width = 20396;
+				depth = 20396;
 			}
 			else if (test_situation == 1) {  //horae
-				width = 5655;///////////
-				depth = 5659;///////////
+				width = 5656;
+				depth = 5656;
 			}
 			break;
 		case 4:
-			filename = "..//..//Dataset//caida";
-			input_dir = "..//..//TestFiles//caida//input//";
-			output_dir = "..//..//TestFiles//caida//output//";
+			filename = ".//Dataset//caida";
+			input_dir = ".//TestFiles//caida//input//";
+			output_dir = ".//TestFiles//caida//output//";
 			dataset_name = "caida";
 			num = { 1024, 2048, 3072, 4096, 5120, 6144, 7168, 8192, 9216, 10240, 11264, 12288 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
-				width = 54000;
-				depth = 54000;
+			if (test_situation == 0) { //baselines
+				width = 55000;
+				depth = 55000;
 			}
 			else if (test_situation == 1) {  //horae
-				width = 15000;
-				depth = 15000;
+				width = 14000;
+				depth = 14000;
 			}
 			break;
+		
 		case 5:
-			filename = "..//..//Dataset//wiki";
-			input_dir = "..//..//TestFiles//wiki//input//";
-			output_dir = "..//..//TestFiles//wiki//output//";
-			dataset_name = "wiki";
-			num = { 64, 128, 256, 512, 1024, 1536, 2048, 2560, 3072, 3584, 4096, 4608 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
-				width = 6500;
-				depth = 6550;
-			}
-			else if (test_situation == 1) {  //horae
-				width = 1750;
-				depth = 1800;
-			}
-			break;
-		case 6:
-			filename = "..//..//Dataset//lkml";
-			input_dir = "..//..//TestFiles//lkml-10w-86400//input//";
-			output_dir = "..//..//TestFiles//lkml-10w-86400//output//";
-			dataset_name = "lkml";
+			filename = ".//Dataset//wiki-balanced";
+			input_dir = ".//TestFiles//wiki-balanced//input//";
+			output_dir = ".//TestFiles//wiki-balanced//output//";
+			dataset_name = "wiki-balanced";
 			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
-				width = 6500;
-				depth = 6550;
+			if (test_situation == 0) { //baseline or single dynamic horae
+				width = 20396;
+				depth = 20396;
 			}
 			else if (test_situation == 1) {  //horae
-				width = 1750;
-				depth = 1800;
-			}
-			break;
-		case 7:
-			filename = "..//..//Dataset//wiki-talk";
-			input_dir = "..//..//TestFiles//wiki-talk//input//";
-			output_dir = "..//..//TestFiles//wiki-talk//output//";
-			dataset_name = "wiki-talk";
-			num = { 32, 64, 128, 256, 512, 1024, 2048, 3072, 4096, 5120 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
-				width = 3536;
-				depth = 3536;
-			}
-			else if (test_situation == 1) {  //horae
-				width = 3536;
-				depth = 3536;
-			}
-			break;
-		case 8:
-			filename = "..//..//Dataset//dblp";
-			input_dir = "..//..//TestFiles//dblp//input//";
-			output_dir = "..//..//TestFiles//dblp//output//";
-			dataset_name = "dblp";
-			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
-				width = 3840;
-				depth = 3840;
-			}
-			else if (test_situation == 1) {  //horae
-				width = 3840;
-				depth = 3840;
-			}
-			break;
-		case 9:
-			filename = "..//..//Dataset//stk-balanced";
-			input_dir = "..//..//TestFiles//stk-balanced//input//";
-			output_dir = "..//..//TestFiles//stk-balanced//output//";
-			dataset_name = "stk-balanced";
-			//num = { 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560, 3072, 3584 };
-			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
-				width = 20396;/////////
-				depth = 20397;/////////
-			}
-			else if (test_situation == 1) {  //horae
-				width = 5655;///////////
-				depth = 5659;///////////
-			}
-			break;
-		case 10:
-			filename = "..//..//Dataset//stk-time";
-			input_dir = "..//..//TestFiles//stackoverflow//input//";
-			output_dir = "..//..//TestFiles//stackoverflow//output//";
-			dataset_name = "stackoverflow";
-			//num = { 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560, 3072, 3584 };
-			num = { 8, 16, 32, 64, 128, 256, 512, 1024, 1536, 2048, 2560 };
-			if (test_situation == 0 || test_situation == 2) { //baseline or single dynamic horae
-				width = 20396;/////////
-				depth = 20397;/////////
-			}
-			else if (test_situation == 1) {  //horae
-				width = 5655;///////////
-				depth = 5659;///////////
+				width = 5656;
+				depth = 5656;
 			}
 			break;
 		default:
 			break;
 	}
 
-	// command parameters
+	// Command-line parameters
 	for (int i = 0; i < argc; i++) {
 		if (strcmp(argv[i], "-vector") == 0) {
 			num.clear();

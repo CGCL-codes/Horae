@@ -42,7 +42,7 @@ Horae-cpt also decomposes the time range into multiple windows of different laye
 # Evaluation Result
 <img src="images/Horae-evaluation.png" width=1000 alt="Horae-Eva"/><br/>
 
-Here, we show some evaluation result on the dataset *caida*, this dataset contains partial anonymized passive traffic traces from CAIDA's equinox-Chicago monitor in 2015. A node represents an IP address and an edge denotes a communication. The weight of each edge represents the size of the transmitted data. The collected eleven minutes trace contains 2,121,486 nodes, 403,436,907 edges. We set *gl* to 50 ms and obtain 13,200 time slices.
+Here, we show some evaluation results on the dataset *caida*, this dataset contains partial anonymized passive traffic traces from CAIDA's equinox-Chicago monitor in 2015. A node represents an IP address and an edge denotes a communication. The weight of each edge represents the size of the transmitted data. The collected eleven minutes trace contains 2,121,486 nodes, 403,436,907 edges. We set *gl* to 50 ms and obtain 13,200 time slices.
 
 **Temporal edge weight queries.** Figure (1) shows the average query time of temporal edge weight queries for the dataset *caida*. Horae and Horae-cpt both greatly reduce the average latency of GSS and TCM by over two orders of magnitude.
 
@@ -60,58 +60,11 @@ We use the temporal node-out (resp. node-in) query to represent the temporal sou
 For more detailed information, please refer to the paper.
 
 
-## How to use?
-### Environment
-We implement Horae in a Red Hat Enterprise Linux Server release 6.2 with an Intel 2.60GHz CPU and 64GB RAM, the size of one cache line in the server is 64 bytes. 
+## Source code
 
-The g++ version we use is 7.3.0.
+The source code of our design horae is in the folder "Horae", the readme.md file in that folder shows how to build and execute the program horae and horae-compacted. Besides, we also provide the baseline codes, tcm+timeslice (in folder TCM+Timeslice), gss+timeslice (in folder GSS+Timeslice) and segment tree version (in folder DynamicSegmentTree), and we provide readme.md files to each folder to illustrate how to build and run these codes.
 
-Build & Run
-
-```txt
-make
-./horae
-```
-
-### Configurations
-Some important parameters setting and theirs descriptions are as follows.
-| Command-line parameters | Descriptions                                       |
-|:----------------------- | :------------------------------------------------- |
-| **-w**                  | the width of the hash matrix                       |
-| **-d**                  | the depth of the hash matrix                       |
-| **-gl**                 | granularity length                                 |
-| **-slot**               | slot numbers of one bucket                         |
-| **-fplength**           | fingerprint length                                 |
-| **-edgeweight**         | run edge weight query                              |
-| **-edgeexistence**      | run edge existence query                           |
-| **-nodeinweight**       | run node-in aggregated weight query                |
-| **-nodeoutweight**      | run node-out aggregated weight query               |
-| **-bool**               | run bool query                                     |
-| **-dataset**            | choose dataset for testing                         |
-| **-filename**           | the file path of dataset                           |
-| **-input_dir**          | the folder path of input files                     |
-| **-output_dir**         | the folder path of output files                    |
-| **-para_ins**           | parallel insertion                                 |
-| **-seq_ins**            | serial insertion                                   |
-| **-para_query**         | execute query tasks in parallel                    |
-| **-seq_query**          | execute query tasks serially                       |
-| **-baseline**           | run baseline code                                  |
-| **-horae**              | run horae code                                     |
-| **-row_addrs**          | number of alternative addresses for matrix rows    |
-| **-col_addrs**          | number of alternative addresses for matrix columns |
-| **-kick**               | add kick out stategy                               |
-| **-cache_align**        | add cache align stategy                            |
-| **-write**              | output test results to file                        |
-
-
-We give a simple example of how to use these parameters:
-``` code
-e.g. ./horae -dataset <int> -filename <path> -w <int> -d <int> -gl <int> -fplength <int> -horae -para_ins -slot <int> -edgeweight -write -input_dir <path> -output_dir <path>
-e.g. ./horae -dataset 9 -filename Dataset/stackoverflow -horae -para_ins -w 5656 -d 5656 -gl 86400 -qtimes 1 -edgeweight -write -output_dir TestFiles/stk-test/output/ -fplength 14 -kick -cache_align 
-```
-
-
-## Author and Copyright
+## Authors and Copyright
 
 Horae is developed in National Engineering Research Center for Big Data Technology and System, Cluster and Grid Computing Lab, Services Computing Technology and System Lab, School of Computer Science and Technology, Huazhong University of Science and Technology, Wuhan, China by Ming Chen (mingc@hust.edu.cn), Renxiang Zhou (mr\_zhou@hust.edu.cn), Hanhua Chen (chen@hust.edu.cn), Jiang Xiao (jiangxiao@hust.edu.cn), Hai Jin (hjin@hust.edu.cn).
 
