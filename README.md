@@ -42,6 +42,19 @@ Horae-cpt also decomposes the time range into multiple windows of different laye
 # Evaluation Result
 <img src="images/Horae-Eva.png" width=1000 alt="Horae-Eva"/><br/>
 
+Here, we show some evaluation result on the dataset *caida*, this dataset contains partial anonymized passive traffic traces from CAIDA's equinox-Chicago monitor in 2015. A node represents an IP address and an edge denotes a communication. The weight of each edge represents the size of the transmitted data. The collected eleven minutes trace contains 2,121,486 nodes, 403,436,907 edges. We set *gl* to 50 ms and obtain 13,200 time slices.
+
+**Temporal edge weight queries.** Figure (1) shows the average query time of temporal edge weight queries for the dataset *caida*. Horae and Horae-cpt both greatly reduce the average latency of GSS and TCM by over two orders of magnitude.
+
+
+**Temporal edge existence queries.** We examine the non-existence queries where the edges do not appear within the corresponding time ranges. Figure (2) shows the FPR of the non-existence queries for the dataset *caida*. The FPR increases significantly for GSS and TCM as *L* increases. In contrast, it maintains stable in Horae. 
+
+**Temporal node queries.**
+We use the temporal node-out (resp. node-in) query to represent the temporal source (resp. destination) node query. Figure (3) plots the average time of temporal node-in and node-out queries with different lengths for the dataset *caida*. Horae reduces the latency of TCM by three to four orders of magnitude when the length is considerable while it reduces that of GSS more. The latency of Horae-cpt is slightly larger than that of Horae. Figure (4) illustrates the ARE of the temporal node queries with different lengths. Horae reduces the ARE of GSS by almost two orders of magnitude for both the temporal node-out queries and the temporal node-in queries. The ARE of temporal node query of TCM is high because it lacks a collision avoidance mechanism. The ARE of node query in Horae-cpt is close to that in Horae.
+
+**Memory cost.** In the experiment, we configure Horae, GSS, and TCM with the same amount of memory. The result in Figure (5) shows that Horae-cpt greatly reduces the memory cost of Horae by 50%. 
+
+**Insert throughput.** Figure (6) shows the insert throughput of GSS, TCM, and Horae for the four datasets. Horae-para and Horae-seq denote the parallel insert operation and the sequential insert operation, respectively. The parallel insert operation greatly improves the throughput compared to the sequential one. The throughput of Horae-cpt-para is close to those of GSS and TCM.
 
 
 For more detailed information, please refer to the paper.
