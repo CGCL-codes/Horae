@@ -38,5 +38,5 @@ Some important parameters setting and theirs descriptions are as follows.
 We give a simple example of how to use these parameters:
 ``` code
 e.g. ./tcm-timeslice -filename <path> -w <int> -d <int> -gl <int> -fplength <int> -input_dir <path> -output_dir <path>
-e.g. ./tcm-timeslice -dataset 2 -filename ../Dataset/wiki-talk -w 3536 -d 3536 -gl 86400 -fplength 14 -bp 100 -para_query -write -input_dir TestFiles/wiki/input/ -output_dir TestFiles/wiki/output/ -edgefrequence 
+e.g. ./tcm-timeslice -dataset 2 -filename ../Dataset/wiki-talk -w 3536 -d 3536 -gl 86400 -fplength 14 -bp 100 -para_query -write -input_dir TestFiles/wiki/input/ -output_dir TestFiles/wiki/output/ -edgeweight -write 
 ```

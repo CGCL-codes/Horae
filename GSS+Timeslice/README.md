@@ -43,5 +43,5 @@ We give a simple example of how to use these parameters:
 ``` code
 e.g. ./gss-timeslice -dataset <int> -filename <path> -w <int> -d <int> -gl <int> -fplength <int> -slot <int> -edgeweight -write -input_dir <path> -output_dir <path>
 
-e.g. ./gss-timeslice -dataset 3 -filename ../Dataset/stackoverflow -w 20396 -d 20396 -gl 86400 -fplength 14 -para_query -write -input_dir TestFiles/stackoverflow/input/ -output_dir TestFiles/stackoverflow/output/ -edgefrequence 
+e.g. ./gss-timeslice -dataset 3 -filename ../Dataset/stackoverflow -w 20396 -d 20396 -gl 86400 -fplength 6 -para_query -write -input_dir ../TestFiles/stackoverflow/input/ -output_dir TestFiles/stackoverflow/output/ -edgeweight -write
 ```

@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 	int edge_existence_flag = 1;				// 1-edge_existence_query, 2-bool_query
 	int line = 0;
 	bool para_query = true;  					// 0-sequential query, 1-parallel query
-	string back_addr = "baseline_tcm_" + to_string(hash_num) + "_hash";
+	string back_addr = "tcm-timeslice_" + to_string(hash_num) + "_hash";
 	
 	
 	// Command-line parameters

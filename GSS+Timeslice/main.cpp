@@ -91,7 +91,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	
-	back_addr = "gss-timeslice-" + to_string(row_addrs) + "x" + to_string(column_addrs) + "-res";
+	back_addr = "-gss-timeslice-" + to_string(row_addrs) + "x" + to_string(column_addrs) + "-res";
 		
 	switch (dataset) {
 		case 1:

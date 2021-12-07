@@ -41,5 +41,5 @@ Some important parameters setting and theirs descriptions are as follows.
 We give a simple example of how to use these parameters:
 ``` code
 e.g. ./segtree -filename <path> -w <int> -d <int> -gl <int> -fplength <int> -input_dir <path> -output_dir <path>
-e.g. ./segtree -dataset 7 -filename ../Dataset/wiki-talk -w 128 -d 128 -gl 86400 -fplength 14 -bp 100 -query -write -input_dir TestFiles/wiki/input/ -output_dir TestFiles/wiki/output/ -edgefrequence 
+e.g. ./segtree -dataset 7 -filename ../Dataset/wiki-talk -w 128 -d 128 -gl 86400 -fplength 14 -bp 100 -query -write -input_dir TestFiles/wiki/input/ -output_dir TestFiles/wiki/output/ -edgeweight -write 
 ```
