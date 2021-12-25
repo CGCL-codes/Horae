@@ -8,6 +8,7 @@
 #include <map>
 #include <cmath>
 #include <stdlib.h>
+#include <malloc.h>
 #include <bitset>
 #include <memory.h>
 #include <algorithm>
@@ -90,12 +91,16 @@ granularity(granularity), width(width), depth(depth), fingerprintLength(fingerpr
 		<< ", row_addrs: " << row_addrs << ", column_addrs: " << column_addrs << ")" << endl;
 
 	uint32_t msize = width * depth;
-	posix_memalign((void**)&value, 64, sizeof(basket) * msize); 	// 64-byte alignment of the requested space
+	// this->value = new basket[msize];
+	// posix_memalign((void**)&value, 64, sizeof(basket) * msize); 					// 64-byte alignment of the requested space
+	// this->value = (basket *) aligned_alloc(64, sizeof(basket) * msize);		    // 64-byte alignment of the requested space
+    this->value = (basket *) memalign(64, sizeof(basket) * msize);		            // 64-byte alignment of the requested space
 	memset(this->value, 0, sizeof(basket) * msize);
 }
 GssTimeslice::~GssTimeslice() {
     cout << "GssTimeslice::~GssTimeslice()" << endl;
-	delete[] this->value;
+	// delete[] this->value;
+	free(this->value);
 	vector<vector<node>>().swap(successorAdjacencyList);
 }
 

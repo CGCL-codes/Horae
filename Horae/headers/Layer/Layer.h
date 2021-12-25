@@ -8,6 +8,7 @@
 #include <map>
 #include <cmath>
 #include <stdlib.h>
+#include <malloc.h>
 #include <bitset>
 #include <memory.h>
 #include <algorithm>
@@ -100,7 +101,10 @@ granularity(granularity), width(width), depth(depth), fingerprintLength(fingerpr
 		<< ", row_addrs: " << row_addrs << ", column_addrs: " << column_addrs << ")" << endl;
 
 	uint32_t msize = width * depth;
-	posix_memalign((void**)&value, 64, sizeof(basket) * msize); 	// 64-byte alignment of the requested space
+	// this->value = new basket[msize];
+	// posix_memalign((void**)&value, 64, sizeof(basket) * msize); 					// 64-byte alignment of the requested space
+	// this->value = (basket *) aligned_alloc(64, sizeof(basket) * msize);		    // 64-byte alignment of the requested space
+    this->value = (basket *) memalign(64, sizeof(basket) * msize);		            // 64-byte alignment of the requested space
 	memset(this->value, 0, sizeof(basket) * msize);
 }
 Layer::Layer(const Layer *layer)
@@ -108,7 +112,10 @@ Layer::Layer(const Layer *layer)
 	cout << "Layer::Layer(*layer)" << endl;
 	
 	uint32_t msize = width * depth;
-	posix_memalign((void**)&value, 64, sizeof(basket) * msize);		// 64-byte alignment of the requested space
+	// this->value = new basket[msize];
+	// posix_memalign((void**)&value, 64, sizeof(basket) * msize); 					// 64-byte alignment of the requested space
+	// this->value = (basket *) aligned_alloc(64, sizeof(basket) * msize);		    // 64-byte alignment of the requested space
+    this->value = (basket *) memalign(64, sizeof(basket) * msize);		            // 64-byte alignment of the requested space
 	for(uint32_t i = 0; i < msize; i++) {
 		for(uint32_t j = 0; j < SLOTNUM; j++) {
 			this->value[i].src[j] = layer->value[i].src[j];
@@ -133,13 +140,17 @@ Layer::Layer(const Layer *layer, int level)
 	}
 	
 	uint32_t msize = width * depth;
-	posix_memalign((void**)&value, 64, sizeof(basket) * msize);		// 64-byte alignment of the requested space
+	// this->value = new basket[msize];
+	// posix_memalign((void**)&value, 64, sizeof(basket) * msize); 					// 64-byte alignment of the requested space
+	// this->value = (basket *) aligned_alloc(64, sizeof(basket) * msize);		    // 64-byte alignment of the requested space
+    this->value = (basket *) memalign(64, sizeof(basket) * msize);		            // 64-byte alignment of the requested space
 	memset(this->value, 0, sizeof(basket) * msize);
 }
 
 Layer::~Layer() {
     cout << "Layer::~Layer()" << endl;
-	delete[] this->value;
+	// delete[] this->value;
+	free(this->value);
 }
 
 int Layer::getMinIndex(uint32_t* a, int length) {
