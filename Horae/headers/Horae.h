@@ -4,8 +4,8 @@
 #include "LayerHeaders.h"
 
 struct TimeInterval {
-    time_type start;
-    time_type end;
+	time_type start;
+	time_type end;
 };
 
 class Horae {
@@ -284,7 +284,7 @@ void Horae::secondPowerDecompose(int start, int end, vector<window>& win, int le
 void Horae::decompose(int L, int point, int type, vector<window>& win, int curlayer) {
 	for (int i = 0, j = 0; i <= curlayer; ++i) {
 		if (L >> i == 0)
-            break;
+			break;
 		int tmp = ((L >> i) & 0x1) << i;
 		if (tmp != 0) {
 			//win[j].level = i + 1;
@@ -328,7 +328,7 @@ void Horae::decompose(int L, int point, int type, vector<window>& win, int curla
 						win.push_back(temp);
 					}
 				}
-                j++;				
+				j++;				
 			}
 		}
 	}

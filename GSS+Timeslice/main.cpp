@@ -4,7 +4,7 @@
 time_type getDatasetStartTime(string datasetPath);
 
 int main(int argc, char* argv[]) {
-    cout << fixed;
+	cout << fixed;
 #if defined(DEBUG) || defined(HINT)  
 	cout << setprecision(7);
 	timeval main_start, main_end;
@@ -209,7 +209,7 @@ int main(int argc, char* argv[]) {
 	cout << "****************** GSS + Timeslice insert start *****************" << endl;
 	baselineInsert(gss_timeslice_var, filename);
 	cout << "****************** GSS + Timeslice insert end *******************" << endl << endl;
-    if (efflag == 1) {
+	if (efflag == 1) {
 		cout << "**************** GSS + Timeslice frequence start ****************" << endl;
 		edgeFrequenceBaselineTest(para_query, input_dir, output_dir, dataset_name, num, query_times, writeflag);
 		cout << "***************** GSS + Timeslice frequence end *****************" << endl << endl;

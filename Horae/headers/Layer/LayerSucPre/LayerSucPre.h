@@ -15,8 +15,8 @@ public:
 	virtual ~LayerSucPre();
 	void bucketCounting();
 
-    // from class LayerSuc -> Layer
-    // virtual void insert(string src, string dst, weight_type weight) = 0;
+	// from class LayerSuc -> Layer
+	// virtual void insert(string src, string dst, weight_type weight) = 0;
 	// virtual weight_type edgeQuery(string src, string dst) = 0;
 	// virtual weight_type nodeQuery(string vertex, int type) = 0;		//src_type = 0 dst_type = 1
 
@@ -28,7 +28,7 @@ void LayerSucPre::bucketCounting() {
 	LayerSuc::bucketCounting();
 	//print buffer size
 	cout << "---------------------------------------" << endl;
-    cout << "LayerSucPre bucketCounting(): print precursorAdjacencyList..." << endl;
+	cout << "LayerSucPre bucketCounting(): print precursorAdjacencyList..." << endl;
 	int64_t total_preBuffer = this->precursorAdjacencyList.size();
 	cout << "precursorAdjacencyList.size() = " << total_preBuffer << endl;
 	cout << "---------------------------------------" << endl;
@@ -75,4 +75,4 @@ void LayerSucPre::insertPreBuffer(uint32_t k1, uint32_t k2, weight_type weight) 
 }
 
 
-#endif      // _LayerSucPre_H
+#endif	 	 // _LayerSucPre_H

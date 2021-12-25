@@ -15,8 +15,8 @@ public:
 	virtual ~LayerSuc();
 	void bucketCounting();
 
-    // from class Layer
-    // virtual void insert(string src, string dst, weight_type weight) = 0;
+	// from class Layer
+	// virtual void insert(string src, string dst, weight_type weight) = 0;
 	// virtual weight_type edgeQuery(string src, string dst) = 0;
 	// virtual weight_type nodeQuery(string vertex, int type) = 0;		//src_type = 0 dst_type = 1
 
@@ -30,7 +30,7 @@ void LayerSuc::bucketCounting() {
 	Layer::bucketCounting();
 	//print buffer size
 	cout << "---------------------------------------" << endl;
-    cout << "LayerSuc bucketCounting(): print successorAdjacencyList..." << endl;
+	cout << "LayerSuc bucketCounting(): print successorAdjacencyList..." << endl;
 	cout << "successorAdjacencyList.size() = " << successorAdjacencyList.size() << endl;
 	cout << "successorAdjacencyList.capacity() = " << successorAdjacencyList.capacity() << endl;
 
@@ -167,4 +167,4 @@ weight_type LayerSuc::nodeQuerySucBuffer(uint32_t k, int type) {
 	return weight;
 }
 
-#endif      // _LayerSuc_H
+#endif	  	// _LayerSuc_H

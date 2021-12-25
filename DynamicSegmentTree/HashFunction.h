@@ -16,7 +16,7 @@ typedef unsigned int uint32_t;
 
 #if !defined (get16bits)
 #define get16bits(d) ((((uint32_t)(((const uint8_t *)(d))[1])) << 8)\
-                       +(uint32_t)(((const uint8_t *)(d))[0]) )
+					   +(uint32_t)(((const uint8_t *)(d))[0]) )
 #endif 
 
 
@@ -388,7 +388,7 @@ BOB4(const unsigned char* str, unsigned int len)
 	/* Set up the internal state */
 	//len = length;
 	a = b = 0x9e3779b9;  /* the golden ratio; an arbitrary value */
-	c = initval;         /* the previous hash value */
+	c = initval;		 /* the previous hash value */
 
 	/*---------------------------------------- handle most of the key */
 	while (len >= 12)
@@ -402,7 +402,7 @@ BOB4(const unsigned char* str, unsigned int len)
 
 	/*------------------------------------- handle the last 11 bytes */
 	c += len;
-	switch (len)              /* all the case statements fall through */
+	switch (len)			  /* all the case statements fall through */
 	{
 	case 11: c += ((unsigned int)str[10] << 24);
 	case 10: c += ((unsigned int)str[9] << 16);
@@ -432,7 +432,7 @@ BOB1(const unsigned char* str, unsigned int len)
 	/* Set up the internal state */
 	//len = length;
 	a = b = 0x9e3779b9;  /* the golden ratio; an arbitrary value */
-	c = initval;         /* the previous hash value */
+	c = initval;		 /* the previous hash value */
 
 	/*---------------------------------------- handle most of the key */
 	while (len >= 12)
@@ -446,7 +446,7 @@ BOB1(const unsigned char* str, unsigned int len)
 
 	/*------------------------------------- handle the last 11 bytes */
 	c += len;
-	switch (len)              /* all the case statements fall through */
+	switch (len)			  /* all the case statements fall through */
 	{
 	case 11: c += ((unsigned int)str[10] << 24);
 	case 10: c += ((unsigned int)str[9] << 16);
@@ -475,7 +475,7 @@ BOB2(const unsigned char* str, unsigned int len)
 	/* Set up the internal state */
 	//len = length;
 	a = b = 0x9e3779b9;  /* the golden ratio; an arbitrary value */
-	c = initval;         /* the previous hash value */
+	c = initval;		 /* the previous hash value */
 
 	/*---------------------------------------- handle most of the key */
 	while (len >= 12)
@@ -489,7 +489,7 @@ BOB2(const unsigned char* str, unsigned int len)
 
 	/*------------------------------------- handle the last 11 bytes */
 	c += len;
-	switch (len)              /* all the case statements fall through */
+	switch (len)			  /* all the case statements fall through */
 	{
 	case 11: c += ((unsigned int)str[10] << 24);
 	case 10: c += ((unsigned int)str[9] << 16);
@@ -518,7 +518,7 @@ BOB3(const unsigned char* str, unsigned int len)
 	/* Set up the internal state */
 	//len = length;
 	a = b = 0x9e3779b9;  /* the golden ratio; an arbitrary value */
-	c = initval;         /* the previous hash value */
+	c = initval;		 /* the previous hash value */
 
 	/*---------------------------------------- handle most of the key */
 	while (len >= 12)
@@ -532,7 +532,7 @@ BOB3(const unsigned char* str, unsigned int len)
 
 	/*------------------------------------- handle the last 11 bytes */
 	c += len;
-	switch (len)              /* all the case statements fall through */
+	switch (len)			  /* all the case statements fall through */
 	{
 	case 11: c += ((unsigned int)str[10] << 24);
 	case 10: c += ((unsigned int)str[9] << 16);

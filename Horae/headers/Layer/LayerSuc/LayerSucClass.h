@@ -7,10 +7,10 @@ private:
 	bool cache_align = false;
 	bool kick = false;
 	struct mapnode
-    {
-        uint32_t addr;
-        uint16_t fp;
-    };
+	{
+		uint32_t addr;
+		uint16_t fp;
+	};
 public:
 	LayerSucClass(uint32_t granularity, uint32_t width, uint32_t depth, uint32_t fingerprintLength, bool cache_align, bool kick, uint32_t row_addrs = 4, uint32_t column_addrs = 4);
 	LayerSucClass(const LayerSucClass *layer);
@@ -167,20 +167,20 @@ weight_type LayerSucClass::nodeQuery(string vertex, int type) { // vertex is the
 // s is the ID of the source node, d is the ID of the destination node
 bool LayerSucClass::reachabilityQuery(string s, string d) {
 	uint32_t hash_s = (*hfunc[HASH])((unsigned char*)(s.c_str()), s.length());
-    uint32_t hash_d = (*hfunc[HASH])((unsigned char*)(d.c_str()), d.length());
-    uint32_t mask = (1 << fingerprintLength) - 1;
-    
-    uint32_t addr_s = (hash_s >> fingerprintLength) % depth;
-    uint32_t addr_d = (hash_d >> fingerprintLength) % width;
+	uint32_t hash_d = (*hfunc[HASH])((unsigned char*)(d.c_str()), d.length());
+	uint32_t mask = (1 << fingerprintLength) - 1;
+	
+	uint32_t addr_s = (hash_s >> fingerprintLength) % depth;
+	uint32_t addr_d = (hash_d >> fingerprintLength) % width;
 
-    uint16_t fp_s = hash_s & mask;
-    uint16_t fp_d = hash_d & mask;
-    if(fp_s == 0) fp_s = 1;
-    if(fp_d == 0) fp_d = 1;
+	uint16_t fp_s = hash_s & mask;
+	uint16_t fp_d = hash_d & mask;
+	if(fp_s == 0) fp_s = 1;
+	if(fp_d == 0) fp_d = 1;
 
-    uint32_t key_s = (addr_s << fingerprintLength) + fp_s;
-    uint32_t key_d = (addr_d << fingerprintLength) + fp_d;
-    
+	uint32_t key_s = (addr_s << fingerprintLength) + fp_s;
+	uint32_t key_d = (addr_d << fingerprintLength) + fp_d;
+	
 	int pos;
 	map<uint32_t, bool> checked;
 	queue<mapnode> q;
@@ -191,8 +191,8 @@ bool LayerSucClass::reachabilityQuery(string s, string d) {
 	checked[key_s] = true;
 	map<unsigned int, bool>::iterator IT;
 
-    uint32_t temp_addr;
-    uint16_t temp_fp;
+	uint32_t temp_addr;
+	uint16_t temp_fp;
 	
 	if (cache_align) 
 	{

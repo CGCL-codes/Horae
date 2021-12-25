@@ -17,8 +17,8 @@ public:
 	~LayerSucPreMap();
 	void bucketCounting();
 
-    // from class LayerSucPre -> LayerSuc -> Layer
-    // virtual void insert(string src, string dst, weight_type weight) = 0;
+	// from class LayerSucPre -> LayerSuc -> Layer
+	// virtual void insert(string src, string dst, weight_type weight) = 0;
 	// virtual weight_type edgeQuery(string src, string dst) = 0;
 	// virtual weight_type nodeQuery(string vertex, int type) = 0;		//src_type = 0 dst_type = 1
 
@@ -137,4 +137,4 @@ weight_type LayerSucPreMap::nodeQuerySucPreMapBuffer(uint32_t k, int type) {
 	return weight;
 }
 
-#endif      // _LayerSucPreMap_H
+#endif		  // _LayerSucPreMap_H

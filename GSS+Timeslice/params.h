@@ -8,12 +8,12 @@
 #define modulus 1048576
 #define multiplier 5
 
-#define SLOTNUM 2 	// This is the parameter to control the maximum number of rooms in a bucket.
+#define SLOTNUM 2 		// This is the parameter to control the maximum number of rooms in a bucket.
 
 typedef uint32_t weight_type;
 typedef int64_t time_type;
 
-#define CACHESLOT 4    // one 64 Bytes cacheline contains 4 slotrooms
+#define CACHESLOT 4		// one 64 Bytes cacheline contains 4 slotrooms
 
 #ifdef H1
 #define HASH 1

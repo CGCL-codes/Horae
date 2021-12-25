@@ -79,8 +79,8 @@ public:
 	virtual weight_type edgeQuery(string src, string dst) = 0;
 	virtual weight_type nodeQuery(string vertex, int type) = 0;		//src_type = 0 dst_type = 1
 	virtual bool reachabilityQuery(string s, string d) {
-        return false;
-    }
+		return false;
+	}
 	
 protected:
 	bool insertMatrix(uint32_t addr_src, uint16_t fp_src, uint32_t addr_dst, uint16_t fp_dst, weight_type weight);
@@ -103,8 +103,8 @@ granularity(granularity), width(width), depth(depth), fingerprintLength(fingerpr
 	uint32_t msize = width * depth;
 	// this->value = new basket[msize];
 	// posix_memalign((void**)&value, 64, sizeof(basket) * msize); 					// 64-byte alignment of the requested space
-	// this->value = (basket *) aligned_alloc(64, sizeof(basket) * msize);		    // 64-byte alignment of the requested space
-    this->value = (basket *) memalign(64, sizeof(basket) * msize);		            // 64-byte alignment of the requested space
+	// this->value = (basket *) aligned_alloc(64, sizeof(basket) * msize);			// 64-byte alignment of the requested space
+	this->value = (basket *) memalign(64, sizeof(basket) * msize);					// 64-byte alignment of the requested space
 	memset(this->value, 0, sizeof(basket) * msize);
 }
 Layer::Layer(const Layer *layer)
@@ -114,8 +114,8 @@ Layer::Layer(const Layer *layer)
 	uint32_t msize = width * depth;
 	// this->value = new basket[msize];
 	// posix_memalign((void**)&value, 64, sizeof(basket) * msize); 					// 64-byte alignment of the requested space
-	// this->value = (basket *) aligned_alloc(64, sizeof(basket) * msize);		    // 64-byte alignment of the requested space
-    this->value = (basket *) memalign(64, sizeof(basket) * msize);		            // 64-byte alignment of the requested space
+	// this->value = (basket *) aligned_alloc(64, sizeof(basket) * msize);			// 64-byte alignment of the requested space
+	this->value = (basket *) memalign(64, sizeof(basket) * msize);					// 64-byte alignment of the requested space
 	for(uint32_t i = 0; i < msize; i++) {
 		for(uint32_t j = 0; j < SLOTNUM; j++) {
 			this->value[i].src[j] = layer->value[i].src[j];
@@ -142,13 +142,13 @@ Layer::Layer(const Layer *layer, int level)
 	uint32_t msize = width * depth;
 	// this->value = new basket[msize];
 	// posix_memalign((void**)&value, 64, sizeof(basket) * msize); 					// 64-byte alignment of the requested space
-	// this->value = (basket *) aligned_alloc(64, sizeof(basket) * msize);		    // 64-byte alignment of the requested space
-    this->value = (basket *) memalign(64, sizeof(basket) * msize);		            // 64-byte alignment of the requested space
+	// this->value = (basket *) aligned_alloc(64, sizeof(basket) * msize);			// 64-byte alignment of the requested space
+	this->value = (basket *) memalign(64, sizeof(basket) * msize);					// 64-byte alignment of the requested space
 	memset(this->value, 0, sizeof(basket) * msize);
 }
 
 Layer::~Layer() {
-    cout << "Layer::~Layer()" << endl;
+	cout << "Layer::~Layer()" << endl;
 	// delete[] this->value;
 	free(this->value);
 }
@@ -173,8 +173,8 @@ uint32_t Layer::getGranularity() const{
 	return this->granularity;
 }
 void Layer::bucketCounting() {
-    cout << "---------------------------------------" << endl;
-    cout << "Layer bucketCounting(): print bucket..." << endl;
+	cout << "---------------------------------------" << endl;
+	cout << "Layer bucketCounting(): print bucket..." << endl;
 	int64_t room_count = 0;
 	int64_t bucket_count = 0;
 	for (int64_t i = 0; i < width * depth; i++) {

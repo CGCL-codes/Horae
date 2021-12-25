@@ -11,9 +11,9 @@ private:
 
 protected:
 	struct mapnode {
-        uint32_t addr;
-        uint16_t fp;
-    };
+		uint32_t addr;
+		uint16_t fp;
+	};
 	bool cache_align = false;
 	bool kick = false;
 	const uint32_t row_addrs;			// the row addrs
@@ -22,7 +22,7 @@ protected:
 	uint32_t width;
 	uint32_t depth;
 	uint32_t fingerprintLength;
-    TreeNode* root;
+	TreeNode* root;
 	int node_nums;
 
 public:

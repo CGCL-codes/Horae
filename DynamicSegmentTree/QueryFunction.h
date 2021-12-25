@@ -99,21 +99,21 @@ int createDirectory(char* sPathName) {
 }
 
 uint64_t count_lines(string file) {  // count file lines
-    ifstream readFile;
-    uint64_t n = 0;
-    char line[512];
-    string temp;
-    readFile.open(file, ios::in);	// ios::in means that open file with readonly 
-    if(readFile.fail()) { 			// open file error, return 0
-        cout << "error in opening file" << endl;
-        return 0;
-    }
-    else { 							// the file exists
-        while(getline(readFile,temp))
-            n++;
-    }
-    readFile.close();
-    return n;
+	ifstream readFile;
+	uint64_t n = 0;
+	char line[512];
+	string temp;
+	readFile.open(file, ios::in);	// ios::in means that open file with readonly 
+	if(readFile.fail()) { 			// open file error, return 0
+		cout << "error in opening file" << endl;
+		return 0;
+	}
+	else { 							// the file exists
+		while(getline(readFile,temp))
+			n++;
+	}
+	readFile.close();
+	return n;
 }
 
 time_type getDatasetStartTime(string datasetPath) {
@@ -168,7 +168,7 @@ void progress_bar(int n) {
 	const char *lable = "|/-\\";
 	bar[0] = 0;
 	while (i < n) {
-	    bar[i] = '#';
+		bar[i] = '#';
 		i++;
 		bar[i] = 0;
 	}
@@ -314,7 +314,7 @@ int edgeFrequenceSegTest_seq(SegmentTree* segmentTree, string input_dir, string 
 				res = segmentTree->edgeQuery(to_string(dataArray[n].source), to_string(dataArray[n].destination), dataArray[n].start_time, dataArray[n].end_time);
 				gettimeofday( &tp2, NULL);
 				double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
-    			sumTime_perquery += delta_t;
+				sumTime_perquery += delta_t;
 				if (write && (m == 0)) {
 					if(n == (datanum - 1)) {
 						resultFile << res;
@@ -405,7 +405,7 @@ int edgeExistenceSegTest_seq(SegmentTree* segmentTree, string input_dir, string 
 				res = segmentTree->edgeQuery(to_string(dataArray[n].source), to_string(dataArray[n].destination), dataArray[n].start_time, dataArray[n].end_time);			
 				gettimeofday( &tp2, NULL);
 				double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
-    			sumTime_perquery += delta_t;
+				sumTime_perquery += delta_t;
 				if (write && (m == 0)) {
 					if (res > 0) ones++;
 					if(n == (datanum - 1)) {
@@ -516,7 +516,7 @@ int nodeFrequenceSegTest_seq(SegmentTree* segmentTree, string input_dir, string 
 				res = segmentTree->nodeQuery(to_string(dataArray[n].source), (int)dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
 				gettimeofday( &tp2, NULL);
 				double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
-    			sumTime_perquery += delta_t;
+				sumTime_perquery += delta_t;
 				if (write && (m == 0)) {
 					if(n == (datanum - 1)) {
 						resultFile << res;
@@ -691,7 +691,7 @@ int edgeExistenceSegTest_single(SegmentTree* segmentTree, string input_dir, stri
 			res = segmentTree->edgeQuery(to_string(dataArray[n].source), to_string(dataArray[n].destination), dataArray[n].start_time, dataArray[n].end_time);
 			gettimeofday( &tp2, NULL);
 			double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
-    		sumTime_perquery += delta_t;
+			sumTime_perquery += delta_t;
 			if (write && m == 0) {
 				if (res > 0) ones++;
 				if(n == (datanum - 1)) {
@@ -812,7 +812,7 @@ int nodeFrequenceSegTest_single(SegmentTree* segmentTree, string input_dir, stri
 			res = segmentTree->nodeQuery(to_string(dataArray[n].source), (int)dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);			
 			gettimeofday( &tp2, NULL);
 			double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
-    		sumTime_perquery += delta_t;
+			sumTime_perquery += delta_t;
 			if (write && m == 0) {
 				if(n == (datanum - 1)) {
 					resultFile << res;

@@ -6,7 +6,7 @@ time_type getDatasetStartTime(string datasetPath);
 int TreeNode::nodes = 0;
 
 int main(int argc, char* argv[]) {
-    cout << fixed;
+	cout << fixed;
 #if defined(DEBUG) || defined(HINT)  
 	cout << setprecision(7);
 	timeval main_start, main_end;

@@ -57,10 +57,10 @@ private:
 class GssTimeslice {
 private:
 	struct mapnode
-    {
-        uint32_t addr;
-        uint16_t fp;
-    };
+	{
+		uint32_t addr;
+		uint16_t fp;
+	};
 	const uint32_t granularity;			// the granularity of the level
 	uint32_t width;						// the width of the matrix
 	uint32_t depth;						// the depth of the matrix
@@ -93,12 +93,12 @@ granularity(granularity), width(width), depth(depth), fingerprintLength(fingerpr
 	uint32_t msize = width * depth;
 	// this->value = new basket[msize];
 	// posix_memalign((void**)&value, 64, sizeof(basket) * msize); 					// 64-byte alignment of the requested space
-	// this->value = (basket *) aligned_alloc(64, sizeof(basket) * msize);		    // 64-byte alignment of the requested space
-    this->value = (basket *) memalign(64, sizeof(basket) * msize);		            // 64-byte alignment of the requested space
+	// this->value = (basket *) aligned_alloc(64, sizeof(basket) * msize);			// 64-byte alignment of the requested space
+	this->value = (basket *) memalign(64, sizeof(basket) * msize);					// 64-byte alignment of the requested space
 	memset(this->value, 0, sizeof(basket) * msize);
 }
 GssTimeslice::~GssTimeslice() {
-    cout << "GssTimeslice::~GssTimeslice()" << endl;
+	cout << "GssTimeslice::~GssTimeslice()" << endl;
 	// delete[] this->value;
 	free(this->value);
 	vector<vector<node>>().swap(successorAdjacencyList);
@@ -124,8 +124,8 @@ uint32_t GssTimeslice::getGranularity() const{
 	return this->granularity;
 }
 void GssTimeslice::bucketCounting() {
-    cout << "---------------------------------------" << endl;
-    cout << "GssTimeslice bucketCounting(): print bucket..." << endl;
+	cout << "---------------------------------------" << endl;
+	cout << "GssTimeslice bucketCounting(): print bucket..." << endl;
 	int64_t room_count = 0;
 	int64_t bucket_count = 0;
 	for (int64_t i = 0; i < width * depth; i++) {
@@ -145,7 +145,7 @@ void GssTimeslice::bucketCounting() {
 	
 	//print buffer size
 	cout << "---------------------------------------" << endl;
-    cout << "print successorAdjacencyList..." << endl;
+	cout << "print successorAdjacencyList..." << endl;
 	cout << "successorAdjacencyList.size() = " << successorAdjacencyList.size() << endl;
 	cout << "successorAdjacencyList.capacity() = " << successorAdjacencyList.capacity() << endl;
 
@@ -387,20 +387,20 @@ weight_type GssTimeslice::nodeQuery(string vertex, int type) { // vertex is the 
 // s is the ID of the source node, d is the ID of the destination node
 bool GssTimeslice::reachabilityQuery(string s, string d) {
 	uint32_t hash_s = (*hfunc[HASH])((unsigned char*)(s.c_str()), s.length());
-    uint32_t hash_d = (*hfunc[HASH])((unsigned char*)(d.c_str()), d.length());
-    uint32_t mask = (1 << fingerprintLength) - 1;
-    
-    uint32_t addr_s = (hash_s >> fingerprintLength) % depth;
-    uint32_t addr_d = (hash_d >> fingerprintLength) % width;
+	uint32_t hash_d = (*hfunc[HASH])((unsigned char*)(d.c_str()), d.length());
+	uint32_t mask = (1 << fingerprintLength) - 1;
+	
+	uint32_t addr_s = (hash_s >> fingerprintLength) % depth;
+	uint32_t addr_d = (hash_d >> fingerprintLength) % width;
 
-    uint16_t fp_s = hash_s & mask;
-    uint16_t fp_d = hash_d & mask;
-    if(fp_s == 0) fp_s = 1;
-    if(fp_d == 0) fp_d = 1;
+	uint16_t fp_s = hash_s & mask;
+	uint16_t fp_d = hash_d & mask;
+	if(fp_s == 0) fp_s = 1;
+	if(fp_d == 0) fp_d = 1;
 
-    uint32_t key_s = (addr_s << fingerprintLength) + fp_s;
-    uint32_t key_d = (addr_d << fingerprintLength) + fp_d;
-    
+	uint32_t key_s = (addr_s << fingerprintLength) + fp_s;
+	uint32_t key_d = (addr_d << fingerprintLength) + fp_d;
+	
 	int pos;
 	map<uint32_t, bool> checked;
 	queue<mapnode> q;
@@ -411,8 +411,8 @@ bool GssTimeslice::reachabilityQuery(string s, string d) {
 	checked[key_s] = true;
 	map<unsigned int, bool>::iterator IT;
 
-    uint32_t temp_addr;
-    uint16_t temp_fp;
+	uint32_t temp_addr;
+	uint16_t temp_fp;
 
 	while (!q.empty())
 	{

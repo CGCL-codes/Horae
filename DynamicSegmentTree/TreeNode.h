@@ -64,9 +64,9 @@ private:
 	const uint32_t row_addrs;			// the row addrs
 	const uint32_t column_addrs;		// the column_addrs
 	struct mapnode {
-        uint32_t addr;
-        uint16_t fp;
-    };
+		uint32_t addr;
+		uint16_t fp;
+	};
 public:
 	static int nodes;					// The number of nodes that allocate matrix space
 	time_type interval_start;
@@ -154,7 +154,7 @@ interval_start(interval_start), interval_end(interval_end), width(width), depth(
 }
 
 TreeNode::~TreeNode() {
-    // cout << "TreeNode::~TreeNode([" << interval_start << ", " << interval_end << "])" << endl;
+	// cout << "TreeNode::~TreeNode([" << interval_start << ", " << interval_end << "])" << endl;
 	vector<vector<node>>().swap(successorAdjacencyList);
 	if (this->value != nullptr)
 		delete[] this->value;
@@ -345,20 +345,20 @@ bool TreeNode::reachabilityQuery(string s, string d) {
 		return false;
 	
 	uint32_t hash_s = (*hfunc[0])((unsigned char*)(s.c_str()), s.length());
-    uint32_t hash_d = (*hfunc[0])((unsigned char*)(d.c_str()), d.length());
-    uint32_t mask = (1 << fingerprintLength) - 1;
-    
-    uint32_t addr_s = (hash_s >> fingerprintLength) % depth;
-    uint32_t addr_d = (hash_d >> fingerprintLength) % width;
+	uint32_t hash_d = (*hfunc[0])((unsigned char*)(d.c_str()), d.length());
+	uint32_t mask = (1 << fingerprintLength) - 1;
+	
+	uint32_t addr_s = (hash_s >> fingerprintLength) % depth;
+	uint32_t addr_d = (hash_d >> fingerprintLength) % width;
 
-    uint16_t fp_s = hash_s & mask;
-    uint16_t fp_d = hash_d & mask;
-    if(fp_s == 0) fp_s = 1;
-    if(fp_d == 0) fp_d = 1;
+	uint16_t fp_s = hash_s & mask;
+	uint16_t fp_d = hash_d & mask;
+	if(fp_s == 0) fp_s = 1;
+	if(fp_d == 0) fp_d = 1;
 
-    uint32_t key_s = (addr_s << fingerprintLength) + fp_s;
-    uint32_t key_d = (addr_d << fingerprintLength) + fp_d;
-    
+	uint32_t key_s = (addr_s << fingerprintLength) + fp_s;
+	uint32_t key_d = (addr_d << fingerprintLength) + fp_d;
+	
 	int pos;
 	map<uint32_t, bool> checked;
 	queue<mapnode> q;
@@ -369,8 +369,8 @@ bool TreeNode::reachabilityQuery(string s, string d) {
 	checked[key_s] = true;
 	map<unsigned int, bool>::iterator IT;
 
-    uint32_t temp_addr;
-    uint16_t temp_fp;
+	uint32_t temp_addr;
+	uint16_t temp_fp;
 	
 	if (cache_align) 
 	{

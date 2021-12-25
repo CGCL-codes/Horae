@@ -100,21 +100,21 @@ int createDirectory(char* sPathName) {
 }
 
 uint64_t count_lines(string file) {  // count file lines
-    ifstream readFile;
-    uint64_t n = 0;
-    char line[512];
-    string temp;
-    readFile.open(file, ios::in);	// ios::in means that open file with readonly 
-    if(readFile.fail()) { 			// open file error, return 0
-        cout << "error in opening file" << endl;
-        return 0;
-    }
-    else { 							// the file exists
-        while(getline(readFile,temp))
-            n++;
-    }
-    readFile.close();
-    return n;
+	ifstream readFile;
+	uint64_t n = 0;
+	char line[512];
+	string temp;
+	readFile.open(file, ios::in);	// ios::in means that open file with readonly 
+	if(readFile.fail()) { 			// open file error, return 0
+		cout << "error in opening file" << endl;
+		return 0;
+	}
+	else { 							// the file exists
+		while(getline(readFile,temp))
+			n++;
+	}
+	readFile.close();
+	return n;
 }
 
 #if defined(DEBUG) || defined(TINSTIME) || defined(BINSTIME) || defined(HINT)
@@ -124,7 +124,7 @@ void progress_bar(int n) {
 	const char *lable = "|/-\\";
 	bar[0] = 0;
 	while (i < n) {
-	    bar[i] = '#';
+		bar[i] = '#';
 		i++;
 		bar[i] = 0;
 	}
@@ -207,7 +207,7 @@ int horaeSequentialInsert(HORAE_VAR var, string filename) {
 	return 0;
 }
 int insert_horae_parallel(Horae* pg, int64_t fpLength, int level, string filename, int line) {
-    ifstream ifs;
+	ifstream ifs;
 	ifs.open(filename);
 	if (!ifs.is_open()) {
 		cout << "error in open file " << endl;
@@ -222,7 +222,7 @@ int insert_horae_parallel(Horae* pg, int64_t fpLength, int level, string filenam
 	int tag = 1;
 #endif
 	thread* child = NULL;
-    int datanum = line;
+	int datanum = line;
 #if defined(DEBUG) || defined(BINSTIME)
 	timeval bpoint_start, bpoint_end;
 	gettimeofday( &bpoint_start, NULL);
@@ -302,14 +302,14 @@ int insert_horae_parallel(Horae* pg, int64_t fpLength, int level, string filenam
 	cout << "Level " << level << ", datanum = " << datanum << ", Break Point Time = " << bpoint_time << " s" << endl;
 #endif
 #if defined(DEBUG) || defined(HINT)
-    cout << "level " << level << " data insert = " << datanum << endl;
-    cout << "level " << level << "finished!" << endl;
+	cout << "level " << level << " data insert = " << datanum << endl;
+	cout << "level " << level << "finished!" << endl;
 #endif
 	if(child != NULL) {
 		child->join();
 	}
 #if defined(DEBUG) || defined(HINT)
-    cout << "level " << level << "finished!!!" << endl;
+	cout << "level " << level << "finished!!!" << endl;
 #endif
 	delete child;
 	return 0;
@@ -396,7 +396,7 @@ int horaeParallelInsert(HORAE_VAR var, string filename) {
 			cout << "(" << s << ", " << d << ", " << w << ", " << t << ") -- " << " level = " << level << endl;
 	#endif
 			horae_parallel->levelInsert(level + 1, s, d, w, t);
-            child = new thread(insert_horae_parallel, horae_parallel, length, level + 1, filename, line);	
+			child = new thread(insert_horae_parallel, horae_parallel, length, level + 1, filename, line);	
 		}
 		horae_parallel->levelInsert(level, s, d, w, t);
 
@@ -428,13 +428,13 @@ int horaeParallelInsert(HORAE_VAR var, string filename) {
 	cout << "Level 0, datanum = " << datanum << ", Break Point Time = " << bpoint_time << " s" << endl;
 #endif
 #if defined(DEBUG) || defined(HINT)
-    cout << "level " << level << " data insert = " << datanum << endl;
-    cout << "level " << level << "finished!" << endl;
+	cout << "level " << level << " data insert = " << datanum << endl;
+	cout << "level " << level << "finished!" << endl;
 #endif
 	if(child != NULL)
 		child->join();
 #if defined(DEBUG) || defined(HINT)
-    cout << "level " << level << "finished!!!" << endl;
+	cout << "level " << level << "finished!!!" << endl;
 #endif
 	delete child;
 #if defined(DEBUG) || defined(HINT)
@@ -624,7 +624,7 @@ int edgeExistenceHoraeTest_single(Horae* horae, string input_dir, string output_
 			res = horae->edgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
 			gettimeofday( &tp2, NULL);
 			double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
-    		sumTime_perquery += delta_t;
+			sumTime_perquery += delta_t;
 			if (write && m == 0) {
 				if (res > 0) ones++;
 				if(n == (datanum - 1)) {
@@ -745,7 +745,7 @@ int nodeFrequenceHoraeTest_single(Horae* horae, string input_dir, string output_
 			res = horae->nodeQuery(dataArray[n].source, (int)dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);			
 			gettimeofday( &tp2, NULL);
 			double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
-    		sumTime_perquery += delta_t;
+			sumTime_perquery += delta_t;
 			if (write && m == 0) {
 				if(n == (datanum - 1)) {
 					resultFile << res;
@@ -832,7 +832,7 @@ int edgeFrequenceHoraeTest_seq(Horae* horae, string input_dir, string output_dir
 				res = horae->edgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
 				gettimeofday( &tp2, NULL);
 				double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
-    			sumTime_perquery += delta_t;
+				sumTime_perquery += delta_t;
 				if (write && (m == 0)) {
 					if(n == (datanum - 1)) {
 						resultFile << res;
@@ -923,7 +923,7 @@ int edgeExistenceHoraeTest_seq(Horae* horae, string input_dir, string output_dir
 				res = horae->edgeQuery(dataArray[n].source, dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);			
 				gettimeofday( &tp2, NULL);
 				double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
-    			sumTime_perquery += delta_t;
+				sumTime_perquery += delta_t;
 				if (write && (m == 0)) {
 					if (res > 0) ones++;
 					if(n == (datanum - 1)) {
@@ -1034,7 +1034,7 @@ int nodeFrequenceHoraeTest_seq(Horae* horae, string input_dir, string output_dir
 				res = horae->nodeQuery(dataArray[n].source, (int)dataArray[n].destination, dataArray[n].start_time, dataArray[n].end_time);
 				gettimeofday( &tp2, NULL);
 				double delta_t = (tp2.tv_sec - tp1.tv_sec) * 1000000 +  (tp2.tv_usec - tp1.tv_usec);
-    			sumTime_perquery += delta_t;
+				sumTime_perquery += delta_t;
 				if (write && (m == 0)) {
 					if(n == (datanum - 1)) {
 						resultFile << res;
