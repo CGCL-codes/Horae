@@ -1,4 +1,4 @@
-Since a single github file cannot exceed the limit of 200MB, we give the download address of the data sets here.
+Since a single github file cannot exceed the limit of 100MB, we give the download address of the data sets here.
 
 + lkml: http://konect.cc/files/download.tsv.lkml-reply.tar.bz2
 + wiki-talk: http://konect.cc/files/download.tsv.wiki_talk_en.tar.bz2

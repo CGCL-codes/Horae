@@ -60,11 +60,11 @@ We use the temporal node-out (resp. node-in) query to represent the temporal sou
 For more detailed information, please refer to the paper.
 
 
-## Source code
+# Source code
 
-The source code of our design horae is in the folder "Horae", the readme.md file in that folder shows how to build and execute the program horae and horae-compacted. Besides, we also provide the baseline codes, tcm+timeslice (in folder TCM+Timeslice), gss+timeslice (in folder GSS+Timeslice) and segment tree version (in folder DynamicSegmentTree), and we provide readme.md files to each folder to illustrate how to build and run these codes.
+The source code of our design Horae is in the folder "Horae", the "readme.md" file in that folder shows how to build and execute the program horae and horae-compacted. Besides, we also provide the baseline codes, tcm+timeslice (in folder TCM+Timeslice), gss+timeslice (in folder GSS+Timeslice) and segment tree version (in folder DynamicSegmentTree), and we provide "readme.md" files to each folder to illustrate how to build them and run these codes.
 
-## Authors and Copyright
+# Authors and Copyright
 
 Horae is developed in National Engineering Research Center for Big Data Technology and System, Cluster and Grid Computing Lab, Services Computing Technology and System Lab, School of Computer Science and Technology, Huazhong University of Science and Technology, Wuhan, China by Ming Chen (mingc@hust.edu.cn), Renxiang Zhou (mr\_zhou@hust.edu.cn), Hanhua Chen (chen@hust.edu.cn), Jiang Xiao (jiangxiao@hust.edu.cn), Hai Jin (hjin@hust.edu.cn).
 
