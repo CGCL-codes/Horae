@@ -63,7 +63,8 @@ The source code of our design Horae is in the folder "Horae", the "readme.md" fi
 
 # Publications
 
-If you want to know more detailed information, please refer to this paper: 
+If you want to know more detailed information, please refer to this paper:
+ 
 Ming Chen, Renxiang Zhou, Hanhua Chen, Jiang Xiao, Hai Jin, Bo Li. Horae: A Graph Stream Summarization Structure for Efficient Temporal Range Query. in Proceedings of the 38th IEEE International Conference on Data Engineering (ICDE 2022), Virtual Event, Kuala Lumpur, Malaysia, May 9-12, 2022.
 
 # Authors and Copyright
