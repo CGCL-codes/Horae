@@ -57,7 +57,7 @@ We use the temporal node-out (resp. node-in) query to represent the temporal sou
 **Insert throughput.** Figure (6) shows the insert throughput of GSS, TCM, and Horae for the four datasets. Horae-para and Horae-seq denote the parallel insert operation and the sequential insert operation, respectively. The parallel insert operation greatly improves the throughput compared to the sequential one. The throughput of Horae-cpt-para is close to those of GSS and TCM.
 
 
-# Source code
+# Source Code
 
 The source code of our design Horae is in the folder "Horae", the "readme.md" file in that folder shows how to build and execute the program horae and horae-compacted. Besides, we also provide the baseline codes, tcm+timeslice (in folder TCM+Timeslice), gss+timeslice (in folder GSS+Timeslice) and segment tree version (in folder DynamicSegmentTree), and we provide "readme.md" files to each folder to illustrate how to build them and run these codes.
 
